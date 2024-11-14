@@ -1,106 +1,52 @@
+import React from "react";
+import { LoginStyle } from "../components/Login/LoginStyle";
+import { Form } from "../components/Login/Form";
+import { Button } from "../components/Button";
+import { Link } from "react-router-dom";
+
 export function Login() {
+  const [signIn, toggle] = React.useState(true);
   return (
-    <>
-      <div className="main-login">
-        <div className="title-text">
-          <div className="title login">Entrar</div>
-          <div className="title login">Cadastrar</div>
-        </div>
-        <div className="form-container">
-          <div className="slide-controls">
-            <input type="radio" name="slider" id="login" checked />
-            <input type="radio" name="slider" id="signup" />
-            <label htmlFor="login" className="slide login">
+    <LoginStyle signinIn={signIn}>
+      <div className="signup-container">
+        <Form>
+          <h1>Criar Conta</h1>
+          <input type="text" placeholder="Nome" />
+          <input type="email" placeholder="E-mail" />
+          <input type="password" placeholder="Senha" />
+          <Button>Cadastrar</Button>
+        </Form>
+      </div>
+
+      <div className="signin-container">
+        <Form>
+          <h1>Entrar</h1>
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <Link to="#">Esqueceu a senha?</Link>
+          <Button>Entrar</Button>
+        </Form>
+      </div>
+
+      <div className="overlay-container">
+        <div className="overlay">
+          <div className="overlay-panel left-overlay">
+            <h1>Que bom ver você de novo!</h1>
+            <p>Para entrar na sua conta, clique no botão abaixo</p>
+            <Button ghost onClick={() => toggle(true)}>
               Entrar
-            </label>
-            <label htmlFor="signup" className="slide signup">
-              Cadastrar
-            </label>
-            <div className="slide-tab"></div>
+            </Button>
           </div>
-          <div className="form-inner">
-            <form action="" className="login">
-              <div className="field">
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Digite seu email..."
-                  required
-                />
-              </div>
-              <div className="field">
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Digite sua senha..."
-                  required
-                />
-              </div>
-              <div className="pass-link">
-                <a href="#">Esqueceu a senha?</a>
-              </div>
-              <div className="field">
-                <input type="submit" value="Entrar" className="spinner-btn" />
-              </div>
-              <div className="signup-link">
-                Não tem conta? <a href="#">Cadastre-se</a>
-              </div>
-              {/**<div id="switch" onClick="toggleMode()"> */}
-              <div id="switch">
-                <button></button>
-                <span></span>
-              </div>
-            </form>
-            <form action="" className="signup">
-              <div className="field">
-                <input
-                  type="text"
-                  name="username"
-                  id="username"
-                  placeholder="Digite seu nome"
-                  required
-                />
-              </div>
-              <div className="field">
-                <input
-                  type="email"
-                  name="email-sign"
-                  id="email-sign"
-                  placeholder="Digite seu email..."
-                  required
-                />
-              </div>
-              <div className="field">
-                <input
-                  type="password"
-                  name="password-sign"
-                  id="password-sign"
-                  placeholder="Digite sua senha..."
-                  required
-                />
-              </div>
-              <div className="field">
-                <input
-                  type="password"
-                  name="password-confirm"
-                  id="password-confirm"
-                  placeholder="Confirme sua senha..."
-                  required
-                />
-              </div>
-              <div className="field">
-                <input
-                  type="submit"
-                  value="Cadastrar"
-                  className="spinner-btn"
-                />
-              </div>
-            </form>
+
+          <div className="overlay-panel right-overlay">
+            <h1>Olá! Primeira vez aqui?</h1>
+            <p>InForme seus dados e crie sua conta!</p>
+            <Button ghost onClick={() => toggle(false)}>
+              Cadastrar
+            </Button>
           </div>
         </div>
       </div>
-    </>
+    </LoginStyle>
   );
 }

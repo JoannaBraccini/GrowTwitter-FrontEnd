@@ -7,6 +7,15 @@ export const GlobalStyle = createGlobalStyle`
       box-sizing: border-box;
       font-family: "Open Sans", sans-serif;
   }
+
+  body {
+    background: #f6f5f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+  }
 /* 
   :root {
 --white-color: #fff;
