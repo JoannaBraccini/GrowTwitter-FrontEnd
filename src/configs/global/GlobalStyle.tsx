@@ -7,6 +7,26 @@ export const GlobalStyle = createGlobalStyle`
       box-sizing: border-box;
       font-family: "Open Sans", sans-serif;
   }
+/* 
+  :root {
+--white-color: #fff;
+--blue-color: #4070f4;
+--grey-color: #707070;
+--grey-color-light: #aaa;
+ }
+ body {
+   background-color: #e7f2fd;
+   transition: all 0.5s ease;
+ }
+ body.dark {
+   background-color: #333;
+ }
+ body.dark {
+   --white-color: #333;
+   --blue-color: #fff;
+   --grey-color: #f2f2f2;
+   --grey-color-light: #aaa;
+ } */
 
 `;
 /**

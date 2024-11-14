@@ -1,17 +1,21 @@
+import { navigations } from "../navigation/navigations";
+import { NavBar } from "../../components/Navbar/Navbar";
+import { Sidebar } from "../../components/Sidebar/Sidebar";
+import { Main } from "../../components/Main";
 import { ReactNode } from "react";
-import { navigations } from "../navigations/navigation";
-import { NavBar } from "../../components/Navbar";
+import { Header } from "../../components/Header/Header";
 
-interface DefaultLayoutProps {
+export interface DefaultLayoutProps {
   children: ReactNode;
 }
 
 export function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     <>
+      <Header />
       <NavBar navigations={navigations} />
-      <main>{children}</main>
-      <footer />
+      <Main>{children}</Main>
+      <Sidebar />
     </>
   );
 }
