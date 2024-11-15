@@ -1,11 +1,99 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { LoginStyle } from "../components/Login/LoginStyle";
 import { FormStyle } from "../components/FormStyle";
 import { Button } from "../components/Button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { getToken } from "../utils/getToken";
+import { login, signUp } from "../configs/services/auth.service";
+import { ToastResponse } from "../components/Toast/Toast";
+import { Toast } from "../types/toast";
+import { Loader } from "../components/Loader";
 
 export function Login() {
+  const navigate = useNavigate();
   const [signIn, toggle] = React.useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [checked, setChecked] = useState(false);
+  const [toastProps, setToastProps] = useState<Toast>();
+  const token = getToken();
+
+  function showToast(type: "success" | "error", message: string) {
+    setToastProps({ type, message, duration: 3000 });
+  }
+
+  const handleCloseToast = () => {
+    setToastProps(undefined);
+  };
+
+  const showLoading = () => {};
+
+  async function handleSignupForm(e: React.FormEvent<HTMLFormElement>) {
+    setLoading(true);
+    e.preventDefault();
+
+    const user = {
+      name: e.currentTarget.uname.value,
+      username: e.currentTarget.username.value,
+      email: e.currentTarget.email.value,
+      password: e.currentTarget.password.value,
+    };
+
+    const passwordConfirm = e.currentTarget.passwordConfirm.value;
+
+    if (user.password !== passwordConfirm) {
+      showToast("error", "As senhas não são iguais!");
+      setLoading(false);
+      return;
+    }
+
+    const response = await signUp(user);
+
+    setLoading(false);
+
+    showToast(response.ok ? "success" : "error", response.message);
+    if (response.ok) setTimeout(() => navigate("/"), 500);
+  }
+
+  async function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
+    setLoading(true);
+    event.preventDefault();
+
+    const user = {
+      email: event.currentTarget.email.value,
+      username: event.currentTarget.username.value,
+      password: event.currentTarget.password.value,
+    };
+
+    if (!user.email && !user.username) {
+      showToast("error", "E-mail ou username necessários");
+      setLoading(false);
+      return;
+    }
+
+    const response = await login(user);
+
+    setLoading(false);
+    if (!response.ok) {
+      showToast("error", response.message);
+      return;
+    }
+
+    if (checked) {
+      localStorage.setItem("token", response.data!.token);
+    }
+    sessionStorage.setItem("token", response.data!.token);
+
+    showToast("success", response.message);
+    navigate("/feed");
+  }
+
+  useEffect(() => {
+    if (token) {
+      navigate("/feed");
+      return;
+    }
+  }, [token, navigate]);
+
   return (
     <LoginStyle signinIn={signIn}>
       <div className="title">
@@ -13,25 +101,65 @@ export function Login() {
         <span>Trabalho final do módulo intermediário</span>
       </div>
       <div className="signup-container">
-        <FormStyle>
+        <FormStyle onSubmit={handleSignupForm}>
           <h1>Criar Conta</h1>
-          <input type="text" placeholder="Nome" maxLength={100} required />
-          <input type="text" placeholder="Username" maxLength={30} required />
-          <input type="email" placeholder="E-mail" maxLength={50} required />
-          <input type="password" placeholder="Senha" required />
-          <input type="password" placeholder="Confirme a Senha" required />
-          <Button>Cadastrar</Button>
+          <input
+            type="text"
+            name="uname"
+            placeholder="Nome"
+            maxLength={100}
+            required
+          />
+          <input
+            type="text"
+            name="username"
+            placeholder="Nome de usuário"
+            maxLength={30}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="E-mail"
+            maxLength={50}
+            required
+          />
+          <input type="password" name="password" placeholder="Senha" required />
+          <input
+            type="password"
+            name="passwordConfirm"
+            placeholder="Confirme a Senha"
+            required
+          />
+          <Button disabled={loading}>Cadastrar</Button>
         </FormStyle>
       </div>
 
       <div className="signin-container">
-        <FormStyle>
+        <FormStyle onSubmit={handleLoginForm}>
           <h1>Entrar</h1>
-          <input type="email" placeholder="Email" maxLength={50} />
-          <input type="text" placeholder="Username" maxLength={30} />
-          <input type="password" placeholder="Senha" required />
-          <Link to="#">Esqueceu a senha?</Link>
-          <Button>Entrar</Button>
+          <input
+            type="email"
+            name="email"
+            placeholder="E-mail"
+            maxLength={50}
+          />
+          <input
+            type="text"
+            name="username"
+            placeholder="Nome de usuário"
+            maxLength={30}
+          />
+          <input type="password" name="password" placeholder="Senha" required />
+          <div className="checkbox">
+            <input
+              type="checkbox"
+              value={String(checked)}
+              onChange={() => setChecked(!checked)}
+            />
+            <label>Lembrar</label>
+          </div>
+          <Button disabled={loading}>Entrar</Button>
         </FormStyle>
       </div>
 
@@ -40,11 +168,11 @@ export function Login() {
           <div className="overlay-panel left-overlay">
             <h1>Que bom ver você de novo!</h1>
             <p>
-              O Growtwitter é a plataforma definitiva para todos os apaixonados
+              Growtwitter é a plataforma definitiva para todos os apaixonados
               por redes sociais que buscam uma experiência familiar e poderosa,
               semelhante ao Twitter, mas com um toque único.
             </p>
-            <Button ghost onClick={() => toggle(true)}>
+            <Button type="button" ghost onClick={() => toggle(true)}>
               Entre
             </Button>
           </div>
@@ -55,12 +183,21 @@ export function Login() {
               Seja parte desta comunidade que valoriza a liberdade de expressão,
               a conexão com pessoas de todo o mundo e a disseminação de ideias.
             </p>
-            <Button ghost onClick={() => toggle(false)}>
+            <Button type="button" ghost onClick={() => toggle(false)}>
               Cadastre-se
             </Button>
           </div>
         </div>
       </div>
+      <Loader isOpen onClose />
+      {toastProps && (
+        <ToastResponse
+          message={toastProps.message}
+          duration={toastProps.duration}
+          type={toastProps.type}
+          onClose={handleCloseToast}
+        />
+      )}
     </LoginStyle>
   );
 }

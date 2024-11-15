@@ -31,10 +31,17 @@ export const FormStyle = styled.form`
     }
   }
 
-  a {
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  label {
     color: #333;
     font-size: 14px;
     text-decoration: none;
-    margin: 15px 0;
   }
 `;

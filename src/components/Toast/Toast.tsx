@@ -8,7 +8,7 @@ interface ToastProps {
   onClose: () => void;
 }
 
-export const ToastResposta = ({
+export const ToastResponse = ({
   message,
   type,
   duration,
