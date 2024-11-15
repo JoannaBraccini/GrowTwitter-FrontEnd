@@ -5,6 +5,7 @@ export interface ButtonProps {
 }
 
 export const Button = styled.button<ButtonProps>`
+  font-family: var(--Montserrat);
   border-radius: 20px;
   border: 1px solid;
   background-color: ${(props) => (props.ghost ? "transparent" : "#4595e1")};
@@ -21,5 +22,9 @@ export const Button = styled.button<ButtonProps>`
   }
   &:focus {
     outline: none;
+  }
+  @media (max-width: 768px) {
+    margin: 10px 0;
+    padding: 12px 25px;
   }
 `;

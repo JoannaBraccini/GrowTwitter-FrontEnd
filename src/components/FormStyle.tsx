@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Form = styled.form`
+export const FormStyle = styled.form`
   background-color: #ffffff;
   display: flex;
   align-items: center;
@@ -9,10 +9,15 @@ export const Form = styled.form`
   padding: 0 50px;
   height: 100%;
   text-align: center;
+  @media (max-width: 768px) {
+    padding: 0 3px;
+  }
 
   h1 {
     font-weight: bold;
-    margin: 0;
+    @media (max-width: 768px) {
+      padding-bottom: 10px;
+    }
   }
 
   input {
@@ -21,6 +26,9 @@ export const Form = styled.form`
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
+    @media (max-width: 768px) {
+      border-radius: 3rem;
+    }
   }
 
   a {
