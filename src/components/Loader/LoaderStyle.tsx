@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Loader = styled.div`
+export const LoaderStyle = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -11,6 +11,16 @@ export const Loader = styled.div`
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
   z-index: 9999;
+  animation: fadeIn 0.3s ease-in-out;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
   span {
     width: 48px;
     height: 48px;
@@ -20,6 +30,14 @@ export const Loader = styled.div`
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
+
+    p {
+      margin-top: 16px;
+      font-size: 1.2rem;
+      color: #fff;
+      font-family: var(--Poppins);
+      text-align: center;
+    }
 
     @keyframes rotation {
       0% {

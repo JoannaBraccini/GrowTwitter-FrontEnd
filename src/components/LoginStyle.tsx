@@ -13,28 +13,16 @@ export const LoginStyle = styled.div<LoginProps>`
   overflow: hidden;
   width: 678px;
   max-width: 100%;
-  min-height: 400px;
-  @media (max-width: 768px) {
-    width: 378px;
-    height: 70vh;
-  }
-
-  .title {
-    position: fixed;
-    top: 0;
-    left: 0;
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
+  min-height: 500px;
+  padding: 20px;
 
   .signin-container {
     position: absolute;
     top: 0;
-    height: 100%;
-    transition: all 0.6s ease-in-out;
     left: 0;
+    height: 100%;
     width: 50%;
+    transition: all 0.6s ease-in-out;
     z-index: 2;
     ${(props) =>
       props.signinIn !== true ? `transform: translateX(100%);` : null}
@@ -42,12 +30,12 @@ export const LoginStyle = styled.div<LoginProps>`
   .signup-container {
     position: absolute;
     top: 0;
-    height: 100%;
-    transition: all 0.6s ease-in-out;
     left: 0;
+    height: 100%;
     width: 50%;
     opacity: 0;
     z-index: 1;
+    transition: all 0.6s ease-in-out;
     ${(props) =>
       props.signinIn !== true
         ? `
@@ -81,8 +69,8 @@ export const LoginStyle = styled.div<LoginProps>`
     left: -100%;
     height: 100%;
     width: 200%;
-    transform: translateX(0);
     transition: transform 0.6s ease-in-out;
+    transform: translateX(0);
     ${(props) =>
       props.signinIn !== true ? `transform: translateX(50%);` : null}
   }
@@ -98,21 +86,28 @@ export const LoginStyle = styled.div<LoginProps>`
     top: 0;
     height: 100%;
     width: 50%;
-    transform: translateX(0);
     transition: transform 0.6s ease-in-out;
-    @media (max-width: 768px) {
-      padding: 0 10px;
-    }
+    transform: translateX(0);
   }
+
   .left-overlay {
     transform: translateX(-20%);
     ${(props) => (props.signinIn !== true ? `transform: translateX(0);` : null)}
   }
+
   .right-overlay {
     right: 0;
     transform: translateX(0);
     ${(props) =>
       props.signinIn !== true ? `transform: translateX(20%);` : null}
+  }
+
+  button {
+    margin: 10px 0;
+  }
+
+  .mobile {
+    display: none;
   }
 
   p {
@@ -123,10 +118,54 @@ export const LoginStyle = styled.div<LoginProps>`
     letter-spacing: 0.5px;
     margin: 20px 0 30px;
   }
+
   h1 {
     font-weight: bold;
-    @media (max-width: 768px) {
-      font-size: 1.5rem;
+    margin: 10px 0;
+  }
+
+  @media screen and (max-width: 900px) {
+    width: 95vw;
+    height: 80vh;
+
+    footer {
+      display: none;
+    }
+
+    .overlay-container {
+      display: none;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    .signin-container {
+      width: 100%;
+      z-index: 999;
+      border-radius: 10px;
+      border-left: 4px solid rgb(6, 127, 215, 0.5);
+    }
+
+    .signup-container {
+      width: 100%;
+      z-index: 999;
+    }
+
+    .overlay-panel,
+    .right-overlay,
+    .signup-container {
+      border-radius: 1rem;
+      transform: translateX(0%);
+      z-index: 999;
+    }
+
+    span {
+      margin: 15px 0;
+    }
+
+    .mobile {
+      display: block;
     }
   }
 `;

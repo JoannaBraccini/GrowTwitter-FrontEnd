@@ -10,14 +10,7 @@ export const FormStyle = styled.form`
   height: 100%;
   text-align: center;
   @media (max-width: 768px) {
-    padding: 0 3px;
-  }
-
-  h1 {
-    font-weight: bold;
-    @media (max-width: 768px) {
-      padding-bottom: 10px;
-    }
+    padding: 0 10px;
   }
 
   input {
@@ -27,7 +20,7 @@ export const FormStyle = styled.form`
     margin: 8px 0;
     width: 100%;
     @media (max-width: 768px) {
-      border-radius: 3rem;
+      border-radius: 0.5rem;
     }
   }
 
@@ -37,9 +30,11 @@ export const FormStyle = styled.form`
     gap: 10px;
     margin: 0;
     padding: 0;
-    margin-bottom: 10px;
+    margin: 10px 0;
   }
-  label {
+
+  label,
+  a {
     color: #333;
     font-size: 14px;
     text-decoration: none;

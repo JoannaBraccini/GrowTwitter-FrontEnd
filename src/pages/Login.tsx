@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LoginStyle } from "../components/Login/LoginStyle";
+import { LoginStyle } from "../components/LoginStyle";
 import { FormStyle } from "../components/FormStyle";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,8 @@ import { getToken } from "../utils/getToken";
 import { login, signUp } from "../configs/services/auth.service";
 import { ToastResponse } from "../components/Toast/Toast";
 import { Toast } from "../types/toast";
-import { Loader } from "../components/Loader";
+import { Loader } from "../components/Loader/Loader";
+import { Footer } from "../components/Footer/Footer";
 
 export function Login() {
   const navigate = useNavigate();
@@ -24,8 +25,6 @@ export function Login() {
   const handleCloseToast = () => {
     setToastProps(undefined);
   };
-
-  const showLoading = () => {};
 
   async function handleSignupForm(e: React.FormEvent<HTMLFormElement>) {
     setLoading(true);
@@ -96,13 +95,10 @@ export function Login() {
 
   return (
     <LoginStyle signinIn={signIn}>
-      <div className="title">
-        <h1>GrowTwitter</h1>
-        <span>Trabalho final do módulo intermediário</span>
-      </div>
       <div className="signup-container">
         <FormStyle onSubmit={handleSignupForm}>
           <h1>Criar Conta</h1>
+          <span className="mobile">Digite seus dados para se cadastrar</span>
           <input
             type="text"
             name="uname"
@@ -132,12 +128,19 @@ export function Login() {
             required
           />
           <Button disabled={loading}>Cadastrar</Button>
+          <p className="mobile">
+            Já possiu conta? {""}
+            <a type="button" onClick={() => toggle(true)}>
+              Acesse
+            </a>
+          </p>
         </FormStyle>
       </div>
 
       <div className="signin-container">
         <FormStyle onSubmit={handleLoginForm}>
           <h1>Entrar</h1>
+          <span className="mobile">Use seu e-mail ou username para entrar</span>
           <input
             type="email"
             name="email"
@@ -160,6 +163,12 @@ export function Login() {
             <label>Lembrar</label>
           </div>
           <Button disabled={loading}>Entrar</Button>
+          <p className="mobile">
+            Não possiu conta? {""}
+            <a type="button" onClick={() => toggle(false)}>
+              Cadastre-se
+            </a>
+          </p>
         </FormStyle>
       </div>
 
@@ -189,7 +198,7 @@ export function Login() {
           </div>
         </div>
       </div>
-      <Loader isOpen onClose />
+      <Loader isLoading={loading} />
       {toastProps && (
         <ToastResponse
           message={toastProps.message}
@@ -198,6 +207,7 @@ export function Login() {
           onClose={handleCloseToast}
         />
       )}
+      <Footer />
     </LoginStyle>
   );
 }

@@ -23,8 +23,7 @@ export const Button = styled.button<ButtonProps>`
   &:focus {
     outline: none;
   }
-  @media (max-width: 768px) {
-    margin: 10px 0;
+  @media screen and (max-width: 900px) {
     padding: 12px 25px;
   }
 `;
