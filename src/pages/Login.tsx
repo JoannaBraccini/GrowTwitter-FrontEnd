@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { LoginStyle } from "../components/LoginStyle";
-import { FormStyle } from "../components/FormStyle";
+import { LoginStyle } from "../components/Login/LoginStyle";
+import { FormStyle } from "../components/Login/FormStyle";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../utils/getToken";
@@ -9,6 +9,7 @@ import { ToastResponse } from "../components/Toast/Toast";
 import { Toast } from "../types/toast";
 import { Loader } from "../components/Loader/Loader";
 import { Footer } from "../components/Footer/Footer";
+import { Banner } from "../components/Login/Banner";
 
 export function Login() {
   const navigate = useNavigate();
@@ -46,11 +47,10 @@ export function Login() {
     }
 
     const response = await signUp(user);
-
     setLoading(false);
 
     showToast(response.ok ? "success" : "error", response.message);
-    if (response.ok) setTimeout(() => navigate("/"), 500);
+    if (response.ok) setTimeout(() => navigate("/sign"), 500);
   }
 
   async function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
@@ -95,6 +95,7 @@ export function Login() {
 
   return (
     <LoginStyle signinIn={signIn}>
+      <Banner> GrowTwitter </Banner>
       <div className="signup-container">
         <FormStyle onSubmit={handleSignupForm}>
           <h1>Criar Conta</h1>
@@ -198,7 +199,7 @@ export function Login() {
           </div>
         </div>
       </div>
-      <Loader isLoading={loading} />
+      <Loader isLoading={loading} message="Aguarde..." />
       {toastProps && (
         <ToastResponse
           message={toastProps.message}

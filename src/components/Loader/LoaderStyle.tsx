@@ -7,6 +7,7 @@ export const LoaderStyle = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
@@ -21,6 +22,14 @@ export const LoaderStyle = styled.div`
       opacity: 1;
     }
   }
+  p {
+    margin-top: 16px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #fff;
+    font-family: var(--Poppins);
+    text-align: center;
+  }
   span {
     width: 48px;
     height: 48px;
@@ -30,14 +39,6 @@ export const LoaderStyle = styled.div`
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
-
-    p {
-      margin-top: 16px;
-      font-size: 1.2rem;
-      color: #fff;
-      font-family: var(--Poppins);
-      text-align: center;
-    }
 
     @keyframes rotation {
       0% {
