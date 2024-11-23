@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-export interface LoginProps {
+export interface SignProps {
   signinIn: boolean;
 }
 
-export const LoginStyle = styled.div<LoginProps>`
+export const SignStyle = styled.div<SignProps>`
   font-family: var(--Poppins);
   background-color: #fff;
   border-radius: 10px;
@@ -15,6 +15,20 @@ export const LoginStyle = styled.div<LoginProps>`
   max-width: 100%;
   min-height: 500px;
   padding: 20px;
+
+  .banner {
+    font-size: 4rem;
+    background: linear-gradient(to bottom, #1da1f2, #70c9f9, #e8f5fd);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
 
   .signin-container {
     position: absolute;
@@ -59,8 +73,7 @@ export const LoginStyle = styled.div<LoginProps>`
       props.signinIn !== true ? `transform: translateX(-100%);` : null}
   }
   .overlay {
-    background: #067fd7;
-    background: -webkit-linear-gradient(to right, #1a9ae9, #4595e1);
+    background: linear-gradient(to bottom, #2ba9f8, #0066af);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;
@@ -127,6 +140,10 @@ export const LoginStyle = styled.div<LoginProps>`
   @media screen and (max-width: 900px) {
     width: 95vw;
     height: 80vh;
+
+    .banner {
+      font-size: 1.8rem;
+    }
 
     footer {
       display: none;

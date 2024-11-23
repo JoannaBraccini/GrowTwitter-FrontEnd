@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { LoginStyle } from "../components/Login/LoginStyle";
-import { FormStyle } from "../components/Login/FormStyle";
+import { SignStyle } from "../components/Sign/SignStyle";
+import { FormStyle } from "../components/Sign/FormStyle";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../utils/getToken";
@@ -9,9 +9,8 @@ import { ToastResponse } from "../components/Toast/Toast";
 import { Toast } from "../types/toast";
 import { Loader } from "../components/Loader/Loader";
 import { Footer } from "../components/Footer/Footer";
-import { Banner } from "../components/Login/Banner";
 
-export function Login() {
+export function Sign() {
   const navigate = useNavigate();
   const [signIn, toggle] = React.useState(true);
   const [loading, setLoading] = useState<boolean>(false);
@@ -94,8 +93,8 @@ export function Login() {
   }, [token, navigate]);
 
   return (
-    <LoginStyle signinIn={signIn}>
-      <Banner> GrowTwitter </Banner>
+    <SignStyle signinIn={signIn}>
+      <h1 className="banner"> GrowTwitter </h1>
       <div className="signup-container">
         <FormStyle onSubmit={handleSignupForm}>
           <h1>Criar Conta</h1>
@@ -209,6 +208,6 @@ export function Login() {
         />
       )}
       <Footer />
-    </LoginStyle>
+    </SignStyle>
   );
 }
