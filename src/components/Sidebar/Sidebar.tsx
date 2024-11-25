@@ -1,150 +1,36 @@
-import { Link } from "react-router-dom";
+import { SidebarStyle } from "./SidebarStyle";
 
 export function Sidebar() {
   return (
-    <div>
-      <h1>O que está acontecendo</h1>
-      <section>
-        <Link to=""></Link>
-        <Link to=""></Link>
-        <Link to=""></Link>
-        <Link to=""></Link>
-        <Link to="">Mostrar mais</Link>
-      </section>
-    </div>
+    <SidebarStyle>
+      <div className="sidebar-input">
+        <span className="icons sidebar-searchIcon"> search </span>
+        <input type="text" placeholder="Search Twitter" />
+      </div>
+
+      <div className="sidebar-widgetContainer">
+        <h2>What's happening?</h2>
+        <blockquote className="twitter-tweet">
+          <p lang="en" dir="ltr">
+            Sunsets don&#39;t get much better than this one over
+            <a href="https://twitter.com/GrandTetonNPS?ref_src=twsrc%5Etfw">
+              @GrandTetonNPS
+            </a>
+            .
+            <a href="https://twitter.com/hashtag/nature?src=hash&amp;ref_src=twsrc%5Etfw">
+              #nature
+            </a>
+            <a href="https://twitter.com/hashtag/sunset?src=hash&amp;ref_src=twsrc%5Etfw">
+              #sunset
+            </a>
+            <a href="http://t.co/YuKy2rcjyU">pic.twitter.com/YuKy2rcjyU</a>
+          </p>
+          &mdash; US Department of the Interior (@Interior)
+          <a href="https://twitter.com/Interior/status/463440424141459456?ref_src=twsrc%5Etfw">
+            May 5, 2014
+          </a>
+        </blockquote>
+      </div>
+    </SidebarStyle>
   );
 }
-
-//     <nav class="sidebar">
-//       <div class="menu_content">
-//         <ul class="menu_items">
-//           <div class="menu_title menu_dahsboard"></div>
-//           <!-- duplicate or remove this li tag if you want to add or remove navlink with submenu -->
-//           <!-- start -->
-//           <li class="item">
-//             <div href="#" class="nav_link submenu_item">
-//               <span class="navlink_icon">
-//                 <i class="bx bx-home-alt"></i>
-//               </span>
-//               <span class="navlink">Home</span>
-//               <i class="bx bx-chevron-right arrow-left"></i>
-//             </div>
-
-//             <ul class="menu_items submenu">
-//               <a href="#" class="nav_link sublink">Nav Sub Link</a>
-//               <a href="#" class="nav_link sublink">Nav Sub Link</a>
-//               <a href="#" class="nav_link sublink">Nav Sub Link</a>
-//               <a href="#" class="nav_link sublink">Nav Sub Link</a>
-//             </ul>
-//           </li>
-//           <!-- end -->
-
-//           <!-- duplicate this li tag if you want to add or remove  navlink with submenu -->
-//           <!-- start -->
-//           <li class="item">
-//             <div href="#" class="nav_link submenu_item">
-//               <span class="navlink_icon">
-//                 <i class="bx bx-grid-alt"></i>
-//               </span>
-//               <span class="navlink">Overview</span>
-//               <i class="bx bx-chevron-right arrow-left"></i>
-//             </div>
-
-//             <ul class="menu_items submenu">
-//               <a href="#" class="nav_link sublink">Nav Sub Link</a>
-//               <a href="#" class="nav_link sublink">Nav Sub Link</a>
-//               <a href="#" class="nav_link sublink">Nav Sub Link</a>
-//               <a href="#" class="nav_link sublink">Nav Sub Link</a>
-//             </ul>
-//           </li>
-//           <!-- end -->
-//         </ul>
-
-//         <ul class="menu_items">
-//           <div class="menu_title menu_editor"></div>
-//           <!-- duplicate these li tag if you want to add or remove navlink only -->
-//           <!-- Start -->
-//           <li class="item">
-//             <a href="#" class="nav_link">
-//               <span class="navlink_icon">
-//                 <i class="bx bxs-magic-wand"></i>
-//               </span>
-//               <span class="navlink">Magic build</span>
-//             </a>
-//           </li>
-//           <!-- End -->
-
-//           <li class="item">
-//             <a href="#" class="nav_link">
-//               <span class="navlink_icon">
-//                 <i class="bx bx-loader-circle"></i>
-//               </span>
-//               <span class="navlink">Filters</span>
-//             </a>
-//           </li>
-//           <li class="item">
-//             <a href="#" class="nav_link">
-//               <span class="navlink_icon">
-//                 <i class="bx bx-filter"></i>
-//               </span>
-//               <span class="navlink">Filter</span>
-//             </a>
-//           </li>
-//           <li class="item">
-//             <a href="#" class="nav_link">
-//               <span class="navlink_icon">
-//                 <i class="bx bx-cloud-upload"></i>
-//               </span>
-//               <span class="navlink">Upload new</span>
-//             </a>
-//           </li>
-//         </ul>
-//         <ul class="menu_items">
-//           <div class="menu_title menu_setting"></div>
-//           <li class="item">
-//             <a href="#" class="nav_link">
-//               <span class="navlink_icon">
-//                 <i class="bx bx-flag"></i>
-//               </span>
-//               <span class="navlink">Notice board</span>
-//             </a>
-//           </li>
-//           <li class="item">
-//             <a href="#" class="nav_link">
-//               <span class="navlink_icon">
-//                 <i class="bx bx-medal"></i>
-//               </span>
-//               <span class="navlink">Award</span>
-//             </a>
-//           </li>
-//           <li class="item">
-//             <a href="#" class="nav_link">
-//               <span class="navlink_icon">
-//                 <i class="bx bx-cog"></i>
-//               </span>
-//               <span class="navlink">Setting</span>
-//             </a>
-//           </li>
-//           <li class="item">
-//             <a href="#" class="nav_link">
-//               <span class="navlink_icon">
-//                 <i class="bx bx-layer"></i>
-//               </span>
-//               <span class="navlink">Features</span>
-//             </a>
-//           </li>
-//         </ul>
-
-//         <!-- Sidebar Open / Close -->
-//         <div class="bottom_content">
-//           <div class="bottom expand_sidebar">
-//             <span> Expand</span>
-//             <i class='bx bx-log-in' ></i>
-//           </div>
-//           <div class="bottom collapse_sidebar">
-//             <span> Collapse</span>
-//             <i class='bx bx-log-out'></i>
-//           </div>
-//         </div>
-//       </div>
-//     </nav>

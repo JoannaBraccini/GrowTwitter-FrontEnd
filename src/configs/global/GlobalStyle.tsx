@@ -1,9 +1,10 @@
 import { createGlobalStyle } from "styled-components";
 
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle<{ isSignPage: boolean }>`
 :root {
   --Poppins: "Poppins", sans-serif;
   --Montserrat: "Montserrat", sans-serif;
+  --OpenSans: "Open Sans", sans-serif;
 }
 
   * {
@@ -11,15 +12,25 @@ export const GlobalStyle = createGlobalStyle`
       padding: 0;
       box-sizing: border-box;
     }
-    
+    //sign é != do default
     body {
-    font-family: "Open Sans", sans-serif;
-    background: #f6f5f7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
+      font-family: var(--OpenSans);
+      background: #f6f5f7;
+      display: flex;
+      height: 100vh;
+      ${(props) =>
+        props.isSignPage
+          ? `
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+        `
+          : `
+          max-width: 1300px;
+          margin-left: auto;
+          margin-right: auto;
+          padding: 0 10px;
+        `}
   }
 
 `;
