@@ -1,4 +1,4 @@
-import { DefaultLayout } from "../configs/layouts/DefaultLayout";
+import { DefaultLayout } from "../../layouts/DefaultLayout";
 
 export function Feed() {
   return (

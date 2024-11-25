@@ -1,39 +1,53 @@
 import { createGlobalStyle } from "styled-components";
+// import { useLocation } from "react-router-dom";
 
-export const GlobalStyle = createGlobalStyle<{ isSignPage: boolean }>`
-:root {
-  --Poppins: "Poppins", sans-serif;
-  --Montserrat: "Montserrat", sans-serif;
-  --OpenSans: "Open Sans", sans-serif;
-}
+// interface GlobalStyleProps {
+//   isSignPage: boolean;
+// }
+
+// const StyledGlobalStyle = createGlobalStyle<GlobalStyleProps>`
+export const GlobalStyle = createGlobalStyle`
+  :root {
+    --Poppins: "Poppins", sans-serif;
+    --Montserrat: "Montserrat", sans-serif;
+    --OpenSans: "Open Sans", sans-serif;
+  }
 
   * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    //sign é != do default
-    body {
-      font-family: var(--OpenSans);
-      background: #f6f5f7;
-      display: flex;
-      height: 100vh;
-      ${(props) =>
-        props.isSignPage
-          ? `
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-        `
-          : `
-          max-width: 1300px;
-          margin-left: auto;
-          margin-right: auto;
-          padding: 0 10px;
-        `}
-  }
+     body {
+    font-family: "Open Sans", sans-serif;
+    background: #f6f5f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+  }`;
 
+/* body {
+    font-family: "Open Sans", sans-serif;
+    background-color: ${({ isSignPage }) => (isSignPage ? "#f6f5f7" : "#fff")};
+    display: ${({ isSignPage }) => (isSignPage ? "flex" : "block")};
+    justify-content: center;
+    align-items: center;
+    flex-direction: ${({ isSignPage }) => (isSignPage ? "column" : "initial")};
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
 `;
+
+export function GlobalStyle() {
+  const location = useLocation();
+  const isSignPage = location.pathname === "/sign";
+
+  return <StyledGlobalStyle isSignPage={isSignPage} />;
+} */
+
 /**
  Open Sans:
 Texto Principal e Parágrafos: É uma fonte altamente legível e neutra, ideal para grandes blocos de texto.

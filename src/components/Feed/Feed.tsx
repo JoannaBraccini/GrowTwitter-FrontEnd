@@ -10,10 +10,7 @@ export function Feed() {
       <div className="tweetBox">
         <form>
           <div className="tweetbox-input">
-            <img
-              src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-              alt=""
-            />
+            <img src="" alt="" />
             <input type="text" placeholder="What's happening?" />
           </div>
           <button className="tweetBox-tweetButton">Tweet</button>
@@ -22,10 +19,7 @@ export function Feed() {
 
       <div className="post">
         <div className="post-avatar">
-          <img
-            src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-            alt=""
-          />
+          <img src="" alt="" />
         </div>
 
         <div className="post-body">
@@ -43,10 +37,7 @@ export function Feed() {
               <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
             </div>
           </div>
-          <img
-            src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
-            alt=""
-          />
+          <img src="" alt="" />
           <div className="post-footer">
             <span className="material-icons"> repeat </span>
             <span className="material-icons"> favorite_border </span>
@@ -57,10 +48,7 @@ export function Feed() {
 
       <div className="post">
         <div className="post-avatar">
-          <img
-            src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-            alt=""
-          />
+          <img src="" alt="" />
         </div>
 
         <div className="post-body">
@@ -78,10 +66,7 @@ export function Feed() {
               <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
             </div>
           </div>
-          <img
-            src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
-            alt=""
-          />
+          <img src="" alt="" />
           <div className="post-footer">
             <span className="material-icons"> repeat </span>
             <span className="material-icons"> favorite_border </span>

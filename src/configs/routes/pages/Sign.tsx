@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { SignStyle } from "../components/Sign/SignStyle";
-import { FormStyle } from "../components/Sign/FormStyle";
-import { Button } from "../components/Button";
+import { SignStyle } from "../../../components/Sign/SignStyle";
+import { FormStyle } from "../../../components/Sign/FormStyle";
+import { Button } from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
-import { getToken } from "../utils/getToken";
-import { login, signUp } from "../configs/services/auth.service";
-import { ToastResponse } from "../components/Toast/Toast";
-import { Toast } from "../types/toast";
-import { Loader } from "../components/Loader/Loader";
-import { Footer } from "../components/Footer/Footer";
+import { getToken } from "../../../utils/getToken";
+import { login, signUp } from "../../services/auth.service";
+import { ToastResponse } from "../../../components/Toast/Toast";
+import { Toast } from "../../../types/toast";
+import { Loader } from "../../../components/Loader/Loader";
+import { Footer } from "../../../components/Footer/Footer";
 
 export function Sign() {
   const navigate = useNavigate();

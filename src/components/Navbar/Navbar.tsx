@@ -1,49 +1,31 @@
 import { Button } from "../Button";
 import { NavbarStyle } from "./NavbarStyle";
-import HomeIcon from "../../assets/icons/homeIcon.svg";
-import ExploreIcon from "../../assets/icons/exploreIcon.svg";
-import NotificationIcon from "../../assets/icons/notificationIcon.svg";
-import ProfileIcon from "../../assets/icons/profileIcon.svg";
-import MoreIcon from "../../assets/icons/moreIcon.svg";
+import homeIcon from "../../assets/icons/homeIcon.svg";
+import exploreIcon from "../../assets/icons/exploreIcon.svg";
+import notificationIcon from "../../assets/icons/notificationIcon.svg";
+import profileIcon from "../../assets/icons/profileIcon.svg";
+import moreIcon from "../../assets/icons/moreIcon.svg";
+
+const navItems = [
+  { icon: homeIcon, label: "Página Inicial", alt: "Página Inicial" },
+  { icon: exploreIcon, label: "Explorar", alt: "Explorar" },
+  { icon: notificationIcon, label: "Notificações", alt: "Notificações" },
+  { icon: profileIcon, label: "Perfil", alt: "Perfil" },
+  { icon: moreIcon, label: "Mais", alt: "Mais" },
+];
 
 export function Navbar() {
   return (
     <NavbarStyle>
       <img className="logo-black"></img>
-      <div className="active">
-        <span>
-          <HomeIcon />{" "}
-        </span>
-        <h2>Página Inicial</h2>
-      </div>
-
-      <div>
-        <span>
-          <ExploreIcon />{" "}
-        </span>
-        <h2>Explorar</h2>
-      </div>
-
-      <div>
-        <span>
-          <NotificationIcon />{" "}
-        </span>
-        <h2>Notificações</h2>
-      </div>
-
-      <div>
-        <span>
-          <ProfileIcon />{" "}
-        </span>
-        <h2>Perfil</h2>
-      </div>
-
-      <div>
-        <span>
-          <MoreIcon />{" "}
-        </span>
-        <h2>Mais</h2>
-      </div>
+      {navItems.map(({ icon, label, alt }) => (
+        <div key={label}>
+          <span>
+            <img src={icon} alt={alt} />
+          </span>
+          <h2>{label}</h2>
+        </div>
+      ))}
       <Button>Postar</Button>
 
       <div></div>
