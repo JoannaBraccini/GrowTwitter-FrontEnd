@@ -1,11 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-// import { useLocation } from "react-router-dom";
 
-// interface GlobalStyleProps {
-//   isSignPage: boolean;
-// }
-
-// const StyledGlobalStyle = createGlobalStyle<GlobalStyleProps>`
 export const GlobalStyle = createGlobalStyle`
   :root {
     --Poppins: "Poppins", sans-serif;
@@ -18,35 +12,24 @@ export const GlobalStyle = createGlobalStyle`
       padding: 0;
       box-sizing: border-box;
     }
-     body {
-    font-family: "Open Sans", sans-serif;
-    background: #f6f5f7;
+
+  body {
+    font-family: var(--OpenSans);
+    background-color: #f6f5f7;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     height: 100vh;
-  }`;
-
-/* body {
-    font-family: "Open Sans", sans-serif;
-    background-color: ${({ isSignPage }) => (isSignPage ? "#f6f5f7" : "#fff")};
-    display: ${({ isSignPage }) => (isSignPage ? "flex" : "block")};
-    justify-content: center;
-    align-items: center;
-    flex-direction: ${({ isSignPage }) => (isSignPage ? "column" : "initial")};
-    height: 100vh;
-    margin: 0;
-    padding: 0;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 10px;
   }
-`;
 
-export function GlobalStyle() {
-  const location = useLocation();
-  const isSignPage = location.pathname === "/sign";
-
-  return <StyledGlobalStyle isSignPage={isSignPage} />;
-} */
+  body.sign-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }`;
 
 /**
  Open Sans:

@@ -18,6 +18,15 @@ export function Sign() {
   const [toastProps, setToastProps] = useState<Toast>();
   const token = getToken();
 
+  useEffect(() => {
+    // Adiciona a classe ao body quando o componente é montado
+    document.body.classList.add("sign-page");
+    return () => {
+      // Remove a classe do body quando o componente é desmontado
+      document.body.classList.remove("sign-page");
+    };
+  }, []);
+
   function showToast(type: "success" | "error", message: string) {
     setToastProps({ type, message, duration: 3000 });
   }
@@ -97,8 +106,8 @@ export function Sign() {
       <h1 className="banner"> GrowTwitter </h1>
       <div className="signup-container">
         <FormStyle onSubmit={handleSignupForm}>
-          <h1>Criar Conta</h1>
-          <span className="mobile">Digite seus dados para se cadastrar</span>
+          <h1>Primeira vez aqui?</h1>
+          <span className="mobile">Faça parte desta comunidade.</span>
           <input
             type="text"
             name="uname"
@@ -140,7 +149,9 @@ export function Sign() {
       <div className="signin-container">
         <FormStyle onSubmit={handleLoginForm}>
           <h1>Entrar</h1>
-          <span className="mobile">Use seu e-mail ou username para entrar</span>
+          <span className="mobile">
+            A plataforma definitiva para todos os apaixonados por redes sociais
+          </span>
           <input
             type="email"
             name="email"
@@ -189,7 +200,7 @@ export function Sign() {
           <div className="overlay-panel right-overlay">
             <h1>Olá! Primeira vez aqui?</h1>
             <p>
-              Seja parte desta comunidade que valoriza a liberdade de expressão,
+              Faça parte desta comunidade que valoriza a liberdade de expressão,
               a conexão com pessoas de todo o mundo e a disseminação de ideias.
             </p>
             <Button type="button" ghost onClick={() => toggle(false)}>

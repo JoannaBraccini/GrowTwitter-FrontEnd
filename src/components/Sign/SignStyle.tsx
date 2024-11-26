@@ -137,24 +137,24 @@ export const SignStyle = styled.div<SignProps>`
     margin: 10px 0;
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 768px) {
     width: 95vw;
     height: 80vh;
 
     .banner {
-      font-size: 1.8rem;
+      font-size: 1.9rem;
+    }
+
+    footer :first-child {
+      display: none;
     }
 
     footer {
-      display: none;
+      height: 3rem;
     }
 
     .overlay-container {
       display: none;
-    }
-
-    h1 {
-      margin-top: 20px;
     }
 
     .signin-container {
@@ -178,7 +178,12 @@ export const SignStyle = styled.div<SignProps>`
     }
 
     span {
-      margin: 15px 0;
+      margin: 10px 0;
+    }
+
+    a {
+      color: #0066af;
+      font-weight: 400;
     }
 
     .mobile {
