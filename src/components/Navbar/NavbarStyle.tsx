@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const NavbarStyle = styled.div`
-  border-right: 1px solid #e6ecf0;
+  border-right: 2px solid #e6ecf0;
   flex: 0.2;
 
   min-width: 250px;
@@ -9,36 +9,35 @@ export const NavbarStyle = styled.div`
   padding-left: 20px;
   padding-right: 20px;
 
+  .icons,
+  .logo {
+    width: 2rem;
+    height: auto;
+    margin-right: 1rem;
+    vertical-align: text-bottom;
+  }
+
   div {
     display: flex;
     align-items: center;
     cursor: pointer;
-    padding: 20px;
-
-    span,
-    .logo-black {
-      width: 1.75rem;
-      height: 1.75rem;
-      vertical-align: text-bottom;
-      padding: 20px;
-    }
+    padding: 15px;
 
     h2 {
-      font-weight: 800;
+      font-weight: 400;
       font-size: 20px;
       margin-right: 20px;
     }
 
     &:hover {
-      background-color: #e6ecf0;
+      background-color: #e7e7e8;
       border-radius: 30px;
-      color: #50b7f5;
-      transition: color 100ms ease-out;
+      transition: color 0.2s ease-out;
     }
   }
 
   .active {
-    color: #50b7f5;
+    font-weight: 800;
   }
 
   .navbar-tweet {

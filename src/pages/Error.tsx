@@ -1,5 +1,5 @@
-import { Button } from "../../../components/Button";
-import { ErrorStyle } from "../../../components/ErrorStyle";
+import { Button } from "../components/Button";
+import { ErrorStyle } from "../components/ErrorStyle";
 
 export function Error() {
   return (

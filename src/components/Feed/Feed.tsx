@@ -28,7 +28,7 @@ export function Feed() {
               <h3>
                 Somanath Goudar
                 <span className="post-headerSpecial">
-                  <span className="material-icons post-badge"> verified </span>
+                  <span className="icons post-badge"> verified </span>
                   @somanathg
                 </span>
               </h3>
@@ -39,9 +39,9 @@ export function Feed() {
           </div>
           <img src="" alt="" />
           <div className="post-footer">
-            <span className="material-icons"> repeat </span>
-            <span className="material-icons"> favorite_border </span>
-            <span className="material-icons"> publish </span>
+            <span className="icons"> repeat </span>
+            <span className="icons"> favorite_border </span>
+            <span className="icons"> publish </span>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@ export function Feed() {
               <h3>
                 Somanath Goudar
                 <span className="post-headerSpecial">
-                  <span className="material-icons post-badge"> verified </span>
+                  <span className="icons post-badge"> verified </span>
                   @somanathg
                 </span>
               </h3>
@@ -68,9 +68,9 @@ export function Feed() {
           </div>
           <img src="" alt="" />
           <div className="post-footer">
-            <span className="material-icons"> repeat </span>
-            <span className="material-icons"> favorite_border </span>
-            <span className="material-icons"> publish </span>
+            <span className="icons"> repeat </span>
+            <span className="icons"> favorite_border </span>
+            <span className="icons"> publish </span>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { DefaultLayout } from "../../layouts/DefaultLayout";
+import { DefaultLayout } from "../configs/layouts/DefaultLayout";
 
 export function Explore() {
   return (

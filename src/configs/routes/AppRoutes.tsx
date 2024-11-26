@@ -1,12 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Feed } from "./pages/Feed";
-import { Sign } from "./pages/Sign";
-import { Profile } from "./pages/Profile";
-import { Explore } from "./pages/Explore";
-import { Error } from "./pages/Error";
+import { Feed } from "../../pages/Feed";
+import { Sign } from "../../pages/Sign";
+import { Profile } from "../../pages/Profile";
+import { Explore } from "../../pages/Explore";
+import { Error } from "../../pages/Error";
 
 const router = createBrowserRouter([
-  { path: "/", element: <Feed /> },
+  { path: "/", element: <Sign /> },
   { path: "/sign", element: <Sign /> },
   { path: "/profile", element: <Profile /> },
   { path: "/explore", element: <Explore /> },
