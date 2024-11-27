@@ -1,4 +1,4 @@
-import { Main } from "../../components/Main";
+import { MainContent } from "../../components/Main";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
 import { ReactNode } from "react";
@@ -11,7 +11,7 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     <>
       <Navbar />
-      <Main>{children}</Main>
+      <MainContent>{children}</MainContent>
       <Sidebar />
     </>
   );

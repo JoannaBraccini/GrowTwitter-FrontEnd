@@ -34,7 +34,7 @@
     <li>
       <a href="#about-the-project">Sobre o Projeto</a>
       <ul>
-        <li><a href="#built-with">Linguagens</a></li>
+        <li><a href="#built-with">Linguagens & Ferramentas</a></li>
       </ul>
     </li>
     <li>
@@ -44,7 +44,6 @@
         <li><a href="#installation">Instalação</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Uso</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contribuição</a></li>
     <li><a href="#license">Licença</a></li>
@@ -61,7 +60,7 @@
 
 ### Projeto para avaliação de conhecimentos.
 
-Plataforma similar ao X (antigo Twitter), com CRUD para Tweets, Replies, Likes e Followers.
+Plataforma similar ao X (antigo Twitter), com CRUD para Usuários, Tweets, Replies, Likes e Followers.
 
 <!-- <p align="right">(<a href="#readme-top">voltar ao topo</a>)</p> -->
 
@@ -71,6 +70,7 @@ Plataforma similar ao X (antigo Twitter), com CRUD para Tweets, Replies, Likes e
 [![HTML][html]][html-url]
 [![CSS][css]][css-url]
 [![Markdown][MarkdownGuide]][Markdown-url]
+
 [![React][React.js]][React-url]
 [![Vite][Vite.dev]][Vite-url]
 [![ReactRouter][ReactRouter]][ReactRouter-url]
@@ -78,6 +78,7 @@ Plataforma similar ao X (antigo Twitter), com CRUD para Tweets, Replies, Likes e
 [![Node][Node.js]][Node-url]
 [![Postgres][Postgres]][Postgres-url]
 [![npm][npmjs]][npm-url]
+
 [![VisualStudioCode][VisualStudioCode]][VisualStudioCode-url]
 [![GitHub][GitHub]][GitHub-url]
 [![Git][Git]][Git-url]
@@ -91,6 +92,8 @@ Fazer uma cópia e rodar localmente.
 ### Pré Requisitos
 
 - npm
+- API: https://github.com/JoannaBraccini/GrowTwitter-BackEnd2
+- Banco de dados (utilizado: PostgresSQL)
 
 <p align="right">(<a href="#readme-top">voltar ao topo</a>)</p>
 
@@ -100,11 +103,15 @@ Fazer uma cópia e rodar localmente.
    ```sh
    git clone https://github.com/JoannaBraccini/GrowTwitter-FrontEnd.git
    ```
-2. Instale NPM packages
+2. Crie um arquivo .env espelhado no .env-example fornecido e preencha com os dados necessários
+   ```sh
+   cp .env-example .env
+   ```
+3. Instale NPM packages
    ```sh
    npm install
    ```
-3. Start
+4. Start
    ```sh
    npm run dev
    ```

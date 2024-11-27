@@ -1,5 +1,5 @@
 import { DefaultLayoutProps } from "../configs/layouts/DefaultLayout";
 
-export function Main({ children }: DefaultLayoutProps) {
+export function MainContent({ children }: DefaultLayoutProps) {
   return <div>{children}</div>;
 }

@@ -3,56 +3,67 @@ import styled from "styled-components";
 export const NavbarStyle = styled.div`
   border-right: 2px solid #e6ecf0;
   flex: 0.2;
-
   min-width: 250px;
-  margin-top: 20px;
-  padding-left: 10px;
-  padding-right: 20px;
+  padding: 20px;
 
-  .icons,
-  .logo {
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .icons {
     width: 2rem;
     height: auto;
     margin-right: 1rem;
   }
 
   .logo {
-    margin: auto;
     width: 2.5rem;
   }
 
   .account-button {
-    padding: 0;
+    font-family: var(--Montserrat);
+    letter-spacing: 1px;
+    position: fixed;
+    bottom: 0;
+    padding: 12px;
     border-radius: 9999px;
-    outline: 1px dotted red;
-    margin: 1rem auto;
-    cursor: crosshair;
+    cursor: pointer;
+    background-color: green;
+    flex-direction: row;
+    align-items: center;
 
-    .account-image {
-      img {
-        border-radius: 100%;
-        width: 40px;
-        height: 40px;
-      }
+    img {
+      align-items: flex-end;
+      height: 1.25em;
+      max-width: 100%;
     }
 
-    .account-user {
+    .account-image {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
       padding: 0;
-      display: flex;
+    }
+
+    div {
       flex-direction: column;
       text-overflow: unset;
+      align-items: start;
+      padding: 0;
+    }
 
-      .account-name {
-        color: #0f1419;
-      }
-
-      .account-email {
-        color: #536471;
-      }
+    .account-name {
+      color: #0f1419;
+      padding: 0;
+    }
+    .account-email {
+      color: #536471;
+      padding: 0;
     }
 
     &:hover {
-      color: #e7e7e8;
+      background-color: #e7e7e8;
     }
   }
 
@@ -89,6 +100,8 @@ export const NavbarStyle = styled.div`
     border-radius: 30px;
     height: 50px;
     margin-top: 1rem;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
 
     &:hover {
       background-color: #1a8cd8;
