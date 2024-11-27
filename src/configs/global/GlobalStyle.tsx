@@ -15,8 +15,9 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: var(--OpenSans);
-    background-color: #f6f5f7;
+    background-color: #FFFFFF;
     display: flex;
+    justify-content: space-between;
     height: 100vh;
     max-width: 1300px;
     margin-left: auto;
@@ -25,7 +26,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body.sign-page {
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
