@@ -12,7 +12,7 @@ export const NavbarStyle = styled.div`
   }
 
   .icons {
-    width: 2rem;
+    width: 1.6rem;
     height: auto;
     margin-right: 1rem;
   }
