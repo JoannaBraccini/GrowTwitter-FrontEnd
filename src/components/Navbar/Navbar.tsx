@@ -11,8 +11,7 @@ import profileWhite from "../../assets/icons/profile-white.svg";
 import profileBlack from "../../assets/icons/profile-black.svg";
 import userPhoto from "../../assets/Icons/user-photo.svg";
 import dotsIcon from "../../assets/Icons/dots.svg";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const navItems = [
   {
@@ -46,39 +45,39 @@ const navItems = [
 ];
 
 export function Navbar() {
-  const [activeItem, setActiveItem] = useState(-1);
+  const location = useLocation();
 
   return (
     <NavbarStyle>
-      <img className="logo" src={logoBlack} alt="Logo"></img>
-      {navItems.map(({ icon, iconActive, label, alt, to }, index) => (
+      <img className="logo" src={logoBlack} alt="Logo" />
+      {navItems.map(({ icon, iconActive, label, alt, to }) => (
         <Link key={label} to={to}>
-          <div onClick={() => setActiveItem(index)}>
+          <div className={location.pathname === to ? "active" : ""}>
             <span>
               <img
                 className="icons"
-                src={activeItem === index ? iconActive : icon}
+                src={location.pathname === to ? iconActive : icon}
                 alt={alt}
               />
             </span>
-            <h2>{label}</h2>
+            <h2
+              style={{ fontWeight: location.pathname === to ? "700" : "400" }}
+            >
+              {label}
+            </h2>
           </div>
         </Link>
       ))}
       <Button className="navbar-tweet">Postar</Button>
       <div className="account-button">
-        <div>
-          <img
-            className="account-image"
-            src={userPhoto}
-            alt="Foto do Usuário"
-          />
+        <div className="account-image">
+          <img src={userPhoto} alt="Foto do Usuário" />
         </div>
-        <div>
-          <span className="account-name">Usuário</span>
-          <span className="account-email">email</span>
+        <div className="account-data">
+          <span className="account-name">User Name</span>
+          <span className="account-username">@username</span>
         </div>
-        <div>
+        <div className="dots-image">
           <img src={dotsIcon} alt="Mais" />
         </div>
       </div>
