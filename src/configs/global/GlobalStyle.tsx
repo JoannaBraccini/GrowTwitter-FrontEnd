@@ -14,21 +14,21 @@ export const GlobalStyle = createGlobalStyle`
     }
 
   body {
-    font-family: var(--OpenSans);
-    background-color: #FFFFFF;
-    display: flex;
-    justify-content: space-between;
-    height: 100vh;
-    max-width: 1300px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 10px;
+    #root{
+      display: flex;
+      height: 100vh;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 10px;
+      font-family: var(--OpenSans);
+      background-color: #FFFFFF;
+    }
   }
 
   body.sign-page {
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center;    
   }
 
   `;

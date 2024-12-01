@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
 import { ErrorStyle } from "../components/ErrorStyle";
 
@@ -19,7 +20,7 @@ export function Error() {
               </p>{" "}
               <div className="button">
                 <Button ghost>
-                  <a href="/">Vamos voltar?</a>
+                  <Link to="/">Vamos voltar?</Link>
                 </Button>
               </div>{" "}
             </div>{" "}
