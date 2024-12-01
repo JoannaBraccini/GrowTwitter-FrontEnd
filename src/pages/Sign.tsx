@@ -14,6 +14,7 @@ export function Sign() {
   const navigate = useNavigate();
   const [signIn, toggle] = React.useState(true);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loaderMessage, setLoaderMessage] = useState("Aguarde...");
   const [checked, setChecked] = useState(false);
   const [toastProps, setToastProps] = useState<Toast>();
   const token = getToken();
@@ -26,6 +27,26 @@ export function Sign() {
       document.body.classList.remove("sign-page");
     };
   }, []);
+
+  useEffect(() => {
+    if (loading) {
+      const messages = [
+        "Aguarde...",
+        "Só mais um momento...",
+        "Estamos quase lá!",
+      ];
+      let index = 0;
+
+      const interval = setInterval(() => {
+        index = (index + 1) % messages.length;
+        setLoaderMessage(messages[index]);
+      }, 5000); // Alterar a mensagem a cada 5 segundos
+
+      return () => clearInterval(interval); // Limpa o intervalo quando o loading for falso
+    } else {
+      setLoaderMessage("Aguarde..."); // Reseta a mensagem quando o loading termina
+    }
+  }, [loading]);
 
   function showToast(type: "success" | "error", message: string) {
     setToastProps({ type, message, duration: 3000 });
@@ -91,12 +112,12 @@ export function Sign() {
     sessionStorage.setItem("token", response.data!.token);
 
     showToast("success", response.message);
-    navigate("/feed");
+    navigate("/");
   }
 
   useEffect(() => {
     if (token) {
-      navigate("/feed");
+      navigate("/");
       return;
     }
   }, [token, navigate]);
@@ -209,7 +230,7 @@ export function Sign() {
           </div>
         </div>
       </div>
-      <Loader isLoading={loading} message="Aguarde..." />
+      <Loader isLoading={loading} message={loaderMessage} />
       {toastProps && (
         <ToastResponse
           message={toastProps.message}
