@@ -1,7 +1,14 @@
 import styled from "styled-components";
 
 export const SidebarStyle = styled.div`
-  flex: 0.3;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-right: 1rem;
+  padding: 0 8px;
+  min-width: 250px;
+  flex: 0.5;
+  border-left: 1px solid #ececec;
 
   .sidebar-input {
     display: flex;

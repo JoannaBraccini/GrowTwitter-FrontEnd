@@ -11,8 +11,9 @@ import profileWhite from "../../assets/icons/profile-white.svg";
 import profileBlack from "../../assets/icons/profile-black.svg";
 import userPhoto from "../../assets/Icons/user-photo.svg";
 import dotsIcon from "../../assets/Icons/dots.svg";
+import logoutIcon from "../../assets/icons/logout.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LoginResponse } from "../../types";
 import { getUser } from "../../utils";
 
@@ -52,14 +53,30 @@ export function Navbar() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<LoginResponse | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setUser(getUser());
   }, []);
 
-  const toggleMenu = () => {
+  const handleMenuToggle = () => {
     setIsMenuOpen((open) => !open);
   };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [isMenuOpen]);
 
   function logout() {
     localStorage.clear();
@@ -78,14 +95,12 @@ export function Navbar() {
       {navItems.map(({ icon, iconActive, label, alt, to }) => (
         <Link key={label} to={to}>
           <div className={location.pathname === to ? "active" : ""}>
-            <span>
-              <img
-                className="icons"
-                src={location.pathname === to ? iconActive : icon}
-                alt={alt}
-                aria-label={`Navegar para ${label}`}
-              />
-            </span>
+            <img
+              className="icons"
+              src={location.pathname === to ? iconActive : icon}
+              alt={alt}
+              aria-label={`Navegar para ${label}`}
+            />
             <h2
               style={{ fontWeight: location.pathname === to ? "700" : "400" }}
             >
@@ -94,30 +109,39 @@ export function Navbar() {
           </div>
         </Link>
       ))}
-      <Button className="navbar-tweet">Postar</Button>
-      <div className="account-button" onClick={toggleMenu}>
-        {
-          user ? (
-            <>
-              <div className="account-image">
-                <img src={userPhoto} alt={user.name} />
-              </div>
-              <div className="account-data">
-                <span className="account-name">{user.name}</span>
-                <span className="account-username">@{user.username}</span>
-              </div>
-              <div className="dots-image">
-                <img src={dotsIcon} alt="Mais" />
-                {isMenuOpen && (
-                  <ul className="menu">
-                    <li onClick={logout}>Logout</li>
-                  </ul>
-                )}
-              </div>
-            </>
-          ) : null // Caso o usuário ainda não tenha sido carregado
-        }
-      </div>
+      <Button fullWidth shadow size="large" className="navbar-tweet">
+        Postar
+      </Button>
+
+      {user && ( //mostra somente se retornado o user
+        <div className="account-container" ref={menuRef}>
+          <div
+            className="account-button"
+            onClick={handleMenuToggle}
+            aria-expanded={isMenuOpen}
+            aria-label="Abrir menu da conta"
+          >
+            <div className="account-image">
+              <img src={userPhoto} alt={user.name} />
+            </div>
+            <div className="account-data">
+              <span className="account-name">{user.name}</span>
+              <span className="account-username">@{user.username}</span>
+            </div>
+            <div className="dots-image">
+              <img src={dotsIcon} alt="Mais" />
+            </div>
+          </div>
+          {isMenuOpen && ( //mostra somente se menu aberto
+            <ul className="navbar-menu">
+              <li onClick={logout}>
+                <img src={logoutIcon} alt="Logout" />
+                Logout
+              </li>
+            </ul>
+          )}
+        </div>
+      )}
     </NavbarStyle>
   );
 }

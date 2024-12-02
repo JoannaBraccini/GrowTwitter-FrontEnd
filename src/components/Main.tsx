@@ -1,5 +1,15 @@
-import { DefaultLayoutProps } from "../configs/layouts/DefaultLayout";
+// MainContent styled component
+import styled from "styled-components";
 
-export function MainContent({ children }: DefaultLayoutProps) {
-  return <div>{children}</div>;
-}
+export const MainContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+
+  .content-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 20px;
+  }
+`;

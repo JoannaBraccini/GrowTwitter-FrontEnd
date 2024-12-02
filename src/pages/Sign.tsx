@@ -61,7 +61,11 @@ export function Sign() {
     setLoading(false);
 
     showToast(response.ok ? "success" : "error", response.message);
-    if (response.ok) setTimeout(() => navigate("/sign"), 500);
+    if (response.ok)
+      setTimeout(() => {
+        e.currentTarget.reset();
+        toggle(true);
+      }, 500);
   }
 
   //Formulario de login
@@ -157,7 +161,9 @@ export function Sign() {
             placeholder="Confirme a Senha"
             required
           />
-          <Button disabled={loading}>Cadastrar</Button>
+          <Button size="small" disabled={loading}>
+            Cadastrar
+          </Button>
           <p className="mobile">
             Já possiu conta? {""}
             <a type="button" onClick={() => toggle(true)}>
@@ -194,7 +200,9 @@ export function Sign() {
             />
             <label>Lembrar</label>
           </div>
-          <Button disabled={loading}>Entrar</Button>
+          <Button size="small" disabled={loading}>
+            Entrar
+          </Button>
           <p className="mobile">
             Não possiu conta? {""}
             <a type="button" onClick={() => toggle(false)}>
@@ -213,7 +221,12 @@ export function Sign() {
               por redes sociais que buscam uma experiência familiar e poderosa,
               semelhante ao Twitter, mas com um toque único.
             </p>
-            <Button type="button" ghost onClick={() => toggle(true)}>
+            <Button
+              type="button"
+              ghost
+              size="small"
+              onClick={() => toggle(true)}
+            >
               Entre
             </Button>
           </div>
@@ -224,7 +237,12 @@ export function Sign() {
               Faça parte desta comunidade que valoriza a liberdade de expressão,
               a conexão com pessoas de todo o mundo e a disseminação de ideias.
             </p>
-            <Button type="button" ghost onClick={() => toggle(false)}>
+            <Button
+              type="button"
+              ghost
+              size="small"
+              onClick={() => toggle(false)}
+            >
               Cadastre-se
             </Button>
           </div>

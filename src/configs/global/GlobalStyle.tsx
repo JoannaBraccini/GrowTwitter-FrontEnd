@@ -34,6 +34,13 @@ export const GlobalStyle = createGlobalStyle`
     justify-content: space-between;
   }
 
+  .layout-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+}
+
 
   `;
 

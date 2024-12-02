@@ -9,10 +9,12 @@ export interface DefaultLayoutProps {
 
 export function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
-    <>
+    <div className="layout-container">
       <Navbar />
-      <MainContent>{children}</MainContent>
+      <MainContent>
+        <div className="content-container">{children}</div>
+      </MainContent>
       <Sidebar />
-    </>
+    </div>
   );
 }

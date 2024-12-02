@@ -4,7 +4,7 @@ export function Sidebar() {
   return (
     <SidebarStyle>
       <div className="sidebar-input">
-        <span className="icons sidebar-searchIcon"> Buscar </span>
+        <span className="icons sidebar-searchIcon" />
         <input type="text" placeholder="Buscar" />
       </div>
 

@@ -1,22 +1,33 @@
 import styled from "styled-components";
 
-export interface ButtonProps {
+export interface Button {
   ghost?: boolean;
+  fullWidth?: boolean;
+  shadow?: boolean;
+  size?: "small" | "medium" | "large";
 }
 
-export const Button = styled.button<ButtonProps>`
+export const Button = styled.button<Button>`
   font-family: var(--Montserrat);
-  border-radius: 20px;
+  border-radius: 30px;
   border: 1px solid;
-  background-color: ${(props) => (props.ghost ? "transparent" : "#4595e1")};
-  border-color: ${(props) => (props.ghost ? "#fff" : "#4595e1")};
   color: #ffffff;
-  font-size: 12px;
+
+  background-color: ${({ ghost }) => (ghost ? "transparent" : "#4595e1")};
+  border-color: ${({ ghost }) => (ghost ? "#fff" : "#4595e1")};
+  box-shadow: ${({ shadow }) =>
+    shadow ? "0px 5px 10px rgba(0, 0, 0, 0.1)" : "none"};
+  width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
+  max-width: 300px;
+  height: ${({ size }) => (size === "large" ? "50px" : "auto")};
+  font-size: ${({ size }) =>
+    size === "small" ? "12px" : size === "large" ? "16px" : "15px"};
   font-weight: bold;
   padding: 12px 45px;
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: transform 80ms ease-in;
+
   &:active {
     transform: scale(0.95);
   }
