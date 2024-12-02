@@ -11,7 +11,7 @@ import profileWhite from "../../assets/icons/profile-white.svg";
 import profileBlack from "../../assets/icons/profile-black.svg";
 import userPhoto from "../../assets/Icons/user-photo.svg";
 import dotsIcon from "../../assets/Icons/dots.svg";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { QueryFilter } from "../../types/user.type";
 
@@ -47,6 +47,7 @@ const navItems = [
 ];
 
 export function Navbar() {
+  const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<QueryFilter>();
@@ -64,6 +65,8 @@ export function Navbar() {
 
   function logout() {
     localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    navigate("/sign");
   }
 
   return (

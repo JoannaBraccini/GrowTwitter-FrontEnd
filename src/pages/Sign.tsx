@@ -9,14 +9,15 @@ import { ToastResponse } from "../components/Toast/Toast";
 import { Toast } from "../types/toast";
 import { Loader } from "../components/Loader/Loader";
 import { Footer } from "../components/Footer/Footer";
+import { useLoading } from "../utils/loading";
 
 export function Sign() {
   const navigate = useNavigate();
   const [signIn, toggle] = React.useState(true);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [loaderMessage, setLoaderMessage] = useState("Aguarde...");
   const [checked, setChecked] = useState(false);
   const [toastProps, setToastProps] = useState<Toast>();
+
+  const { loading, loaderMessage, setLoading } = useLoading();
   const token = getToken();
 
   useEffect(() => {
@@ -28,26 +29,6 @@ export function Sign() {
     };
   }, []);
 
-  useEffect(() => {
-    if (loading) {
-      const messages = [
-        "Aguarde...",
-        "Só mais um momento...",
-        "Estamos quase lá!",
-      ];
-      let index = 0;
-
-      const interval = setInterval(() => {
-        index = (index + 1) % messages.length;
-        setLoaderMessage(messages[index]);
-      }, 5000); // Alterar a mensagem a cada 5 segundos
-
-      return () => clearInterval(interval); // Limpa o intervalo quando o loading for falso
-    } else {
-      setLoaderMessage("Aguarde..."); // Reseta a mensagem quando o loading termina
-    }
-  }, [loading]);
-
   function showToast(type: "success" | "error", message: string) {
     setToastProps({ type, message, duration: 3000 });
   }
@@ -56,6 +37,7 @@ export function Sign() {
     setToastProps(undefined);
   };
 
+  // Formulario de Cadastro
   async function handleSignupForm(e: React.FormEvent<HTMLFormElement>) {
     setLoading(true);
     e.preventDefault();
@@ -82,6 +64,7 @@ export function Sign() {
     if (response.ok) setTimeout(() => navigate("/sign"), 500);
   }
 
+  //Formulario de login
   async function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
     setLoading(true);
     event.preventDefault();
@@ -110,12 +93,18 @@ export function Sign() {
     }
 
     if (response.data) {
-      const { token } = response.data;
+      const userData = response.data;
+      const user = {
+        token: userData.token,
+        username: userData.username,
+        name: userData.name,
+      };
 
+      //salvar os dados do usuário no storage
       if (checked) {
-        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
       }
-      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("user", JSON.stringify(user));
 
       showToast("success", response.message);
       navigate("/");
@@ -125,6 +114,7 @@ export function Sign() {
     setLoading(false);
   }
 
+  //controle de login
   useEffect(() => {
     if (token) {
       navigate("/");

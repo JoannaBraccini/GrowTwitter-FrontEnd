@@ -14,20 +14,26 @@ export const GlobalStyle = createGlobalStyle`
     }
 
   body {    
-      display: flex;
-      height: 100vh;
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 0 10px;
-      font-family: var(--OpenSans);
-      background-color: #FFFFFF;    
+    display: flex;
+    height: 100vh;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 10px;
+    font-family: var(--OpenSans);
+    background-color: #FFFFFF;    
   }
 
   body.sign-page {
     flex-direction: column;
     justify-content: center;
-    align-items: center;    
+    align-items: center; 
   }
+
+  body:not(.sign-page){
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
 
   `;
 
