@@ -100,19 +100,29 @@ export function Sign() {
 
     const response = await login(user);
 
-    setLoading(false);
-    if (!response.ok) {
-      showToast("error", response.message);
+    if (!response || !response.ok) {
+      showToast(
+        "error",
+        response?.message || "Ocorreu um erro. Tente novamente mais tarde."
+      );
+      setLoading(false);
       return;
     }
 
-    if (checked) {
-      localStorage.setItem("token", response.data!.token);
-    }
-    sessionStorage.setItem("token", response.data!.token);
+    if (response.data) {
+      const { token } = response.data;
 
-    showToast("success", response.message);
-    navigate("/");
+      if (checked) {
+        localStorage.setItem("token", token);
+      }
+      sessionStorage.setItem("token", token);
+
+      showToast("success", response.message);
+      navigate("/");
+    } else {
+      showToast("error", "Resposta inválida do servidor.");
+    }
+    setLoading(false);
   }
 
   useEffect(() => {

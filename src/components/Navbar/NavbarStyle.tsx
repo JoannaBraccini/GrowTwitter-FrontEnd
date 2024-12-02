@@ -120,5 +120,46 @@ export const NavbarStyle = styled.div`
       background-color: #1a8cd8;
       cursor: pointer;
     }
+
+    .dots-image .menu {
+      position: absolute;
+      bottom: 0;
+      right: -5px;
+      padding: 5px 0;
+      background: white;
+      border-radius: 4px;
+      transform: scale(0);
+      transform-origin: bottom right;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease;
+      z-index: 1;
+    }
+
+    .dots-image:hover .menu {
+      transform: scale(1);
+    }
+
+    .dots-image .menu li {
+      height: 25px;
+      font-size: 16px;
+      margin-bottom: 2px;
+      padding: 17px 15px;
+      cursor: pointer;
+      box-shadow: none;
+      border-radius: 0;
+      justify-content: flex-start;
+    }
+
+    .menu li:last-child {
+      margin-bottom: 0;
+    }
+
+    .menu li:hover {
+      background: var(--highlight-color);
+    }
+
+    .menu li i {
+      padding-right: 8px;
+    }
   }
 `;

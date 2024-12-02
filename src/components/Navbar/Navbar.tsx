@@ -12,6 +12,8 @@ import profileBlack from "../../assets/icons/profile-black.svg";
 import userPhoto from "../../assets/Icons/user-photo.svg";
 import dotsIcon from "../../assets/Icons/dots.svg";
 import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { QueryFilter } from "../../types/user.type";
 
 const navItems = [
   {
@@ -46,6 +48,23 @@ const navItems = [
 
 export function Navbar() {
   const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<QueryFilter>();
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const toggleMenu = () => {
+    setIsMenuOpen((open) => !open);
+  };
+
+  function logout() {
+    localStorage.removeItem("user");
+  }
 
   return (
     <NavbarStyle>
@@ -69,16 +88,28 @@ export function Navbar() {
         </Link>
       ))}
       <Button className="navbar-tweet">Postar</Button>
-      <div className="account-button">
+      <div className="account-button" onClick={toggleMenu}>
         <div className="account-image">
-          <img src={userPhoto} alt="Foto do Usuário" />
+          <img src={userPhoto} alt={user?.name} />
         </div>
         <div className="account-data">
-          <span className="account-name">User Name</span>
-          <span className="account-username">@username</span>
+          {user ? (
+            <>
+              <span className="account-name">{user.name}</span>
+              <span className="account-username">@{user.username}</span>
+            </>
+          ) : (
+            //<span>Carregando...</span> // Caso o usuário ainda não tenha sido carregado
+            <span className="account-name">{user}</span>
+          )}
         </div>
         <div className="dots-image">
           <img src={dotsIcon} alt="Mais" />
+          {isMenuOpen && (
+            <div className="logout-menu">
+              <button onClick={logout}>Logout</button>
+            </div>
+          )}
         </div>
       </div>
     </NavbarStyle>

@@ -4,6 +4,13 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface LoginResponse {
+  token: string;
+  userId: string;
+  username: string;
+  name: string;
+}
+
 export interface SignupRequest {
   name: string;
   email: string;
