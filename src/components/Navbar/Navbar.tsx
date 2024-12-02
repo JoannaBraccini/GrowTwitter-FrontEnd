@@ -13,7 +13,8 @@ import userPhoto from "../../assets/Icons/user-photo.svg";
 import dotsIcon from "../../assets/Icons/dots.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { QueryFilter } from "../../types/user.type";
+import { LoginResponse } from "../../types";
+import { getUser } from "../../utils";
 
 const navItems = [
   {
@@ -50,13 +51,10 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<QueryFilter>();
+  const [user, setUser] = useState<LoginResponse | null>(null);
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
+    setUser(getUser());
   }, []);
 
   const toggleMenu = () => {
@@ -64,14 +62,19 @@ export function Navbar() {
   };
 
   function logout() {
-    localStorage.removeItem("user");
-    sessionStorage.removeItem("token");
+    localStorage.clear();
+    sessionStorage.clear();
     navigate("/sign");
   }
 
   return (
     <NavbarStyle>
-      <img className="logo" src={logoBlack} alt="Logo" />
+      <img
+        className="logo"
+        src={logoBlack}
+        alt="Logo"
+        onClick={() => (user ? navigate("/") : navigate("/sign"))}
+      />
       {navItems.map(({ icon, iconActive, label, alt, to }) => (
         <Link key={label} to={to}>
           <div className={location.pathname === to ? "active" : ""}>
@@ -80,6 +83,7 @@ export function Navbar() {
                 className="icons"
                 src={location.pathname === to ? iconActive : icon}
                 alt={alt}
+                aria-label={`Navegar para ${label}`}
               />
             </span>
             <h2
@@ -92,28 +96,27 @@ export function Navbar() {
       ))}
       <Button className="navbar-tweet">Postar</Button>
       <div className="account-button" onClick={toggleMenu}>
-        <div className="account-image">
-          <img src={userPhoto} alt={user?.name} />
-        </div>
-        <div className="account-data">
-          {user ? (
+        {
+          user ? (
             <>
-              <span className="account-name">{user.name}</span>
-              <span className="account-username">@{user.username}</span>
+              <div className="account-image">
+                <img src={userPhoto} alt={user.name} />
+              </div>
+              <div className="account-data">
+                <span className="account-name">{user.name}</span>
+                <span className="account-username">@{user.username}</span>
+              </div>
+              <div className="dots-image">
+                <img src={dotsIcon} alt="Mais" />
+                {isMenuOpen && (
+                  <ul className="menu">
+                    <li onClick={logout}>Logout</li>
+                  </ul>
+                )}
+              </div>
             </>
-          ) : (
-            //<span>Carregando...</span> // Caso o usuário ainda não tenha sido carregado
-            <span className="account-name">{user}</span>
-          )}
-        </div>
-        <div className="dots-image">
-          <img src={dotsIcon} alt="Mais" />
-          {isMenuOpen && (
-            <div className="logout-menu">
-              <button onClick={logout}>Logout</button>
-            </div>
-          )}
-        </div>
+          ) : null // Caso o usuário ainda não tenha sido carregado
+        }
       </div>
     </NavbarStyle>
   );

@@ -18,4 +18,6 @@ export type UserBase = Partial<
   }
 >;
 
-export type QueryFilter = Partial<Pick<User, "name" | "username" | "email">>;
+export type UserQueryFilter = Partial<
+  Pick<User, "name" | "username" | "email">
+>;

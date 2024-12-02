@@ -155,7 +155,7 @@ export const NavbarStyle = styled.div`
     }
 
     .menu li:hover {
-      background: var(--highlight-color);
+      background: #536471;
     }
 
     .menu li i {
