@@ -6,8 +6,8 @@ import { Explore } from "../../pages/Explore";
 import { Error } from "../../pages/Error";
 
 const router = createBrowserRouter([
-  { path: "/", element: <Feed /> },
-  { path: "/sign", element: <Sign /> },
+  { path: "/", element: <Sign /> },
+  { path: "/feed", element: <Feed /> },
   { path: "/profile", element: <Profile /> },
   { path: "/explore", element: <Explore /> },
 

@@ -1,6 +1,6 @@
-import { MainContent } from "../../components/Main";
-import { Navbar } from "../../components/Navbar/Navbar";
-import { Sidebar } from "../../components/Sidebar/Sidebar";
+import { MainContent } from "../../components/MainContent";
+import { Navbar } from "../../components/Navbar";
+import { Sidebar } from "../../components/Sidebar";
 import { ReactNode } from "react";
 
 export interface DefaultLayoutProps {

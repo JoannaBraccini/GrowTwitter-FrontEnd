@@ -5,10 +5,10 @@ import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../utils/getToken";
 import { login, signUp } from "../configs/services/auth.service";
-import { ToastResponse } from "../components/Toast/Toast";
+import { ToastResponse } from "../components/Toast";
 import { Toast } from "../types/toast";
-import { Loader } from "../components/Loader/Loader";
-import { Footer } from "../components/Footer/Footer";
+import { Loader } from "../components/Loader";
+import { Footer } from "../components/Footer";
 import { useLoading } from "../utils/loading";
 
 export function Sign() {
@@ -111,7 +111,7 @@ export function Sign() {
       sessionStorage.setItem("user", JSON.stringify(user));
 
       showToast("success", response.message);
-      navigate("/");
+      navigate("/feed");
     } else {
       showToast("error", "Resposta inválida do servidor.");
     }
@@ -121,7 +121,7 @@ export function Sign() {
   //controle de login
   useEffect(() => {
     if (token) {
-      navigate("/");
+      navigate("/feed");
       return;
     }
   }, [token, navigate]);
