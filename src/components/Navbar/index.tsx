@@ -16,6 +16,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { LoginResponse } from "../../types";
 import { getUser } from "../../utils";
+import { ToggleButton } from "../ToggleButton";
 
 const navItems = [
   {
@@ -53,34 +54,30 @@ export function Navbar() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<LoginResponse | null>(null);
+  const [isActive, setIsActive] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setUser(getUser());
   }, []);
 
-  const handleMenuToggle = () => {
-    setIsMenuOpen((open) => !open);
-  };
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-      setIsMenuOpen(false);
-    }
-  };
+  const handleMenuToggle = () => setIsMenuOpen((open) => !open);
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
     if (isMenuOpen) {
       document.addEventListener("click", handleClickOutside);
-    } else {
-      document.removeEventListener("click", handleClickOutside);
     }
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMenuOpen]);
 
   function logout() {
-    localStorage.clear();
-    sessionStorage.clear();
+    localStorage.removeItem("token");
     navigate("/sign");
   }
 
@@ -90,8 +87,15 @@ export function Navbar() {
         className="logo"
         src={logoBlack}
         alt="Logo"
-        onClick={() => (user ? navigate("/") : navigate("/sign"))}
+        onClick={() => (user ? navigate("/feed") : navigate("/"))}
       />
+      <ToggleButton
+        isActive={isActive}
+        onClick={() => setIsActive((prev) => !prev)}
+      >
+        <button></button>
+        <span></span>
+      </ToggleButton>
       {navItems.map(({ icon, iconActive, label, alt, to }) => (
         <Link key={label} to={to}>
           <div className={location.pathname === to ? "active" : ""}>

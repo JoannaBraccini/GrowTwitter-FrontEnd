@@ -8,6 +8,7 @@ export const NavbarStyle = styled.div`
   border-right: 1px solid #ececec;
 
   a {
+    padding-top: 12px;
     text-decoration: none;
     color: inherit;
     div {
@@ -30,6 +31,7 @@ export const NavbarStyle = styled.div`
 
   .logo {
     margin-left: 10px;
+    margin-bottom: 10px;
     width: 2.5rem;
   }
 

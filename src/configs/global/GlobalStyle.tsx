@@ -20,18 +20,20 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0 auto;
     padding: 0 10px;
     font-family: var(--OpenSans);
-    background-color: #FFFFFF;    
-  }
+    background-color: ${(props) => props.theme.backgroundColor};
+    color: ${(props) => props.theme.textColor};
+    transition: all 0.3s ease;
 
-  body.sign-page {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; 
-  }
+    &.sign-page {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; 
+    }
 
-  body:not(.sign-page){
-    flex-direction: row;
-    justify-content: space-between;
+    &.default-page {
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 
   .layout-container {

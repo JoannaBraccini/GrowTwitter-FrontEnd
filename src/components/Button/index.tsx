@@ -1,20 +1,21 @@
 import styled from "styled-components";
 
-export interface Button {
+export interface ButtonProps {
   ghost?: boolean;
   fullWidth?: boolean;
   shadow?: boolean;
   size?: "small" | "medium" | "large";
 }
 
-export const Button = styled.button<Button>`
+export const Button = styled.button<ButtonProps>`
   font-family: var(--Montserrat);
   border-radius: 30px;
   border: 1px solid;
-  color: #ffffff;
+  color: ${(props) => props.theme.textColor};
 
-  background-color: ${({ ghost }) => (ghost ? "transparent" : "#4595e1")};
-  border-color: ${({ ghost }) => (ghost ? "#fff" : "#4595e1")};
+  background-color: ${({ ghost, theme }) =>
+    ghost ? "transparent" : theme.accent};
+  border-color: ${({ ghost, theme }) => (ghost ? "#fff" : theme.accent)};
   box-shadow: ${({ shadow }) =>
     shadow ? "0px 5px 10px rgba(0, 0, 0, 0.1)" : "none"};
   width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
