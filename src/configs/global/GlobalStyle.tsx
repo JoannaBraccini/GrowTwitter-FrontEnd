@@ -34,6 +34,12 @@ export const GlobalStyle = createGlobalStyle`
       flex-direction: row;
       justify-content: space-between;
     }
+    
+  }
+
+  a{
+  text-decoration: none;
+  color: ${({ theme }) => theme.accent}
   }
 
   .layout-container {

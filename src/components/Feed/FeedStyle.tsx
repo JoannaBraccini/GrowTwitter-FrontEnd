@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const FeedStyle = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: fit-content;
   overflow-y: scroll;
   flex: 1;
 
@@ -11,7 +10,7 @@ export const FeedStyle = styled.div`
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid #e6ecf0;
+    border-bottom: 1px solid ${({ theme }) => theme.highlight};
     padding: 15px 20px;
   }
 

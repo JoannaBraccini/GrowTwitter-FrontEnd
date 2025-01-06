@@ -11,11 +11,12 @@ export const Button = styled.button<ButtonProps>`
   font-family: var(--Montserrat);
   border-radius: 30px;
   border: 1px solid;
-  color: ${(props) => props.theme.textColor};
+  color: ${({ theme }) => theme.textColor};
 
   background-color: ${({ ghost, theme }) =>
     ghost ? "transparent" : theme.accent};
-  border-color: ${({ ghost, theme }) => (ghost ? "#fff" : theme.accent)};
+  border-color: ${({ ghost, theme }) =>
+    ghost ? theme.backgroundColor : theme.accent};
   box-shadow: ${({ shadow }) =>
     shadow ? "0px 5px 10px rgba(0, 0, 0, 0.1)" : "none"};
   width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
@@ -28,6 +29,12 @@ export const Button = styled.button<ButtonProps>`
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: transform 80ms ease-in;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0081d1;
+    border-color: #0081d1;
+  }
 
   &:active {
     transform: scale(0.95);

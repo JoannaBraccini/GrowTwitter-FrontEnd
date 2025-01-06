@@ -1,48 +1,51 @@
 import { Button } from "../Button";
 import { NavbarStyle } from "./NavbarStyle";
-import logoBlack from "/icons/logo-black.svg";
-import homeWhite from "/icons/home-white.svg";
-import homeBlack from "/icons/home-black.svg";
-import exploreWhite from "/icons/explore-white.svg";
-import exploreBlack from "/icons/explore-black.svg";
-import notificationWhite from "/icons/notification-white.svg";
-import notificationBlack from "/icons/notification-black.svg";
-import profileWhite from "/icons/profile-white.svg";
-import profileBlack from "/icons/profile-black.svg";
-import userPhoto from "/icons/user-photo.svg";
-import dotsIcon from "/icons/dots.svg";
-import logoutIcon from "/icons/logout.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { LoginResponse } from "../../types";
 import { getUser } from "../../utils";
 import { ToggleButton } from "../ToggleButton";
+import { ThemeContext } from "../../configs/contexts/ThemeContext";
+import userPhoto from "../../assets/user-photo.svg";
+import {
+  DotsIcon,
+  ExploreFill,
+  ExploreIcon,
+  HomeFill,
+  HomeIcon,
+  LogoIcon,
+  LogoutIcon,
+  NotificationFill,
+  NotificationIcon,
+  ProfileFill,
+  ProfileIcon,
+} from "../../assets/icons";
 
 const navItems = [
   {
-    icon: homeWhite,
-    iconActive: homeBlack,
+    icon: <HomeIcon />,
+    iconActive: <HomeFill />,
     label: "Página Inicial",
     alt: "Página Inicial",
-    to: "/",
+    to: "/feed",
   },
   {
-    icon: exploreWhite,
-    iconActive: exploreBlack,
+    icon: <ExploreIcon />,
+    iconActive: <ExploreFill />,
     label: "Explorar",
     alt: "Explorar",
     to: "/explore",
   },
   {
-    icon: notificationWhite,
-    iconActive: notificationBlack,
+    icon: <NotificationIcon />,
+    iconActive: <NotificationFill />,
     label: "Notificações",
     alt: "Notificações",
     to: "/notifications",
   },
   {
-    icon: profileWhite,
-    iconActive: profileBlack,
+    icon: <ProfileIcon />,
+    iconActive: <ProfileFill />,
     label: "Perfil",
     alt: "Perfil",
     to: "/profile",
@@ -54,14 +57,23 @@ export function Navbar() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<LoginResponse | null>(null);
-  const [isActive, setIsActive] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const { toggleTheme, theme } = useContext(ThemeContext);
+
+  const getIcon = (
+    pathname: string,
+    to: string,
+    icon: JSX.Element,
+    iconActive: JSX.Element
+  ) => {
+    return pathname === to ? iconActive : icon;
+  };
+
+  const handleMenuToggle = () => setIsMenuOpen((open) => !open);
 
   useEffect(() => {
     setUser(getUser());
   }, []);
-
-  const handleMenuToggle = () => setIsMenuOpen((open) => !open);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -83,28 +95,24 @@ export function Navbar() {
 
   return (
     <NavbarStyle>
-      <img
-        className="logo"
-        src={logoBlack}
-        alt="Logo"
-        onClick={() => (user ? navigate("/feed") : navigate("/"))}
-      />
-      <ToggleButton
-        isActive={isActive}
-        onClick={() => setIsActive((prev) => !prev)}
-      >
-        <button></button>
-        <span></span>
-      </ToggleButton>
-      {navItems.map(({ icon, iconActive, label, alt, to }) => (
+      <div className="topWrapper">
+        <div
+          className="logo"
+          onClick={() => (user ? navigate("/feed") : navigate("/"))}
+        >
+          <LogoIcon />
+        </div>
+        <ToggleButton onClick={toggleTheme} isActive={theme === "dark"}>
+          <button></button>
+          <span></span>
+        </ToggleButton>
+      </div>
+      {navItems.map(({ icon, iconActive, label, to }) => (
         <Link key={label} to={to}>
           <div className={location.pathname === to ? "active" : ""}>
-            <img
-              className="icons"
-              src={location.pathname === to ? iconActive : icon}
-              alt={alt}
-              aria-label={`Navegar para ${label}`}
-            />
+            <div className="icons">
+              {getIcon(location.pathname, to, icon, iconActive)}
+            </div>
             <h2
               style={{ fontWeight: location.pathname === to ? "700" : "400" }}
             >
@@ -116,7 +124,6 @@ export function Navbar() {
       <Button fullWidth shadow size="large" className="navbar-tweet">
         Postar
       </Button>
-
       {user && ( //mostra somente se retornado o user
         <div className="account-container" ref={menuRef}>
           <div
@@ -133,13 +140,13 @@ export function Navbar() {
               <span className="account-username">@{user.username}</span>
             </div>
             <div className="dots-image">
-              <img src={dotsIcon} alt="Mais" />
+              <DotsIcon />
             </div>
           </div>
           {isMenuOpen && ( //mostra somente se menu aberto
             <ul className="navbar-menu">
               <li onClick={logout}>
-                <img src={logoutIcon} alt="Logout" />
+                <LogoutIcon />
                 Logout
               </li>
             </ul>

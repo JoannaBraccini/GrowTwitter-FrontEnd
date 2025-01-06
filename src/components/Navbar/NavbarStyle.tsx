@@ -2,21 +2,21 @@ import styled from "styled-components";
 
 export const NavbarStyle = styled.div`
   flex: 0.5;
-  min-width: 250px;
+  width: 16.5vw;
   margin-left: 1rem;
   padding: 8px;
-  border-right: 1px solid #ececec;
+  border-right: 1px solid ${({ theme }) => theme.highlight};
 
   a {
     padding-top: 12px;
     text-decoration: none;
     color: inherit;
     div {
-      padding: 12px;
-      margin: 0;
+      padding: 7px 12px;
+      margin: 5px 0;
 
       &:hover {
-        background-color: #e7e7e8;
+        background-color: ${({ theme }) => theme.highlight};
         border-radius: 9999px;
         transition: color 0.2s ease-out;
       }
@@ -24,15 +24,21 @@ export const NavbarStyle = styled.div`
   }
 
   .icons {
-    width: 1.7rem;
+    align-self: center;
     height: auto;
     margin-right: 1rem;
   }
 
+  .topWrapper {
+    display: flex;
+    justify-content: center;
+    gap: 6rem;
+    margin-bottom: 1rem;
+  }
+
   .logo {
-    margin-left: 10px;
     margin-bottom: 10px;
-    width: 2.5rem;
+    width: 3rem;
   }
 
   div {
@@ -48,24 +54,20 @@ export const NavbarStyle = styled.div`
   }
 
   .navbar-tweet {
-    margin-top: 1rem;
-
-    &:hover {
-      background-color: #1a8cd8;
-      cursor: pointer;
-    }
+    margin-top: 2rem;
+    max-width: 220px;
   }
 
   .account-container {
     position: fixed;
     bottom: 0;
     width: 100%;
-    max-width: 300px;
+    max-width: 240px;
     border-radius: 9999px;
-    background-color: #fff;
+    background-color: ${({ theme }) => theme.backgroundColor};
     transition: background-color 0.3s, transform 0.3s;
     &:hover {
-      background-color: #e7e7e8;
+      background-color: ${({ theme }) => theme.highlight};
     }
 
     .account-button {
@@ -93,7 +95,7 @@ export const NavbarStyle = styled.div`
 
         .account-name {
           font-size: 14px;
-          color: #0f1419;
+          color: ${({ theme }) => theme.textSecondary};
           padding: 0;
           font-weight: bold;
           white-space: nowrap;
@@ -103,7 +105,7 @@ export const NavbarStyle = styled.div`
         }
 
         .account-username {
-          color: #536471;
+          color: ${({ theme }) => theme.textExtra};
           padding: 0;
         }
       }
@@ -123,13 +125,13 @@ export const NavbarStyle = styled.div`
       position: absolute;
       top: -40px;
       right: -50px;
-      background-color: white;
-      border: 1px solid #ccc;
+      background-color: ${({ theme }) => theme.backgroundColor};
+      border: 1px solid ${({ theme }) => theme.highlight};
       border-radius: 4px;
       padding: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       &:hover {
-        background-color: #e7e7e8;
+        background-color: ${({ theme }) => theme.highlight};
       }
 
       li {
