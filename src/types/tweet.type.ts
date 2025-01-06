@@ -11,13 +11,17 @@ export interface Tweet {
   content: string;
   createdAt: Date;
   updatedAt?: Date;
-  likes?: { id: string; userId: string }[] | number;
-  retweets?: { id: string; userId: string }[] | number;
-  replies?: Tweet[] | number;
+  likes?: { id: string; userId: string }[];
+  retweets?: { id: string; userId: string }[];
+  replies?: Tweet[];
 }
 
+// Para tweet e comentário
 export type CreateTweetRequest = Partial<
   Pick<Tweet, "parentId"> & { userId: string; type: TweetType; content: string }
 >;
 
-export type UpdateTweetRequest = Pick<Tweet, "userId" | "content">;
+export type UpdateTweetRequest = Pick<Tweet, "id" | "userId" | "content">;
+export type DeleteTweetRequest = Pick<Tweet, "id">;
+export type RetweetRequest = Pick<Tweet, "id" | "userId">;
+export type LikeRequest = Pick<Tweet, "id" | "userId">;
