@@ -1,3 +1,9 @@
+export { SaveIcon } from "./SaveIcon";
+export { ShareIcon } from "./ShareIcon";
+export { StatisticIcon } from "./StatisticIcon";
+export { CommentIcon } from "./CommentIcon";
+export { LikeIcon } from "./LikeIcon";
+export { RetweetIcon } from "./RetweetIcon";
 export { LogoIcon } from "./LogoIcon";
 export { LogoutIcon } from "./LogoutIcon";
 export { MessageIcon } from "./MessageIcon";

@@ -3,15 +3,23 @@ import {
   Tweet,
   CreateTweetRequest,
   UpdateTweetRequest,
+  TweetSearchRequest,
 } from "../../types/tweet.type";
 import { api, ResponseApi } from "./api.service";
 
-export async function getAssessments(token: string) {
+export async function getTweets(
+  token: string,
+  { page, take, search }: TweetSearchRequest = {}
+) {
   try {
-    // http://localhost:3000
     const response = await api.get<ResponseApi<Tweet[]>>("/tweets", {
       headers: {
         Authorization: token,
+      },
+      params: {
+        page,
+        take,
+        search,
       },
     });
 
@@ -28,10 +36,7 @@ export async function getAssessments(token: string) {
   }
 }
 
-export async function createAssessment(
-  token: string,
-  dataBody: CreateTweetRequest
-) {
+export async function createTweet(token: string, dataBody: CreateTweetRequest) {
   try {
     const response = await api.post<ResponseApi<Tweet>>("/tweets", dataBody, {
       headers: {
@@ -52,7 +57,7 @@ export async function createAssessment(
   }
 }
 
-export async function updateAssessment(
+export async function updateTweet(
   token: string,
   { id, ...dataBody }: UpdateTweetRequest
 ) {
@@ -80,7 +85,7 @@ export async function updateAssessment(
   }
 }
 
-export async function deleteAssessment(token: string, id: string) {
+export async function deleteTweet(token: string, id: string) {
   try {
     const response = await api.delete<ResponseApi<Tweet>>(`/tweets/${id}`, {
       headers: { Authorization: token },

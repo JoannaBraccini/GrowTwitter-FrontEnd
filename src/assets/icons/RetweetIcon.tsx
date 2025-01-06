@@ -1,10 +1,4 @@
-import { useContext } from "react";
-import { ThemeContext } from "../../configs/contexts/ThemeContext";
-
 export function RetweetIcon() {
-  const { theme } = useContext(ThemeContext);
-  const fillColor = theme === "dark" ? "#ffffff" : "#000000";
-
   return (
     <svg
       width="24"
@@ -12,7 +6,7 @@ export function RetweetIcon() {
       viewBox="0 0 64 64"
       xmlns="http://www.w3.org/2000/svg"
       stroke-width="5"
-      stroke={fillColor}
+      stroke="#626161"
       fill="none"
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

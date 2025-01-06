@@ -4,10 +4,10 @@ export const Post = styled.div`
   display: flex;
   align-items: flex-start;
   border-bottom: 1px solid ${({ theme }) => theme.highlight};
-  padding: 10px 0;
+  padding: 10px;
 
   .post-avatar {
-    padding: 10px 10px 0 21px;
+    padding: 0 10px 10px 10px;
     img {
       border-radius: 50%;
       height: 40px;
@@ -16,11 +16,6 @@ export const Post = styled.div`
 
   .post-body {
     flex: 1;
-    img {
-      width: 450px;
-      object-fit: contain;
-      border-radius: 20px;
-    }
   }
 
   .post-footer {
@@ -28,11 +23,6 @@ export const Post = styled.div`
     justify-content: space-between;
     margin-top: 10px;
   }
-
-  /* .post-icons {
-    display: flex;
-    justify-content: space-between;
-  } */
 
   .post-badge {
     font-size: 14px !important;
@@ -51,8 +41,33 @@ export const Post = styled.div`
     margin-bottom: 5px;
   }
 
-  .post-headerDescription {
-    margin-bottom: 10px;
+  .post-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     font-size: 15px;
+    img {
+      object-fit: contain;
+      border: 1px solid ${({ theme }) => theme.highlight};
+      border-radius: 20px;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .post-icons {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    .post-actions {
+      display: flex;
+      width: 60px;
+      justify-content: space-between;
+      align-items: end;
+      padding-bottom: 6px;
+    }
   }
 `;

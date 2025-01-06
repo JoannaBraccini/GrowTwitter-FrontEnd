@@ -1,18 +1,12 @@
-import { useContext } from "react";
-import { ThemeContext } from "../../configs/contexts/ThemeContext";
-
 export function CommentIcon() {
-  const { theme } = useContext(ThemeContext);
-  const fillColor = theme === "dark" ? "#ffffff" : "#000000";
-
   return (
     <svg
-      fill={fillColor}
+      fill="#626161"
       width="23"
       height="23"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
-      stroke={fillColor}
+      stroke="#626161"
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
       <g

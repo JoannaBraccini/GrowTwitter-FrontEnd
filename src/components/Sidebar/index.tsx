@@ -12,7 +12,7 @@ const trends = [
     posts: "310 mil posts",
   },
   {
-    category: "Entretenimento · Assunto do Momento",
+    category: "Assunto do Momento em Brasil",
     topic: "Bridgerton",
     posts: "6.378 posts",
   },
