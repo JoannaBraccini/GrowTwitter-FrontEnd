@@ -21,7 +21,7 @@ interface ThemeContextProviderProps {
 
 export function ThemeContextProvider({ children }: ThemeContextProviderProps) {
   const [theme, setTheme] = useState<TTheme>(
-    (localStorage.getItem("mode") as TTheme) ?? "light"
+    (localStorage.getItem("theme") as TTheme) ?? "light"
   );
 
   const toggle = () => {
@@ -29,7 +29,7 @@ export function ThemeContextProvider({ children }: ThemeContextProviderProps) {
   };
 
   useEffect(() => {
-    localStorage.setItem("mode", theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   return (

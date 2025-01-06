@@ -1,9 +1,13 @@
-import { DefaultTheme } from "styled-components/dist/types";
-import dark from "src/icons/dark.svg";
+// import { DefaultTheme } from "styled-components/dist/types";
+import { DefaultTheme } from "styled-components";
+import dark from "../../assets/dark.svg";
 
 export const light: DefaultTheme = {
-  backgroundColor: "#ffffff",
-  textColor: "#000000",
+  backgroundColor: "#eeeeee",
+  textColor: "#292929",
+  textSecondary: "#0f1419",
+  textExtra: "#536471",
   accent: "#4595e1",
+  highlight: "#dadada",
   toggle: `url(${dark})`,
 };

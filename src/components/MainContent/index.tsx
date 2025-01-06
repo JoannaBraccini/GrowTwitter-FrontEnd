@@ -11,5 +11,6 @@ export const MainContent = styled.div`
     flex: 1;
     flex-direction: column;
     gap: 20px;
+    min-width: 37.5vw;
   }
 `;
