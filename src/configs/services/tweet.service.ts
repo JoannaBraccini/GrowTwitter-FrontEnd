@@ -22,11 +22,26 @@ export async function getTweets(
         search,
       },
     });
+    const tweetsData = response.data.data;
+    if (tweetsData) {
+      // Buscar os detalhes dos usuários para cada tweet
+      const tweetsWithUser = await Promise.all(
+        tweetsData.map(async (tweet) => {
+          const userResponse = await api.get(`/users/${tweet.userId}`);
+          const user = userResponse.data.data;
+          return {
+            ...tweet,
+            username: user.username, // Adicionando o username
+            name: user.name, // Adicionando o nome
+          };
+        })
+      );
+    }
 
     return {
       ok: response.data.ok,
       message: response.data.message,
-      data: response.data.data,
+      data: tweetsWithUser,
     };
   } catch (error: any) {
     return {

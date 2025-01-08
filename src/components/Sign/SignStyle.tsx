@@ -6,7 +6,6 @@ export interface SignProps {
 
 export const SignStyle = styled.div<SignProps>`
   font-family: var(--Poppins);
-  background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
@@ -21,7 +20,7 @@ export const SignStyle = styled.div<SignProps>`
     background: linear-gradient(to bottom, #1da1f2, #70c9f9, #e8f5fd);
     background-clip: text;
     -webkit-background-clip: text;
-    color: transparent;
+    color: transparent !important;
     -webkit-text-fill-color: transparent;
     position: fixed;
     top: 0;

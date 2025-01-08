@@ -32,6 +32,26 @@ export async function getUsers(
   }
 }
 
+export async function getUserbyId(token: string, id: string) {
+  try {
+    const response = await api.get<ResponseApi<string>>(`/users/${id}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return {
+      ok: response.data.ok,
+      message: response.data.message,
+      data: response.data.data,
+    };
+  } catch (error: any) {
+    return {
+      ok: error.response.data.ok,
+      message: `Erro: ${error.response.data.message}`,
+    };
+  }
+}
+
 export async function updateUser(
   token: string,
   { id, ...dataBody }: ProfileUpdate
@@ -60,7 +80,7 @@ export async function updateUser(
   }
 }
 
-export async function deleteTweet(token: string, id: string) {
+export async function deleteUser(token: string, id: string) {
   try {
     const response = await api.delete<ResponseApi<User>>(`/users/${id}`, {
       headers: { Authorization: token },

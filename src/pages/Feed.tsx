@@ -5,7 +5,7 @@ import { FeedStyle } from "../components/Feed/FeedStyle";
 import { Button } from "../components/Button";
 import { useCallback, useEffect, useState } from "react";
 import { getToken, getUser } from "../utils";
-import { LoginResponse, Tweet } from "../types";
+import { LoginResponse, Tweet, User } from "../types";
 import userPhoto from "../assets/user-photo.svg";
 import linkPhoto from "../assets/link-photo.svg";
 import {
@@ -17,12 +17,15 @@ import {
   ShareIcon,
 } from "../assets/icons";
 import { getTweets } from "../configs/services/tweet.service";
+import { Loader } from "../components/Loader";
 
 export function Feed() {
   const token = getToken();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<LoginResponse | null>(null);
   const [tweets, setTweets] = useState<Tweet[]>([]);
+  const [following, setFollowing] = useState<User[]>([]);
+  const [activeTab, setActiveTab] = useState<"home" | "following">("home");
 
   // Buscar tweets
   const fetchTweets = useCallback(async () => {
@@ -37,17 +40,52 @@ export function Feed() {
     setTweets(response.data || []);
   }, [token]);
 
+  // Buscar os usuários seguidos
+  const fetchFollowing = useCallback(async () => {
+    setLoading(true);
+    const response = await getFollowing(token);
+    setLoading(false);
+
+    if (!response.ok) {
+      alert(response.message);
+      return;
+    }
+    setFollowing(response.data || []);
+  }, [token]);
+
   // Atualizar o feed
   useEffect(() => {
     setUser(getUser());
     fetchTweets();
-  }, [fetchTweets]);
+    fetchFollowing();
+  }, [fetchTweets, fetchFollowing]);
+
+  // Filtrar tweets dependendo da aba
+  const filteredTweets =
+    activeTab === "home"
+      ? tweets
+      : tweets.filter((tweet) =>
+          following.some((follow) => follow.id === tweet.userId)
+        );
 
   return (
     <DefaultLayout>
       <FeedStyle>
         <div className="feed-header">
-          <h2>Página Inicial</h2>
+          <div className="tabs">
+            <button
+              className={activeTab === "home" ? "active" : ""}
+              onClick={() => setActiveTab("home")}
+            >
+              Página Inicial
+            </button>
+            <button
+              className={activeTab === "following" ? "active" : ""}
+              onClick={() => setActiveTab("following")}
+            >
+              Seguindo
+            </button>
+          </div>
         </div>
 
         <TweetBox>
@@ -66,7 +104,7 @@ export function Feed() {
           </form>
         </TweetBox>
 
-        {tweets.map((tweet) => (
+        {filteredTweets.map((tweet) => (
           <Post key={tweet.id}>
             <div className="post-avatar">
               <img src={userPhoto} alt={tweet.userId} />
@@ -128,6 +166,7 @@ export function Feed() {
           </Post>
         ))}
       </FeedStyle>
+      <Loader isLoading={loading} />
     </DefaultLayout>
   );
 }

@@ -131,7 +131,7 @@ export function Sign() {
       <h1 className="banner"> GrowTwitter </h1>
       <div className="signup-container">
         <FormStyle onSubmit={handleSignupForm}>
-          <h1>Primeira vez aqui?</h1>
+          <h1 style={{ color: "#3a3a3a" }}>Primeira vez aqui?</h1>
           <span className="mobile">Faça parte desta comunidade.</span>
           <input
             type="text"
@@ -175,7 +175,7 @@ export function Sign() {
 
       <div className="signin-container">
         <FormStyle onSubmit={handleLoginForm}>
-          <h1>Entrar</h1>
+          <h1 style={{ color: "#3a3a3a" }}>Entrar</h1>
           <span className="mobile">
             A plataforma definitiva para todos os apaixonados por redes sociais
           </span>

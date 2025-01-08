@@ -23,18 +23,17 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${(props) => props.theme.backgroundColor};
     color: ${(props) => props.theme.textColor};
     transition: all 0.3s ease;
+    justify-content: space-between;
 
     &.sign-page {
       flex-direction: column;
       justify-content: center;
       align-items: center; 
-    }
-
-    &.default-page {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-    
+      background-color: #eee;
+      button {
+        border-color: ${({ theme }) => theme.accent};
+      }
+    }    
   }
 
   a{
