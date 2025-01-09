@@ -1,7 +1,4 @@
-type TweetType = {
-  TWEET: string;
-  REPLY: string;
-};
+export type TweetType = "TWEET" | "REPLY";
 
 export interface Tweet {
   id: string;

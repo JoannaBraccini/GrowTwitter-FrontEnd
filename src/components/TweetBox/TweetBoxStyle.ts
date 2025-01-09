@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const TweetBox = styled.div`
+export const TweetBoxStyle = styled.div`
   padding-bottom: 10px;
   padding-right: 10px;
   border-bottom: 8px inset ${({ theme }) => theme.highlight};

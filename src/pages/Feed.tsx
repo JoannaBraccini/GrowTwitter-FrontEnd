@@ -1,13 +1,11 @@
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
-import { TweetBox } from "../components/Feed/TweetBox";
+import { TweetBox } from "../components/TweetBox";
 import { Post } from "../components/Feed/Post";
 import { FeedStyle } from "../components/Feed/FeedStyle";
-import { Button } from "../components/Button";
 import { useCallback, useEffect, useState } from "react";
 import { getToken, getUser } from "../utils";
-import { LoginResponse, Tweet, User } from "../types";
+import { CreateTweetRequest, LoginResponse, Tweet, User } from "../types";
 import userPhoto from "../assets/user-photo.svg";
-import linkPhoto from "../assets/link-photo.svg";
 import {
   RetweetIcon,
   CommentIcon,
@@ -16,7 +14,7 @@ import {
   SaveIcon,
   ShareIcon,
 } from "../assets/icons";
-import { getTweets } from "../configs/services/tweet.service";
+import { getTweets, postTweet } from "../configs/services/tweet.service";
 import { Loader } from "../components/Loader";
 
 export function Feed() {
@@ -26,6 +24,35 @@ export function Feed() {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [following, setFollowing] = useState<User[]>([]);
   const [activeTab, setActiveTab] = useState<"home" | "following">("home");
+
+  function showToast(type: "success" | "error", message: string) {
+    setToastProps({ type, message, duration: 3000 });
+  }
+
+  const handleCloseToast = () => {
+    setToastProps(undefined);
+  };
+
+  const createTweet = async (tweet: string) => {
+    if (!user) return;
+
+    const newTweet: CreateTweetRequest = {
+      userId: user.userId,
+      content: tweet,
+      type: "TWEET",
+    };
+
+    setLoading(true);
+    const response = await postTweet(token, newTweet);
+    setLoading(false);
+
+    showToast(response.ok ? "success" : "error", response.message);
+    if (response.ok)
+      setTimeout(() => {
+        e.currentTarget.reset();
+        toggle(true);
+      }, 500);
+  };
 
   // Buscar tweets
   const fetchTweets = useCallback(async () => {
@@ -88,21 +115,12 @@ export function Feed() {
           </div>
         </div>
 
-        <TweetBox>
-          <form>
-            <div className="tweetbox-input">
-              <img src={userPhoto} alt={user?.name} />
-              <input type="text" placeholder="O que está acontecendo?" />
-            </div>
-            <div className="tweetbox-links">
-              <img src={linkPhoto} title="Mídia" />
-
-              <Button size="small" className="tweetbox-tweetButton">
-                Postar
-              </Button>
-            </div>
-          </form>
-        </TweetBox>
+        <TweetBox
+          key="tweet-box"
+          userPhoto={userPhoto}
+          userName={user?.name}
+          onTweetSubmit={createTweet}
+        />
 
         {filteredTweets.map((tweet) => (
           <Post key={tweet.id}>

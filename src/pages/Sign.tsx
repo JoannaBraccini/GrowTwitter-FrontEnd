@@ -5,7 +5,7 @@ import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../utils/getToken";
 import { login, signUp } from "../configs/services/auth.service";
-import { ToastResponse } from "../components/Toast";
+import { ToastResponse } from "../components/ToastResponse";
 import { Toast } from "../types/toast";
 import { Loader } from "../components/Loader";
 import { Footer } from "../components/Footer";

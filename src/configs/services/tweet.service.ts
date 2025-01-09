@@ -14,7 +14,7 @@ export async function getTweets(
   try {
     const response = await api.get<ResponseApi<Tweet[]>>("/tweets", {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
       params: {
         page,
@@ -51,11 +51,11 @@ export async function getTweets(
   }
 }
 
-export async function createTweet(token: string, dataBody: CreateTweetRequest) {
+export async function postTweet(token: string, dataBody: CreateTweetRequest) {
   try {
     const response = await api.post<ResponseApi<Tweet>>("/tweets", dataBody, {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     });
 

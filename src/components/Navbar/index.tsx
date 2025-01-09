@@ -20,6 +20,8 @@ import {
   ProfileFill,
   ProfileIcon,
 } from "../../assets/icons";
+import { Modal } from "../Modal";
+import { TweetBox } from "../TweetBox";
 
 const navItems = [
   {
@@ -56,6 +58,7 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState<LoginResponse | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { toggleTheme, theme } = useContext(ThemeContext);
@@ -70,6 +73,7 @@ export function Navbar() {
   };
 
   const handleMenuToggle = () => setIsMenuOpen((open) => !open);
+  const handleModal = () => setIsModalOpen((open) => !open);
 
   useEffect(() => {
     setUser(getUser());
@@ -121,7 +125,13 @@ export function Navbar() {
           </div>
         </Link>
       ))}
-      <Button fullWidth shadow size="large" className="navbar-tweet">
+      <Button
+        fullWidth
+        shadow
+        size="large"
+        className="navbar-tweet"
+        onClick={handleModal}
+      >
         Postar
       </Button>
       {user && ( //mostra somente se retornado o user
@@ -153,6 +163,18 @@ export function Navbar() {
           )}
         </div>
       )}
+      <Modal
+        isOpen={isMenuOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Postar"
+      >
+        <TweetBox
+          key="tweet-box"
+          userPhoto={userPhoto}
+          userName={user?.name}
+          onTweetSubmit={createTweet}
+        />
+      </Modal>
     </NavbarStyle>
   );
 }

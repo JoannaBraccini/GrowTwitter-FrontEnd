@@ -32,6 +32,7 @@ export const NavbarStyle = styled.div`
   .topWrapper {
     display: flex;
     justify-content: center;
+    align-items: bottom;
     gap: 6rem;
     margin-bottom: 1rem;
   }
