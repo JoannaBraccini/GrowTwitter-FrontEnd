@@ -5,13 +5,14 @@ export interface ButtonProps {
   fullWidth?: boolean;
   shadow?: boolean;
   size?: "small" | "medium" | "large";
+  text?: string;
 }
 
 export const Button = styled.button<ButtonProps>`
   font-family: var(--Montserrat);
   border-radius: 30px;
   border: 1px solid;
-  color: ${({ theme }) => theme.textColor};
+  color: ${({ text, theme }) => text ?? theme.textColor};
 
   background-color: ${({ ghost, theme }) =>
     ghost ? "transparent" : theme.accent};

@@ -1,3 +1,2 @@
-export * from "./getToken";
-export * from "./getUser";
+export * from "./getUserLogged";
 export * from "./loading";

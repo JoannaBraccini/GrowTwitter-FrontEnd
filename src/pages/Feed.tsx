@@ -3,8 +3,8 @@ import { TweetBox } from "../components/TweetBox";
 import { Post } from "../components/Feed/Post";
 import { FeedStyle } from "../components/Feed/FeedStyle";
 import { useCallback, useEffect, useState } from "react";
-import { getToken, getUser } from "../utils";
-import { CreateTweetRequest, LoginResponse, Tweet, User } from "../types";
+import { getUserLogged } from "../utils";
+import { CreateTweetRequest, Toast, Tweet, User } from "../types";
 import userPhoto from "../assets/user-photo.svg";
 import {
   RetweetIcon,
@@ -16,14 +16,47 @@ import {
 } from "../assets/icons";
 import { getTweets, postTweet } from "../configs/services/tweet.service";
 import { Loader } from "../components/Loader";
+import { ToastResponse } from "../components/ToastResponse";
+
+interface UserLogged {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+}
 
 export function Feed() {
-  const token = getToken();
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<LoginResponse | null>(null);
+  const [toastProps, setToastProps] = useState<Toast | undefined>(undefined);
+  const [user, setUser] = useState<UserLogged | null>(null);
+  const [token, setToken] = useState("");
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [following, setFollowing] = useState<User[]>([]);
   const [activeTab, setActiveTab] = useState<"home" | "following">("home");
+
+  useEffect(() => {
+    const loginResponse = getUserLogged();
+    if (loginResponse) {
+      setUser(loginResponse.user);
+      setToken(loginResponse.token);
+    }
+  }, []);
+
+  // Buscar tweets
+  useEffect(() => {
+    const fetchTweets = async () => {
+      try {
+        setLoading(true);
+        const response = await getTweets();
+        if (response.data) setTweets(response.data);
+      } catch {
+        showToast("error", "Erro ao buscar tweets.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTweets();
+  }, []);
 
   function showToast(type: "success" | "error", message: string) {
     setToastProps({ type, message, duration: 3000 });
@@ -37,35 +70,21 @@ export function Feed() {
     if (!user) return;
 
     const newTweet: CreateTweetRequest = {
-      userId: user.userId,
+      userId: user.id,
       content: tweet,
       type: "TWEET",
     };
 
-    setLoading(true);
-    const response = await postTweet(token, newTweet);
-    setLoading(false);
-
-    showToast(response.ok ? "success" : "error", response.message);
-    if (response.ok)
-      setTimeout(() => {
-        e.currentTarget.reset();
-        toggle(true);
-      }, 500);
-  };
-
-  // Buscar tweets
-  const fetchTweets = useCallback(async () => {
-    setLoading(true);
-    const response = await getTweets(token);
-    setLoading(false);
-
-    if (!response.ok) {
-      alert(response.message);
-      return;
+    try {
+      setLoading(true);
+      await postTweet(token, newTweet);
+      showToast("success", "Tweet criado com sucesso!");
+    } catch {
+      showToast("error", "Erro ao criar tweet.");
+    } finally {
+      setLoading(false);
     }
-    setTweets(response.data || []);
-  }, [token]);
+  };
 
   // Buscar os usuários seguidos
   const fetchFollowing = useCallback(async () => {
@@ -80,12 +99,9 @@ export function Feed() {
     setFollowing(response.data || []);
   }, [token]);
 
-  // Atualizar o feed
-  useEffect(() => {
-    setUser(getUser());
-    fetchTweets();
-    fetchFollowing();
-  }, [fetchTweets, fetchFollowing]);
+  const isImageUrl = (url: string) => {
+    return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+  };
 
   // Filtrar tweets dependendo da aba
   const filteredTweets =
@@ -98,6 +114,14 @@ export function Feed() {
   return (
     <DefaultLayout>
       <FeedStyle>
+        <Loader isLoading={loading} />
+        {toastProps && (
+          <ToastResponse
+            type={toastProps.type}
+            message={toastProps.message}
+            onClose={handleCloseToast}
+          />
+        )}
         <div className="feed-header">
           <div className="tabs">
             <button
@@ -125,7 +149,7 @@ export function Feed() {
         {filteredTweets.map((tweet) => (
           <Post key={tweet.id}>
             <div className="post-avatar">
-              <img src={userPhoto} alt={tweet.userId} />
+              <img src={userPhoto} alt={tweet.user?.name} />
             </div>
 
             <div className="post-body">
@@ -134,41 +158,42 @@ export function Feed() {
                   <span>
                     <RetweetIcon />
                     {tweet.retweets.length === 1
-                      ? `${tweet.userId} repostou`
-                      : `${tweet.userId} e mais ${
-                          tweet.retweets.length - 1
-                        } repostaram`}
+                      ? `${tweet.user?.name} repostou`
+                      : `${tweet.retweetsCount} repostaram`}
                   </span>
                 )}
 
                 <div className="post-headerText">
                   <h3>
-                    {tweet.userId}
+                    {tweet.user?.name}
                     <span className="post-headerSpecial">
                       <span className="icons post-badge"> verified </span>@
-                      {tweet.userId}
+                      {tweet.user?.username}
                     </span>
                   </h3>
                 </div>
                 <div className="post-content">
-                  <p>{tweet.content}</p>
-                  {/* {tweet.content.image && <img src="" alt="" />} */}
+                  {isImageUrl(tweet.content) ? (
+                    <img src={tweet.content} alt="Tweet content" />
+                  ) : (
+                    <p>{tweet.content}</p>
+                  )}
                 </div>
               </div>
               <div className="post-footer">
                 <div className="post-icons">
                   <span title="Responder">
-                    <CommentIcon /> {tweet.replies && tweet.replies?.length}
+                    <CommentIcon /> {tweet.repliesCount}
                   </span>
                   <span title="Repostar">
-                    <RetweetIcon /> {tweet.retweets && tweet.retweets?.length}
+                    <RetweetIcon /> {tweet.retweetsCount}
                   </span>
                   <span title="Curtir">
-                    <LikeIcon /> {tweet.likes && tweet.likes?.length}
+                    <LikeIcon /> {tweet.likesCount}
                   </span>
                   <span title="Ver">
                     <StatisticIcon />
-                    {/* {tweet.views && tweet.views?.length} */}
+                    {/* {tweet.views && tweet.viewsCount} */}
                   </span>
                   <div className="post-actions">
                     <span title="Salvar Tweet">
@@ -184,7 +209,6 @@ export function Feed() {
           </Post>
         ))}
       </FeedStyle>
-      <Loader isLoading={loading} />
     </DefaultLayout>
   );
 }

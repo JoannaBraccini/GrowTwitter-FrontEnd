@@ -97,18 +97,15 @@ export function Sign() {
     }
 
     if (response.data) {
-      const userData = response.data;
-      const user = {
-        token: userData.token,
-        username: userData.username,
-        name: userData.name,
-      };
+      const { token, user } = response.data;
 
       //salvar os dados do usuário no storage
       if (checked) {
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("GrowToken", JSON.stringify(token));
+        localStorage.setItem("GrowUser", JSON.stringify(user));
       }
-      sessionStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("GrowToken", JSON.stringify(token));
+      sessionStorage.setItem("GrowUser", JSON.stringify(user));
 
       showToast("success", response.message);
       navigate("/feed");
@@ -161,7 +158,7 @@ export function Sign() {
             placeholder="Confirme a Senha"
             required
           />
-          <Button size="small" disabled={loading}>
+          <Button text="white" size="small" disabled={loading}>
             Cadastrar
           </Button>
           <p className="mobile">
@@ -200,7 +197,7 @@ export function Sign() {
             />
             <label>Lembrar</label>
           </div>
-          <Button size="small" disabled={loading}>
+          <Button text="white" size="small" disabled={loading}>
             Entrar
           </Button>
           <p className="mobile">
@@ -225,6 +222,7 @@ export function Sign() {
               type="button"
               ghost
               size="small"
+              text="white"
               onClick={() => toggle(true)}
             >
               Entre
@@ -241,6 +239,7 @@ export function Sign() {
               type="button"
               ghost
               size="small"
+              text="white"
               onClick={() => toggle(false)}
             >
               Cadastre-se

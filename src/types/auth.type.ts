@@ -6,9 +6,12 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
-  userId: string;
-  username: string;
-  name: string;
+  user: {
+    id: string;
+    name: string;
+    username: string;
+    email: string;
+  };
 }
 
 export interface SignupRequest {
@@ -17,7 +20,3 @@ export interface SignupRequest {
   password: string;
   username: string;
 }
-
-export type ProfileUpdate = Partial<
-  Pick<LoginRequest, "username" | "password">
->;

@@ -21,3 +21,9 @@ export type UserBase = Partial<
 export type UserSearchRequest = Partial<
   Pick<User, "id" | "name" | "username" | "email">
 >;
+
+export type UserUpdate = { id: string } & Partial<
+  Pick<User, "name" | "username">
+> & {
+    password?: string;
+  };

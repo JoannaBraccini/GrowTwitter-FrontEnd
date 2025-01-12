@@ -3,14 +3,32 @@ export type TweetType = "TWEET" | "REPLY";
 export interface Tweet {
   id: string;
   userId: string;
+  user?: {
+    name: string;
+    username: string;
+  };
   type: TweetType;
   parentId?: string;
   content: string;
   createdAt: Date;
   updatedAt?: Date;
-  likes?: { id: string; userId: string }[];
-  retweets?: { id: string; userId: string }[];
+
+  likesCount?: number;
+  retweetsCount?: number;
+  repliesCount?: number;
+
+  likes?: Actions[];
+  retweets?: Actions[];
   replies?: Tweet[];
+}
+
+interface Actions {
+  id: string;
+  userId: string;
+  user: {
+    name: string;
+    username: string;
+  };
 }
 
 // Para tweet e comentário

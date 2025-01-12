@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { ProfileUpdate, User, UserSearchRequest } from "../../types";
+import { UserUpdate, User, UserSearchRequest } from "../../types";
 import { api, ResponseApi } from "./api.service";
 
 export async function getUsers(
-  token: string,
-  { name, username, email }: UserSearchRequest = {}
+  { name, username, email }: UserSearchRequest = {},
+  token?: string
 ) {
   try {
+    //Define o headers para busca pública ou autenticada
+    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
     const response = await api.get<ResponseApi<User[]>>("/users", {
-      headers: {
-        Authorization: token,
-      },
+      headers,
       params: {
         name,
         username,
@@ -32,12 +32,11 @@ export async function getUsers(
   }
 }
 
-export async function getUserbyId(token: string, id: string) {
+export async function getUserbyId(id: string, token?: string) {
   try {
+    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
     const response = await api.get<ResponseApi<string>>(`/users/${id}`, {
-      headers: {
-        Authorization: token,
-      },
+      headers,
     });
     return {
       ok: response.data.ok,
@@ -54,7 +53,7 @@ export async function getUserbyId(token: string, id: string) {
 
 export async function updateUser(
   token: string,
-  { id, ...dataBody }: ProfileUpdate
+  { id, ...dataBody }: UserUpdate
 ) {
   try {
     const response = await api.put<ResponseApi<User>>(
@@ -62,7 +61,7 @@ export async function updateUser(
       dataBody,
       {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -83,7 +82,7 @@ export async function updateUser(
 export async function deleteUser(token: string, id: string) {
   try {
     const response = await api.delete<ResponseApi<User>>(`/users/${id}`, {
-      headers: { Authorization: token },
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     return {

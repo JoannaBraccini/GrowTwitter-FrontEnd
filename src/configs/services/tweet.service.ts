@@ -8,14 +8,13 @@ import {
 import { api, ResponseApi } from "./api.service";
 
 export async function getTweets(
-  token: string,
-  { page, take, search }: TweetSearchRequest = {}
+  { page, take, search }: TweetSearchRequest = {},
+  token?: string
 ) {
   try {
+    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
     const response = await api.get<ResponseApi<Tweet[]>>("/tweets", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
       params: {
         page,
         take,
@@ -23,25 +22,18 @@ export async function getTweets(
       },
     });
     const tweetsData = response.data.data;
-    if (tweetsData) {
-      // Buscar os detalhes dos usuários para cada tweet
-      const tweetsWithUser = await Promise.all(
-        tweetsData.map(async (tweet) => {
-          const userResponse = await api.get(`/users/${tweet.userId}`);
-          const user = userResponse.data.data;
-          return {
-            ...tweet,
-            username: user.username, // Adicionando o username
-            name: user.name, // Adicionando o nome
-          };
-        })
-      );
+    if (!tweetsData) {
+      return {
+        ok: response.data.ok,
+        message: response.data.message,
+        data: [],
+      };
     }
-
+    // Adiciona username e name dos usuários diretamente na resposta
     return {
       ok: response.data.ok,
       message: response.data.message,
-      data: tweetsWithUser,
+      data: tweetsData,
     };
   } catch (error: any) {
     return {

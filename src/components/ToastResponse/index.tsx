@@ -11,7 +11,7 @@ interface ToastProps {
 export const ToastResponse = ({
   message,
   type,
-  duration,
+  duration = 3000,
   onClose,
 }: ToastProps) => {
   const [progress, setProgress] = useState(100);
