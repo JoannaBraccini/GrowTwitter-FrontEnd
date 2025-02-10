@@ -3,7 +3,6 @@ import { NavbarStyle } from "./NavbarStyle";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useRef, useState } from "react";
 import { LoginResponse } from "../../types";
-import { getUser } from "../../utils";
 import { ToggleButton } from "../ToggleButton";
 import { ThemeContext } from "../../configs/contexts/ThemeContext";
 import userPhoto from "../../assets/user-photo.svg";
@@ -22,6 +21,7 @@ import {
 } from "../../assets/icons";
 import { Modal } from "../Modal";
 import { TweetBox } from "../TweetBox";
+import { getUser } from "../../utils/getUser";
 
 const navItems = [
   {
@@ -59,7 +59,7 @@ export function Navbar() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState<LoginResponse | null>(null);
+  const [user, setUser] = useState<LoginResponse["user"] | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { toggleTheme, theme } = useContext(ThemeContext);
 
