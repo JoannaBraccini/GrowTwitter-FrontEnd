@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Actions, Tweet, TweetType } from "../../../types";
-import { getTweetDetails } from "./tweetsSlice";
+import { getTweetDetails } from "./tweetsActions";
 
 interface InitialState {
   ok: boolean;

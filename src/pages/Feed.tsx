@@ -2,10 +2,8 @@ import { DefaultLayout } from "../configs/layouts/DefaultLayout";
 import { TweetBox } from "../components/TweetBox";
 import { Post } from "../components/Feed/Post";
 import { FeedStyle } from "../components/Feed/FeedStyle";
-import { useCallback, useEffect, useState } from "react";
-import { getUserLogged } from "../utils";
-import { CreateTweetRequest, Toast, Tweet, User } from "../types";
-import userPhoto from "../assets/user-photo.svg";
+import { useEffect, useState } from "react";
+import { CreateTweetRequest, Tweet, User } from "../types";
 import {
   RetweetIcon,
   CommentIcon,
@@ -13,168 +11,353 @@ import {
   StatisticIcon,
   SaveIcon,
   ShareIcon,
+  DotsIcon,
 } from "../assets/icons";
-import { getTweets, postTweet } from "../configs/services/tweet.service";
+import verifiedBlue from "../assets/verified-blue.svg";
 import { Loader } from "../components/Loader";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { showAlert } from "../store/modules/alert/alertSlice";
+import {
+  createTweet,
+  deleteTweet,
+  getTweetDetails,
+  getTweets,
+  updateTweet,
+} from "../store/modules/tweets/tweetsActions";
+import { getUserDetails } from "../store/modules/users/usersActions";
+import { formatDate } from "../utils";
+import { Modal } from "../components/Modal";
+import { Tabs } from "../components/Tabs";
+import { logout } from "../store/modules/auth/loginSlice";
+import { useNavigate } from "react-router-dom";
 
 export function Feed() {
   const dispatch = useAppDispatch();
-  const { token, user, loading } = useAppSelector((state) => state.userLogged);
-  const [activeTab, setActiveTab] = useState<"home" | "following">("home");
-  const [search, setSearch] = useState<string>("");
+  const navigate = useNavigate();
+  const {
+    token,
+    user: userLogged,
+    loading,
+  } = useAppSelector((state) => state.userLogged);
+  const { user } = useAppSelector((state) => state.userDetail);
+  const { tweets, loading: loadingTweets } = useAppSelector(
+    (state) => state.tweetsList
+  );
+  const { users } = useAppSelector((state) => state.usersList);
+  const [activeTab, setActiveTab] = useState<"Para você" | "Seguindo">(
+    "Para você"
+  );
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalContent, setModalContent] = useState<React.ReactNode | null>(
+    null
+  );
+  const [tweetToEdit, setTweetToEdit] = useState<Tweet | null>(null);
+  const [menuVisible, setMenuVisible] = useState<string | null>(null);
+
+  const openModal = (title: string, content: React.ReactNode) => {
+    setModalTitle(title);
+    setModalContent(content);
+    setModalOpen(true);
+  };
 
   // Buscar tweets
   useEffect(() => {
-    if (user && token) {
-      dispatch(getTweets());
-    }
-  }, []);
+    if (userLogged && token) {
+      //dispatch(getFeed)
+      if (user.id !== userLogged.id) {
+        dispatch(getUserDetails(userLogged.id));
+      }
+    } else dispatch(getTweets({ page: 1, take: 20 }));
+  }, [dispatch, token, user.id, userLogged]);
 
-  const createTweet = async (tweet: string) => {
-    if (!user) return;
+  const openTweetBoxModal = (
+    title: string,
+    initialContent: string,
+    onTweetSubmit: (content: string) => void
+  ) => {
+    openModal(
+      title,
+      <TweetBox
+        userPhoto={user.avatarUrl}
+        userName={user.name}
+        initialContent={initialContent}
+        onTweetSubmit={onTweetSubmit}
+      />
+    );
+  };
 
-    const newTweet: CreateTweetRequest = {
-      userId: user.id,
-      content: tweet,
-      type: "TWEET",
-    };
-
-    try {
-      setLoading(true);
-      await postTweet(token, newTweet);
-      showToast("success", "Tweet criado com sucesso!");
-    } catch {
-      showToast("error", "Erro ao criar tweet.");
-    } finally {
-      setLoading(false);
+  const handleCreateTweet = (content: string) => {
+    if (!userLogged) {
+      dispatch(
+        showAlert({
+          message: "Faça login para acessar esta função",
+          type: "warning",
+        })
+      );
+      return;
+    } else {
+      const newTweet: CreateTweetRequest = {
+        userId: userLogged.id,
+        content,
+        type: "TWEET",
+      };
+      dispatch(createTweet(newTweet));
     }
   };
 
-  // Buscar os usuários seguidos
-  const fetchFollowing = useCallback(async () => {
-    setLoading(true);
-    const response = await getFollowing(token);
-    setLoading(false);
-
-    if (!response.ok) {
-      alert(response.message);
-      return;
+  const validateId = (tweet: Tweet): boolean => {
+    const validId = tweet.userId === userLogged.id;
+    if (!validId) {
+      dispatch(showAlert({ message: "Usuário não autorizado", type: "error" }));
+      setTimeout(() => {
+        dispatch(logout());
+        navigate("/sign");
+      }, 1000);
     }
-    setFollowing(response.data || []);
-  }, [token]);
+    return validId;
+  };
 
-  const isImageUrl = (url: string) => {
-    return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+  const handleReply = (id: string, content: string) => {
+    const reply: CreateTweetRequest = {
+      parentId: id,
+      userId: user.id,
+      content,
+      type: "REPLY",
+    };
+    dispatch(createTweet(reply));
+  };
+
+  const handleEditTweet = (tweet: Tweet, content: string) => {
+    if (validateId(tweet)) {
+      const updatedTweet: Tweet = { ...tweet, content };
+      dispatch(updateTweet(updatedTweet));
+    }
+    setMenuVisible(null); // Fechar o menu após a exclusão
+  };
+
+  const handleDeleteTweet = (tweet: Tweet) => {
+    if (validateId(tweet)) {
+      dispatch(deleteTweet(tweet.id));
+    }
+    setMenuVisible(null); // Fechar o menu após a exclusão
+  };
+
+  const handleUserDetail = (user: User) => {
+    if (userLogged) {
+      dispatch(getUserDetails(user.id));
+      navigate(`/profile/${user.username}`);
+    }
+  };
+  const handleTweetDetail = (id: string) => {
+    dispatch(getTweetDetails(id));
+  };
+  const handleLike = (id: string) => {};
+  const handleFollow = (id: string) => {};
+
+  const isImageUrl = (url: string) =>
+    /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+
+  const isLinkUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   // Filtrar tweets dependendo da aba
   const filteredTweets =
-    activeTab === "home"
+    activeTab === "Para você"
       ? tweets
       : tweets.filter((tweet) =>
-          following.some((follow) => follow.id === tweet.userId)
+          user.following.some(
+            (follow) =>
+              follow.id === tweet.userId || tweet.userId === userLogged.id
+          )
         );
 
   return (
     <DefaultLayout>
       <FeedStyle>
-        <Loader isLoading={loading} />
-        {toastProps && (
-          <ToastResponse
-            type={toastProps.type}
-            message={toastProps.message}
-            onClose={handleCloseToast}
+        <div className="feed-header">
+          <Tabs
+            tabs={["Para Você", "Seguindo"]}
+            activeTab={activeTab}
+            onTabChange={() => setActiveTab}
+          />
+        </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          <TweetBox
+            key="tweet-box"
+            userPhoto={user.avatarUrl}
+            userName={user.name}
+            initialContent=""
+            onTweetSubmit={handleCreateTweet}
           />
         )}
-        <div className="feed-header">
-          <div className="tabs">
-            <button
-              className={activeTab === "home" ? "active" : ""}
-              onClick={() => setActiveTab("home")}
-            >
-              Página Inicial
-            </button>
-            <button
-              className={activeTab === "following" ? "active" : ""}
-              onClick={() => setActiveTab("following")}
-            >
-              Seguindo
-            </button>
-          </div>
-        </div>
+        {loadingTweets ? (
+          <Loader />
+        ) : (
+          <>
+            {filteredTweets.map((tweet) => {
+              const tweetUser = users.find((user) => user.id === tweet.userId);
+              const isOwnTweet = tweet.userId === userLogged.id;
 
-        <TweetBox
-          key="tweet-box"
-          userPhoto={userPhoto}
-          userName={user?.name}
-          onTweetSubmit={createTweet}
-        />
-
-        {filteredTweets.map((tweet) => (
-          <Post key={tweet.id}>
-            <div className="post-avatar">
-              <img src={userPhoto} alt={tweet.user?.name} />
-            </div>
-
-            <div className="post-body">
-              <div className="post-header">
-                {tweet.retweets && (
-                  <span>
-                    <RetweetIcon />
-                    {tweet.retweets.length === 1
-                      ? `${tweet.user?.name} repostou`
-                      : `${tweet.retweetsCount} repostaram`}
-                  </span>
-                )}
-
-                <div className="post-headerText">
-                  <h3>
-                    {tweet.user?.name}
-                    <span className="post-headerSpecial">
-                      <span className="icons post-badge"> verified </span>@
-                      {tweet.user?.username}
-                    </span>
-                  </h3>
-                </div>
-                <div className="post-content">
-                  {isImageUrl(tweet.content) ? (
-                    <img src={tweet.content} alt="Tweet content" />
-                  ) : (
-                    <p>{tweet.content}</p>
-                  )}
-                </div>
-              </div>
-              <div className="post-footer">
-                <div className="post-icons">
-                  <span title="Responder">
-                    <CommentIcon /> {tweet.repliesCount}
-                  </span>
-                  <span title="Repostar">
-                    <RetweetIcon /> {tweet.retweetsCount}
-                  </span>
-                  <span title="Curtir">
-                    <LikeIcon /> {tweet.likesCount}
-                  </span>
-                  <span title="Ver">
-                    <StatisticIcon />
-                    {/* {tweet.views && tweet.viewsCount} */}
-                  </span>
-                  <div className="post-actions">
-                    <span title="Salvar Tweet">
-                      <SaveIcon />
-                    </span>
-                    <span title="Compartilhar">
-                      <ShareIcon />
-                    </span>
+              return (
+                <Post key={tweet.id}>
+                  <div className="post-avatar">
+                    <img
+                      src={tweetUser?.avatarUrl}
+                      alt={tweetUser?.name}
+                      onClick={() => handleUserDetail(tweetUser ?? user)}
+                    />
                   </div>
-                </div>
-              </div>
-            </div>
-          </Post>
-        ))}
+                  <div className="post-body">
+                    <div className="post-header">
+                      <div className="post-headerText">
+                        <h3>
+                          {tweetUser?.name}
+                          <span className="post-headerSpecial">
+                            {/* user.verified && */}
+                            <span className="icons post-badge">
+                              {" "}
+                              {verifiedBlue}{" "}
+                            </span>
+                            @{tweetUser?.username} &middot;{" "}
+                            {formatDate(
+                              tweet.updatedAt ?? tweet.createdAt,
+                              "relative"
+                            )}
+                          </span>
+                          <div
+                            className="dots-container"
+                            onClick={() => setMenuVisible(tweet.id)}
+                          >
+                            <DotsIcon />
+                          </div>
+                        </h3>
+                      </div>
+                      <div className="post-content">
+                        {isImageUrl(tweet.content) ? (
+                          <img
+                            src={tweet.content}
+                            alt="Tweet content"
+                            className="tweet-image"
+                            onError={(e) =>
+                              (e.currentTarget.style.display = "none")
+                            } // Esconde a imagem se houver erro
+                          />
+                        ) : isLinkUrl(tweet.content) ? (
+                          <a
+                            href={tweet.content}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {tweet.content}
+                          </a>
+                        ) : (
+                          <p>{tweet.content}</p>
+                        )}
+                      </div>
+                    </div>
+                    {/* Menu Flutuante */}
+                    {menuVisible === tweet.id && (
+                      <div className="tweet-menu">
+                        {isOwnTweet ? (
+                          <>
+                            <button
+                              onClick={() =>
+                                openTweetBoxModal(
+                                  "Editar Tweet",
+                                  tweet.content,
+                                  (content) => handleEditTweet(tweet, content)
+                                )
+                              }
+                            >
+                              Editar
+                            </button>
+
+                            <button onClick={() => handleDeleteTweet(tweet)}>
+                              Excluir
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => handleFollow(tweetUser?.id ?? "")}
+                          >
+                            Deixar de seguir
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    <div className="post-footer">
+                      <div className="post-icons">
+                        <span
+                          title="Responder"
+                          onClick={() =>
+                            openTweetBoxModal(
+                              "Responder Tweet",
+                              "",
+                              (content) => handleReply(tweet.id, content)
+                            )
+                          }
+                        >
+                          <CommentIcon /> {tweet.replyCount}
+                        </span>
+                        <span
+                          title="Repostar"
+                          onClick={() =>
+                            openModal(
+                              "Compartilhar Tweet",
+                              <p>Compartilhe este tweet: {tweet.content}</p>
+                            )
+                          }
+                        >
+                          <RetweetIcon /> {tweet.retweetCount}
+                        </span>
+                        <span
+                          title="Curtir"
+                          onClick={() => handleLike(tweet.id)}
+                        >
+                          <LikeIcon /> {tweet.likeCount}
+                        </span>
+                        <span
+                          title="Ver"
+                          onClick={() => handleTweetDetail(tweet.id)}
+                        >
+                          <StatisticIcon />
+                        </span>
+                        <div className="post-actions">
+                          <span title="Salvar Tweet">
+                            {/* dispatch(addSaved(tweet)) */}
+                            <SaveIcon />
+                          </span>
+                          <span title="Compartilhar">
+                            {/* handleExternalShare(tweet)) */}
+                            <ShareIcon />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Post>
+              );
+            })}
+          </>
+        )}
       </FeedStyle>
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={modalTitle}
+      >
+        {modalContent}
+      </Modal>
     </DefaultLayout>
   );
 }

@@ -143,7 +143,9 @@ export const deleteTweet = createAsyncThunk(
       })
     );
 
-    // return algumaCoisa
     return response;
   }
 );
+// getFeed
+// like
+// retweet

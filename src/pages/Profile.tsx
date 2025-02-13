@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
-import { BackIcon } from "../assets/icons";
+import { BackIcon, RetweetIcon } from "../assets/icons";
 import { Button } from "../components/Button";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { showAlert } from "../store/modules/alert/alertSlice";
@@ -12,6 +12,9 @@ import { User } from "../types";
 import { setUserDetails } from "../store/modules/users/userDetailsSlice";
 import verifiedBlue from "../assets/verified-blue.svg";
 import callendar from "../assets/callendar.svg";
+import { Tabs } from "../components/Tabs";
+import { TabReplies } from "../components/Tabs/TabReplies";
+import { TabLikes } from "../components/Tabs/TabLikes";
 
 export function Profile() {
   const navigate = useNavigate();
@@ -24,6 +27,9 @@ export function Profile() {
   const { user, loading: loadingDetails } = useAppSelector(
     (state) => state.userDetail
   );
+  const [activeTab, setActiveTab] = useState<
+    "Posts" | "Respostas" | "Mídia" | "Curtidas"
+  >("Posts");
 
   const userWallpaper =
     "https://th.bing.com/th/id/OIP.hg1BiocPGLHkoo5lOha7zwHaBK?rs=1&pid=ImgDetMain";
@@ -79,14 +85,38 @@ export function Profile() {
             </p>
           </div>
           <div className="profile-tweets-wrapper">
-            <div className="profile-tweets-header"></div>
-            <div className="profile-tweets-content"></div>
+            <div className="profile-tweets-header">
+              <Tabs
+                tabs={["Posts", "Respostas", "Mídia", "Curtidas"]}
+                activeTab={activeTab}
+                onTabChange={() => setActiveTab}
+              />
+            </div>
+            <div className="profile-tweets-content">
+              {activeTab === "Posts" && (
+                <div>
+                  {user.tweets && user.tweets.length > 0 ? (
+                    user.tweets.map((tweet) => (
+                      <div key={tweet.id} className="post-tweet">
+                        {tweet.retweets.length === 1 && (
+                          <span>
+                            <RetweetIcon /> 'Você repostou'
+                          </span>
+                        )}
+                        <p>{tweet.content}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Este usuário ainda não tweetou.</p>
+                  )}
+                </div>
+              )}
+              {activeTab === "Respostas" && <TabReplies />}
+              {activeTab === "Curtidas" && <TabLikes />}
+            </div>
           </div>
         </div>
       )}
-      {/* // <- Nome User
-
-      // Posts | Respostas | Destaques | Artigos | Mídia | Curtidas */}
     </DefaultLayout>
   );
 }

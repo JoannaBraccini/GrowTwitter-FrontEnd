@@ -4,23 +4,37 @@ export const formatDate = (
 ): string => {
   const dateObj = new Date(date);
 
-  // Função para calcular o tempo relativo
+  // Função para formatar a data como "9 de fev"
+  const formatToShortMonth = (dateObj: Date): string => {
+    const months = [
+      "jan",
+      "fev",
+      "mar",
+      "abr",
+      "mai",
+      "jun",
+      "jul",
+      "ago",
+      "set",
+      "out",
+      "nov",
+      "dez",
+    ];
+    return `${dateObj.getDate()} de ${months[dateObj.getMonth()]}`;
+  };
+
+  // Função para calcular o tempo relativo (até 31 dias)
   const formatRelativeTime = (date: string | Date): string => {
     const now = new Date();
     const dateObj = new Date(date);
     const diffInMs = now.getTime() - dateObj.getTime();
-
     const seconds = Math.floor(diffInMs / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30); // Aproximadamente 30 dias por mês
-    const years = Math.floor(months / 12); // Aproximadamente 12 meses por ano
 
-    if (years > 0) {
-      return `há ${years} ano${years > 1 ? "s" : ""}`;
-    } else if (months > 0) {
-      return `há ${months} mês${months > 1 ? "es" : ""}`;
+    if (days > 31) {
+      return formatToShortMonth(dateObj); // Se for mais que 31 dias, retorna a data no formato "9 de fev"
     } else if (days > 0) {
       return `há ${days} dia${days > 1 ? "s" : ""}`;
     } else if (hours > 0) {
@@ -40,7 +54,7 @@ export const formatDate = (
   if (formatType === "short") {
     return `${day}/${month}/${year}`;
   } else if (formatType === "long") {
-    // Formato Mês por Extenso de yyyy
+    // Formato "Mês de yyyy"
     const months = [
       "janeiro",
       "fevereiro",

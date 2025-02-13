@@ -6,15 +6,17 @@ import { useState } from "react";
 export interface TweetBoxProps {
   userPhoto: string | undefined;
   userName: string | undefined;
+  initialContent: string;
   onTweetSubmit: (tweet: string) => void;
 }
 
 export function TweetBox({
   userPhoto,
   userName,
+  initialContent = "",
   onTweetSubmit,
 }: TweetBoxProps) {
-  const [tweetContent, setTweetContent] = useState("");
+  const [tweetContent, setTweetContent] = useState(initialContent);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -27,8 +29,7 @@ export function TweetBox({
       <form onSubmit={handleSubmit}>
         <div className="tweetbox-input">
           <img src={userPhoto} alt={userName} />
-          <input
-            type="text"
+          <textarea
             placeholder="O que está acontecendo?"
             value={tweetContent}
             onChange={(e) => setTweetContent(e.target.value)}
