@@ -3,12 +3,13 @@ import {
   LoginRequest,
   LoginResponse,
   SignupRequest,
+  SignupResponse,
 } from "../../types/auth.type";
 import { api, ResponseApi } from "./api.service";
 
-export async function signUp(user: SignupRequest) {
+export async function signupService(user: SignupRequest) {
   try {
-    const response = await api.post<ResponseApi<{ token: string }>>(
+    const response = await api.post<ResponseApi<SignupResponse>>(
       "/signup",
       user
     );
@@ -26,7 +27,7 @@ export async function signUp(user: SignupRequest) {
   }
 }
 
-export async function login(user: LoginRequest) {
+export async function loginService(user: Omit<LoginRequest, "remember">) {
   try {
     const response = await api.post<ResponseApi<LoginResponse>>("/login", user);
 

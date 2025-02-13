@@ -3,22 +3,30 @@ import { SignStyle } from "../components/Sign/SignStyle";
 import { FormStyle } from "../components/Sign/FormStyle";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
-import { getToken } from "../utils/getToken";
-import { login, signUp } from "../configs/services/auth.service";
-import { ToastResponse } from "../components/ToastResponse";
-import { Toast } from "../types/toast";
+import { AlertToast } from "../components/AlertToast";
 import { Loader } from "../components/Loader";
 import { Footer } from "../components/Footer";
-import { useLoading } from "../utils/loading";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { signupAsyncThunk } from "../store/modules/auth/signupSlice";
+import { hideAlert } from "../store/modules/alert/alertSlice";
+import { loginAsyncThunk } from "../store/modules/auth/loginSlice";
+import { useValidate } from "../hooks";
 
 export function Sign() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const {
+    token,
+    ok,
+    loading: loginLoading,
+  } = useAppSelector((state) => state.userLogged);
+  const signupLoading = useAppSelector((state) => state.userSignup.loading);
+  const loading = loginLoading || signupLoading;
+  const { open } = useAppSelector((state) => state.alert);
   const [signIn, toggle] = React.useState(true);
   const [checked, setChecked] = useState(false);
-  const [toastProps, setToastProps] = useState<Toast>();
-
-  const { loading, loaderMessage, setLoading } = useLoading();
-  const token = getToken();
+  const { errors, validateLogin, validateSignup, validateField } =
+    useValidate();
 
   useEffect(() => {
     // Adiciona a classe ao body quando o componente é montado
@@ -29,97 +37,81 @@ export function Sign() {
     };
   }, []);
 
-  function showToast(type: "success" | "error", message: string) {
-    setToastProps({ type, message, duration: 3000 });
-  }
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => {
+        dispatch(hideAlert()); // Após o tempo do toast, esconde ele
+      }, 3000); // 3 segundos de duração do toast
+    }
+  }, [open, dispatch]);
 
-  const handleCloseToast = () => {
-    setToastProps(undefined);
-  };
+  //Direcionamento de usuário logado
+  useEffect(() => {
+    if (token && ok) navigate("/feed");
+  }, [token, ok, navigate]);
 
   // Formulario de Cadastro
-  async function handleSignupForm(e: React.FormEvent<HTMLFormElement>) {
-    setLoading(true);
+  function handleSignupForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    const fullName = [
+      e.currentTarget["first-name"].value,
+      e.currentTarget.surname.value,
+    ].join(" ");
     const user = {
-      name: e.currentTarget.uname.value,
+      name: fullName,
       username: e.currentTarget.username.value,
       email: e.currentTarget.email.value,
       password: e.currentTarget.password.value,
+      passwordConfirm: e.currentTarget.passwordConfirm.value,
     };
 
-    const passwordConfirm = e.currentTarget.passwordConfirm.value;
-
-    if (user.password !== passwordConfirm) {
-      showToast("error", "As senhas não são iguais!");
-      setLoading(false);
-      return;
+    if (!validateSignup(user)) {
+      return; // Não envia o formulário se houver erros
     }
 
-    const response = await signUp(user);
-    setLoading(false);
-
-    showToast(response.ok ? "success" : "error", response.message);
-    if (response.ok)
-      setTimeout(() => {
-        e.currentTarget.reset();
-        toggle(true);
-      }, 500);
+    dispatch(signupAsyncThunk(user as Omit<typeof user, "passwordConfirm">))
+      .unwrap()
+      .then((response) => {
+        if (response.ok) {
+          setTimeout(() => {
+            e.currentTarget.reset();
+            toggle(true);
+          }, 500);
+        }
+      });
   }
 
   //Formulario de login
-  async function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
-    setLoading(true);
+  function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const user = {
       email: event.currentTarget.email.value,
       username: event.currentTarget.username.value,
       password: event.currentTarget.password.value,
+      remember: event.currentTarget.remember.value,
     };
 
-    if (!user.email && !user.username) {
-      showToast("error", "E-mail ou username necessários");
-      setLoading(false);
-      return;
+    if (!validateLogin(user)) {
+      return; // Não envia o formulário se houver erros
     }
 
-    const response = await login(user);
-
-    if (!response || !response.ok) {
-      showToast(
-        "error",
-        response?.message || "Ocorreu um erro. Tente novamente mais tarde."
-      );
-      setLoading(false);
-      return;
-    }
-
-    if (response.data) {
-      const { token, user } = response.data;
-
-      //salvar os dados do usuário no storage
-      if (checked) {
-        localStorage.setItem("GrowToken", JSON.stringify(token));
-        localStorage.setItem("GrowUser", JSON.stringify(user));
-      }
-      sessionStorage.setItem("GrowToken", JSON.stringify(token));
-      sessionStorage.setItem("GrowUser", JSON.stringify(user));
-
-      showToast("success", response.message);
-      navigate("/feed");
-    } else {
-      showToast("error", "Resposta inválida do servidor.");
-    }
-    setLoading(false);
+    dispatch(loginAsyncThunk(user));
   }
+
+  // Validação em tempo real ao digitar
+  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, form } = e.target;
+    validateField(name, value, { password: form?.password.value });
+  };
 
   //controle de login
   useEffect(() => {
     if (token) {
-      navigate("/feed");
-      return;
+      setTimeout(() => {
+        navigate("/feed");
+      }, 1000);
     }
   }, [token, navigate]);
 
@@ -130,34 +122,60 @@ export function Sign() {
         <FormStyle onSubmit={handleSignupForm}>
           <h1 style={{ color: "#3a3a3a" }}>Primeira vez aqui?</h1>
           <span className="mobile">Faça parte desta comunidade.</span>
-          <input
-            type="text"
-            name="uname"
-            placeholder="Nome"
-            maxLength={100}
-            required
-          />
+          <div className="name-container">
+            <input
+              type="text"
+              name="first-name"
+              placeholder="Nome"
+              minLength={3}
+              maxLength={20}
+              required
+            />
+            <input
+              type="text"
+              name="surname"
+              placeholder="Sobrenome"
+              minLength={3}
+              maxLength={79}
+              required
+            />
+          </div>
           <input
             type="text"
             name="username"
             placeholder="Nome de usuário"
+            minLength={3}
             maxLength={30}
             required
           />
           <input
             type="email"
             name="email"
-            placeholder="E-mail"
+            placeholder="Seu melhor e-mail"
             maxLength={50}
             required
+            onChange={handleFieldChange}
           />
-          <input type="password" name="password" placeholder="Senha" required />
+          <div className="error-message">{errors.email || " "}</div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Insira uma senha"
+            minLength={4}
+            maxLength={30}
+            required
+            onChange={handleFieldChange}
+          />
           <input
             type="password"
             name="passwordConfirm"
             placeholder="Confirme a Senha"
+            minLength={4}
+            maxLength={30}
             required
+            onChange={handleFieldChange}
           />
+          <div className="error-message">{errors.passwordConfirm || " "}</div>
           <Button text="white" size="small" disabled={loading}>
             Cadastrar
           </Button>
@@ -192,6 +210,7 @@ export function Sign() {
           <div className="checkbox">
             <input
               type="checkbox"
+              name="remember"
               value={String(checked)}
               onChange={() => setChecked(!checked)}
             />
@@ -247,15 +266,10 @@ export function Sign() {
           </div>
         </div>
       </div>
-      <Loader isLoading={loading} message={loaderMessage} />
-      {toastProps && (
-        <ToastResponse
-          message={toastProps.message}
-          duration={toastProps.duration}
-          type={toastProps.type}
-          onClose={handleCloseToast}
-        />
-      )}
+      <Loader />
+      {/* Renderize o Toast quando o alerta estiver ativo */}
+      {open && <AlertToast />}
+
       <Footer />
     </SignStyle>
   );

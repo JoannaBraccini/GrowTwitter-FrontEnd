@@ -3,26 +3,22 @@ export type TweetType = "TWEET" | "REPLY";
 export interface Tweet {
   id: string;
   userId: string;
-  user?: {
-    name: string;
-    username: string;
-  };
-  type: TweetType;
+  tweetType: TweetType;
   parentId?: string;
   content: string;
   createdAt: Date;
   updatedAt?: Date;
 
-  likesCount?: number;
-  retweetsCount?: number;
-  repliesCount?: number;
+  likeCount?: number;
+  replyCount?: number;
+  retweetCount?: number;
 
-  likes?: Actions[];
-  retweets?: Actions[];
-  replies?: Tweet[];
+  likes: Actions[];
+  retweets: Actions[];
+  replies: Tweet[];
 }
 
-interface Actions {
+export interface Actions {
   id: string;
   userId: string;
   user: {
@@ -39,9 +35,7 @@ export type CreateTweetRequest = Pick<Tweet, "parentId"> & {
 };
 
 export type UpdateTweetRequest = Pick<Tweet, "id" | "userId" | "content">;
-export type DeleteTweetRequest = Pick<Tweet, "id">;
-export type RetweetRequest = Pick<Tweet, "id" | "userId">;
-export type LikeRequest = Pick<Tweet, "id" | "userId">;
+export type ActionsRequest = Pick<Tweet, "id" | "userId">;
 
 export interface TweetSearchRequest {
   page?: number;

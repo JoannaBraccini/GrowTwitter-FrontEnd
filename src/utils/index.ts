@@ -1,2 +1,2 @@
-export * from "./getUserLogged";
-export * from "./loading";
+export * from "./formatCPF";
+export * from "./formatDate";

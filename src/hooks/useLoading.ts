@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
+import { useAppSelector } from "../store/hooks";
 
 export function useLoading(initialMessage = "Aguarde...") {
-  const [loading, setLoading] = useState<boolean>(false);
+  const loginLoad = useAppSelector((state) => state.userLogged.loading);
+  const signupLoad = useAppSelector((state) => state.userSignup.loading);
+
+  const loading = loginLoad || signupLoad;
   const [loaderMessage, setLoaderMessage] = useState<string>(initialMessage);
 
   useEffect(() => {
@@ -27,6 +31,5 @@ export function useLoading(initialMessage = "Aguarde...") {
   return {
     loading,
     loaderMessage,
-    setLoading,
   };
 }

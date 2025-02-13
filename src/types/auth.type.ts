@@ -2,6 +2,7 @@ export interface LoginRequest {
   username?: string;
   email?: string;
   password: string;
+  remember: boolean;
 }
 
 export interface LoginResponse {
@@ -11,12 +12,23 @@ export interface LoginResponse {
     name: string;
     username: string;
     email: string;
+    avatarUrl: string;
+    bio?: string;
   };
 }
 
 export interface SignupRequest {
   name: string;
   email: string;
-  password: string;
   username: string;
+  password: string;
+}
+
+export interface SignupResponse {
+  id: string;
+  name: string;
+  email: string;
+  username: string;
+  avatarUrl: string;
+  createdAt: Date;
 }

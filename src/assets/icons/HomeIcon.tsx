@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ThemeContext } from "../../configs/contexts/ThemeContext";
+import { ThemeContext } from "../../configs/providers/ThemeProviderWrapper";
 
 export function HomeIcon() {
   const { theme } = useContext(ThemeContext);

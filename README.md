@@ -15,7 +15,7 @@
   <h1 align="center">GrowTwitter</h1>
 
   <p align="center">
-    Projeto Aplicação Inspiradora para final do Módulo Intermediário  -  Turma 19 do Programa Starter Web FullStack
+    Projeto Aplicação Inspiradora para final do Módulo Avançado  -  Turma 19 do Programa Starter Web FullStack
     <br />
     <a href="https://github.com/JoannaBraccini/GrowTwitter-FrontEnd"><strong>Explore os arquivos »</strong></a>
     <br />
@@ -60,7 +60,7 @@
 
 ### Projeto para avaliação de conhecimentos.
 
-Plataforma similar ao X (antigo Twitter), com CRUD para Usuários, Tweets, Replies, Likes e Followers.
+Plataforma similar ao X (antigo Twitter), com CRUD para Usuários, Tweets, Replies, Likes, Retweets e Followers.
 
 <!-- <p align="right">(<a href="#readme-top">voltar ao topo</a>)</p> -->
 
@@ -130,7 +130,7 @@ Fazer uma cópia e rodar localmente.
 - [ ] Criação da página Profile
 - [ ] Criação da página Feed
 - [ ] Criação da página Explore
-- [ ] Temas Claro e Escuro
+- [x] Temas Claro e Escuro
 - [ ] Suporte multi-idiomas
   - [x] Português
   - [ ] Inglês

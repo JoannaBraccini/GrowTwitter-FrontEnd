@@ -7,7 +7,31 @@ import {
 } from "../../types/tweet.type";
 import { api, ResponseApi } from "./api.service";
 
-export async function getTweets(
+export async function postTweetService(
+  token: string,
+  dataBody: CreateTweetRequest
+) {
+  try {
+    const response = await api.post<ResponseApi<Tweet>>("/tweets", dataBody, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return {
+      ok: response.data.ok,
+      message: response.data.message,
+      data: response.data.data,
+    };
+  } catch (error: any) {
+    return {
+      ok: error.response.data.ok,
+      message: `Erro: ${error.response.data.message}`,
+    };
+  }
+}
+
+export async function getTweetsService(
   { page, take, search }: TweetSearchRequest = {},
   token?: string
 ) {
@@ -38,14 +62,19 @@ export async function getTweets(
   } catch (error: any) {
     return {
       ok: error.response.data.ok,
-      message: `Erro: ${error.response.data.message}`,
+      message: error.response.data.message,
     };
   }
 }
 
-export async function postTweet(token: string, dataBody: CreateTweetRequest) {
+export async function getTweetDetailsService(data: {
+  id: string;
+  token: string;
+}): Promise<ResponseApi<Tweet>> {
+  const { id, token } = data;
+
   try {
-    const response = await api.post<ResponseApi<Tweet>>("/tweets", dataBody, {
+    const response = await api.get(`/tweets/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -59,12 +88,12 @@ export async function postTweet(token: string, dataBody: CreateTweetRequest) {
   } catch (error: any) {
     return {
       ok: error.response.data.ok,
-      message: `Erro: ${error.response.data.message}`,
+      message: error.response.data.message,
     };
   }
 }
 
-export async function updateTweet(
+export async function updateTweetService(
   token: string,
   { id, ...dataBody }: UpdateTweetRequest
 ) {
@@ -87,12 +116,12 @@ export async function updateTweet(
   } catch (error: any) {
     return {
       ok: error.response.data.ok,
-      message: `Erro: ${error.response.data.message}`,
+      message: error.response.data.message,
     };
   }
 }
 
-export async function deleteTweet(token: string, id: string) {
+export async function deleteTweetService(token: string, id: string) {
   try {
     const response = await api.delete<ResponseApi<Tweet>>(`/tweets/${id}`, {
       headers: { Authorization: token },
@@ -106,7 +135,7 @@ export async function deleteTweet(token: string, id: string) {
   } catch (error: any) {
     return {
       ok: error.response.data.ok,
-      message: `Erro: ${error.response.data.message}`,
+      message: error.response.data.message,
     };
   }
 }

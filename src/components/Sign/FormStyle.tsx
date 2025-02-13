@@ -24,6 +24,15 @@ export const FormStyle = styled.form`
     }
   }
 
+  .name-container {
+    display: flex;
+    gap: 10px;
+  }
+
+  .name-container input {
+    flex: 1;
+  }
+
   .checkbox {
     display: flex;
     align-items: center;
@@ -31,6 +40,15 @@ export const FormStyle = styled.form`
     margin: 0;
     padding: 0;
     margin: 10px 0;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 12px;
+    min-height: 16px;
+    margin-bottom: 4px;
+    text-align: left;
+    width: 100%;
   }
 
   label,

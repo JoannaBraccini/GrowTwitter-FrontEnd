@@ -16,55 +16,21 @@ import {
 } from "../assets/icons";
 import { getTweets, postTweet } from "../configs/services/tweet.service";
 import { Loader } from "../components/Loader";
-import { ToastResponse } from "../components/ToastResponse";
-
-interface UserLogged {
-  id: string;
-  name: string;
-  username: string;
-  email: string;
-}
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { showAlert } from "../store/modules/alert/alertSlice";
 
 export function Feed() {
-  const [loading, setLoading] = useState(false);
-  const [toastProps, setToastProps] = useState<Toast | undefined>(undefined);
-  const [user, setUser] = useState<UserLogged | null>(null);
-  const [token, setToken] = useState("");
-  const [tweets, setTweets] = useState<Tweet[]>([]);
-  const [following, setFollowing] = useState<User[]>([]);
+  const dispatch = useAppDispatch();
+  const { token, user, loading } = useAppSelector((state) => state.userLogged);
   const [activeTab, setActiveTab] = useState<"home" | "following">("home");
-
-  useEffect(() => {
-    const loginResponse = getUserLogged();
-    if (loginResponse) {
-      setUser(loginResponse.user);
-      setToken(loginResponse.token);
-    }
-  }, []);
+  const [search, setSearch] = useState<string>("");
 
   // Buscar tweets
   useEffect(() => {
-    const fetchTweets = async () => {
-      try {
-        setLoading(true);
-        const response = await getTweets();
-        if (response.data) setTweets(response.data);
-      } catch {
-        showToast("error", "Erro ao buscar tweets.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTweets();
+    if (user && token) {
+      dispatch(getTweets());
+    }
   }, []);
-
-  function showToast(type: "success" | "error", message: string) {
-    setToastProps({ type, message, duration: 3000 });
-  }
-
-  const handleCloseToast = () => {
-    setToastProps(undefined);
-  };
 
   const createTweet = async (tweet: string) => {
     if (!user) return;

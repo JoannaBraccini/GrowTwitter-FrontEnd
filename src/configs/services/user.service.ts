@@ -3,7 +3,7 @@
 import { UserUpdate, User, UserSearchRequest } from "../../types";
 import { api, ResponseApi } from "./api.service";
 
-export async function getUsers(
+export async function getUsersService(
   { name, username, email }: UserSearchRequest = {},
   token?: string
 ) {
@@ -32,10 +32,10 @@ export async function getUsers(
   }
 }
 
-export async function getUserbyId(id: string, token?: string) {
+export async function getUserDetailsService(id: string, token: string) {
   try {
     const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
-    const response = await api.get<ResponseApi<string>>(`/users/${id}`, {
+    const response = await api.get<ResponseApi<User>>(`/users/${id}`, {
       headers,
     });
     return {
@@ -51,20 +51,16 @@ export async function getUserbyId(id: string, token?: string) {
   }
 }
 
-export async function updateUser(
+export async function updateUserService(
   token: string,
-  { id, ...dataBody }: UserUpdate
+  { id, ...data }: UserUpdate
 ) {
   try {
-    const response = await api.put<ResponseApi<User>>(
-      `/users/${id}`,
-      dataBody,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await api.put<ResponseApi<User>>(`/users/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return {
       ok: response.data.ok,
@@ -79,7 +75,7 @@ export async function updateUser(
   }
 }
 
-export async function deleteUser(token: string, id: string) {
+export async function deleteUserService(token: string, id: string) {
   try {
     const response = await api.delete<ResponseApi<User>>(`/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` },

@@ -1,11 +1,8 @@
 import { Button } from "../Button";
 import { NavbarStyle } from "./NavbarStyle";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useRef, useState } from "react";
-import { LoginResponse } from "../../types";
+import { useEffect, useRef, useState } from "react";
 import { ToggleButton } from "../ToggleButton";
-import { ThemeContext } from "../../configs/contexts/ThemeContext";
-import userPhoto from "../../assets/user-photo.svg";
 import {
   DotsIcon,
   ExploreFill,
@@ -21,8 +18,8 @@ import {
 } from "../../assets/icons";
 import { Modal } from "../Modal";
 import { TweetBox } from "../TweetBox";
-import { getUser } from "../../utils/getUser";
-
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useTheme } from "../../configs/providers/useTheme";
 const navItems = [
   {
     icon: <HomeIcon />,
@@ -57,11 +54,12 @@ const navItems = [
 export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.userLogged);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState<LoginResponse["user"] | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const { toggleTheme, theme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useTheme();
 
   const getIcon = (
     pathname: string,
@@ -74,10 +72,6 @@ export function Navbar() {
 
   const handleMenuToggle = () => setIsMenuOpen((open) => !open);
   const handleModal = () => setIsModalOpen((open) => !open);
-
-  useEffect(() => {
-    setUser(getUser());
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -93,8 +87,12 @@ export function Navbar() {
   }, [isMenuOpen]);
 
   function logout() {
-    localStorage.removeItem("token");
+    dispatch(logout);
     navigate("/sign");
+  }
+
+  function createTweet(): void {
+    throw new Error("Function not implemented yet.");
   }
 
   return (
@@ -143,7 +141,7 @@ export function Navbar() {
             aria-label="Abrir menu da conta"
           >
             <div className="account-image">
-              <img src={userPhoto} alt={user.name} />
+              <img src={user.avatarUrl} alt={user.name} />
             </div>
             <div className="account-data">
               <span className="account-name">{user.name}</span>
@@ -164,14 +162,14 @@ export function Navbar() {
         </div>
       )}
       <Modal
-        isOpen={isMenuOpen}
+        isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Postar"
       >
         <TweetBox
           key="tweet-box"
-          userPhoto={userPhoto}
-          userName={user?.name}
+          userPhoto={user.avatarUrl}
+          userName={user.name}
           onTweetSubmit={createTweet}
         />
       </Modal>

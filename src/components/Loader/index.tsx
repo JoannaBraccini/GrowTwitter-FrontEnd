@@ -1,3 +1,4 @@
+import { useLoading } from "../../utils";
 import { LoaderStyle } from "./LoaderStyle";
 
 export interface LoaderProps {
@@ -5,13 +6,15 @@ export interface LoaderProps {
   message?: string;
 }
 
-export function Loader({ isLoading, message }: LoaderProps) {
-  if (!isLoading) return null;
+export function Loader() {
+  const { loading, loaderMessage } = useLoading();
+
+  if (!loading) return null;
 
   return (
     <LoaderStyle>
       <span />
-      <p>{message}</p>
+      <p>{loaderMessage}</p>
     </LoaderStyle>
   );
 }
