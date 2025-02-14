@@ -4,6 +4,9 @@ import {
   CreateTweetRequest,
   UpdateTweetRequest,
   TweetSearchRequest,
+  Like,
+  RetweetRequest,
+  Retweet,
 } from "../../types/tweet.type";
 import { api, ResponseApi } from "./api.service";
 
@@ -26,7 +29,50 @@ export async function postTweetService(
   } catch (error: any) {
     return {
       ok: error.response.data.ok,
-      message: `Erro: ${error.response.data.message}`,
+      message: error.response.data.message,
+    };
+  }
+}
+
+export async function likeTweetService(id: string, token: string) {
+  try {
+    const response = await api.post<ResponseApi<Like>>(`/tweets/like/${id}`, {
+      headers: { Authorization: token },
+    });
+    return {
+      ok: response.data.ok,
+      message: response.data.message,
+      data: response.data.data,
+    };
+  } catch (error: any) {
+    return {
+      ok: error.response.data.ok,
+      message: error.response.data.message,
+    };
+  }
+}
+
+export async function retweetService(
+  { id, comment }: RetweetRequest,
+  token: string
+) {
+  try {
+    const response = await api.post<ResponseApi<Retweet>>(
+      `/tweets/retweet/${id}`,
+      {
+        headers: { Authorization: token },
+        comment,
+      }
+    );
+    return {
+      ok: response.data.ok,
+      message: response.data.message,
+      data: response.data.data,
+    };
+  } catch (error: any) {
+    return {
+      ok: error.response.data.ok,
+      message: error.response.data.message,
     };
   }
 }
@@ -39,6 +85,41 @@ export async function getTweetsService(
     const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
     const response = await api.get<ResponseApi<Tweet[]>>("/tweets", {
       headers,
+      params: {
+        page,
+        take,
+        search,
+      },
+    });
+    const tweetsData = response.data.data;
+    if (!tweetsData) {
+      return {
+        ok: response.data.ok,
+        message: response.data.message,
+        data: [],
+      };
+    }
+    // Adiciona username e name dos usuários diretamente na resposta
+    return {
+      ok: response.data.ok,
+      message: response.data.message,
+      data: tweetsData,
+    };
+  } catch (error: any) {
+    return {
+      ok: error.response.data.ok,
+      message: error.response.data.message,
+    };
+  }
+}
+
+export async function getFeedService(
+  { page, take, search }: TweetSearchRequest = {},
+  token: string
+) {
+  try {
+    const response = await api.get<ResponseApi<Tweet[]>>("/tweets/feed", {
+      headers: { Authorization: `Bearer ${token}` },
       params: {
         page,
         take,

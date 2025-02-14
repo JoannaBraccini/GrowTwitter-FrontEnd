@@ -1,7 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { UserUpdate, User, UserSearchRequest } from "../../types";
+import { UserUpdate, User, UserSearchRequest, Follow } from "../../types";
 import { api, ResponseApi } from "./api.service";
+
+export async function followUserService(id: string, token: string) {
+  try {
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await api.post<ResponseApi<Follow>>(
+      `/users/follow/${id}`,
+      { headers }
+    );
+    return {
+      ok: response.data.ok,
+      message: response.data.message,
+      data: response.data.data,
+    };
+  } catch (error: any) {
+    return {
+      ok: error.response.data.ok,
+      message: error.response.data.message,
+    };
+  }
+}
 
 export async function getUsersService(
   { name, username, email }: UserSearchRequest = {},
@@ -27,7 +47,7 @@ export async function getUsersService(
   } catch (error: any) {
     return {
       ok: error.response.data.ok,
-      message: `Erro: ${error.response.data.message}`,
+      message: error.response.data.message,
     };
   }
 }
@@ -46,7 +66,7 @@ export async function getUserDetailsService(id: string, token: string) {
   } catch (error: any) {
     return {
       ok: error.response.data.ok,
-      message: `Erro: ${error.response.data.message}`,
+      message: error.response.data.message,
     };
   }
 }
@@ -70,7 +90,7 @@ export async function updateUserService(
   } catch (error: any) {
     return {
       ok: error.response.data.ok,
-      message: `Erro: ${error.response.data.message}`,
+      message: error.response.data.message,
     };
   }
 }
@@ -89,7 +109,7 @@ export async function deleteUserService(token: string, id: string) {
   } catch (error: any) {
     return {
       ok: error.response.data.ok,
-      message: `Erro: ${error.response.data.message}`,
+      message: error.response.data.message,
     };
   }
 }

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Tweet, User, UserBase } from "../../../types";
+import { Follow, Tweet, User } from "../../../types";
 import { getUserDetails } from "./usersActions";
 
 interface InitialState {
@@ -13,8 +13,8 @@ interface InitialState {
     username: string;
     avatarUrl: string;
     bio: string;
-    followers: UserBase[];
-    following: UserBase[];
+    followers: Follow[];
+    following: Follow[];
     tweets: Tweet[];
   };
 }

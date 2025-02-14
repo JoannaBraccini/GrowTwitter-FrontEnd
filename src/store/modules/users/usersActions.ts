@@ -2,12 +2,40 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UserSearchRequest, UserUpdate } from "../../../types";
 import {
   deleteUserService,
+  followUserService,
   getUserDetailsService,
   getUsersService,
   updateUserService,
 } from "../../../configs/services/user.service";
 import { showAlert } from "../alert/alertSlice";
 import { RootState } from "../..";
+
+// ######################################
+// #               POST                 #
+// ######################################
+
+export const followUser = createAsyncThunk(
+  "users/follow",
+  async (id: string, { dispatch, getState }) => {
+    const { userLogged } = getState() as RootState;
+    const { token } = userLogged;
+    const response = await followUserService(id, token);
+
+    if (!response.ok) {
+      dispatch(
+        showAlert({
+          message: response.message,
+          type: "error",
+        })
+      );
+    }
+    return response;
+  }
+);
+
+// ######################################
+// #               GET                  #
+// ######################################
 
 export const getUsers = createAsyncThunk(
   "users/findMany",
@@ -55,6 +83,10 @@ export const getUserDetails = createAsyncThunk(
   }
 );
 
+// ######################################
+// #              UPDATE                #
+// ######################################
+
 export const updateUser = createAsyncThunk(
   "users/update",
   async ({ id, ...data }: UserUpdate, { dispatch, getState }) => {
@@ -83,6 +115,10 @@ export const updateUser = createAsyncThunk(
     return response;
   }
 );
+
+// ######################################
+// #               DELETE               #
+// ######################################
 
 export const deleteUser = createAsyncThunk(
   "users/delete",
@@ -113,4 +149,3 @@ export const deleteUser = createAsyncThunk(
     return response;
   }
 );
-// follow

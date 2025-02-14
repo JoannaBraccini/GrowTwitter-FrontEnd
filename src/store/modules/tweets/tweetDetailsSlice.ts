@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Actions, Tweet, TweetType } from "../../../types";
+import { Like, Retweeet, Tweet, TweetType } from "../../../types";
 import { getTweetDetails } from "./tweetsActions";
 
 interface InitialState {
@@ -19,8 +19,8 @@ interface InitialState {
     replyCount?: number;
     retweetCount?: number;
 
-    likes: Actions[];
-    retweets: Actions[];
+    likes: Like[];
+    retweets: Retweeet[];
     replies: Tweet[];
   };
 }

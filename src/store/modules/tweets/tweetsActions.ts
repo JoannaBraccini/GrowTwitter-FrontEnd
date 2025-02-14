@@ -1,18 +1,26 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   CreateTweetRequest,
+  RetweetRequest,
   TweetSearchRequest,
   UpdateTweetRequest,
 } from "../../../types";
 import { RootState } from "../..";
 import {
   deleteTweetService,
+  getFeedService,
   getTweetDetailsService,
   getTweetsService,
+  likeTweetService,
   postTweetService,
+  retweetService,
   updateTweetService,
 } from "../../../configs/services/tweet.service";
 import { showAlert } from "../alert/alertSlice";
+
+// ######################################
+// #               POST                 #
+// ######################################
 
 export const createTweet = createAsyncThunk(
   "tweets/create",
@@ -41,6 +49,52 @@ export const createTweet = createAsyncThunk(
   }
 );
 
+export const likeTweet = createAsyncThunk(
+  "tweets/like",
+  async (id: string, { dispatch, getState }) => {
+    const { userLogged } = getState() as RootState;
+    const { token } = userLogged;
+
+    const response = await likeTweetService(id, token);
+
+    if (!response.ok) {
+      dispatch(
+        showAlert({
+          message: response.message,
+          type: "error",
+        })
+      );
+    }
+
+    return response;
+  }
+);
+
+export const retweetTweet = createAsyncThunk(
+  "tweets/retweet",
+  async ({ id, comment }: RetweetRequest, { dispatch, getState }) => {
+    const { userLogged } = getState() as RootState;
+    const { token } = userLogged;
+
+    const response = await retweetService({ id, comment }, token);
+
+    if (!response.ok) {
+      dispatch(
+        showAlert({
+          message: response.message,
+          type: "error",
+        })
+      );
+    }
+
+    return response;
+  }
+);
+
+// ######################################
+// #                GET                 #
+// ######################################
+
 export const getTweets = createAsyncThunk(
   "tweets/findAll",
   async (query: TweetSearchRequest, { dispatch, getState }) => {
@@ -61,6 +115,28 @@ export const getTweets = createAsyncThunk(
     return response;
   }
 );
+
+export const getFeed = createAsyncThunk(
+  "tweets/feed",
+  async (query: TweetSearchRequest, { dispatch, getState }) => {
+    const { userLogged } = getState() as RootState;
+    const { token } = userLogged;
+
+    const response = await getFeedService(query, token);
+
+    if (!response.ok) {
+      dispatch(
+        showAlert({
+          message: response.message,
+          type: "error",
+        })
+      );
+    }
+
+    return response;
+  }
+);
+
 export const getTweetDetails = createAsyncThunk(
   "tweets/findOne",
   async (id: string, { dispatch, getState }) => {
@@ -89,6 +165,11 @@ export const getTweetDetails = createAsyncThunk(
     return response;
   }
 );
+
+// ######################################
+// #                PUT                 #
+// ######################################
+
 export const updateTweet = createAsyncThunk(
   "tweets/update",
   async ({ id, ...data }: UpdateTweetRequest, { dispatch, getState }) => {
@@ -117,6 +198,11 @@ export const updateTweet = createAsyncThunk(
     return response;
   }
 );
+
+// ######################################
+// #               DELETE               #
+// ######################################
+
 export const deleteTweet = createAsyncThunk(
   "tweets/delete",
   async (id: string, { dispatch, getState }) => {
@@ -146,6 +232,3 @@ export const deleteTweet = createAsyncThunk(
     return response;
   }
 );
-// getFeed
-// like
-// retweet

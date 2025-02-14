@@ -3,7 +3,10 @@ import { Tweet } from "../../../types";
 import {
   createTweet,
   deleteTweet,
+  getFeed,
   getTweets,
+  likeTweet,
+  retweetTweet,
   updateTweet,
 } from "./tweetsActions";
 
@@ -12,6 +15,7 @@ interface InitialState {
   message: string;
   loading: boolean;
   tweets: Tweet[];
+  feed: Tweet[];
 }
 
 const initialState: InitialState = {
@@ -19,6 +23,7 @@ const initialState: InitialState = {
   message: "",
   loading: false,
   tweets: [],
+  feed: [],
 };
 
 const tweetsSlice = createSlice({
@@ -46,6 +51,67 @@ const tweetsSlice = createSlice({
       });
 
     builder
+      .addCase(likeTweet.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(likeTweet.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ok = action.payload.ok;
+        state.message = action.payload.message;
+
+        if (state.ok && action.payload.data) {
+          const likedTweetIndex = state.tweets.findIndex(
+            (tweet) => tweet.id === action.payload.data?.tweetId
+          );
+
+          if (likedTweetIndex !== -1) {
+            // Garante uma atualização imutável do tweet
+            state.tweets[likedTweetIndex] = {
+              ...state.tweets[likedTweetIndex],
+              likeCount: action.payload.data.likeCount,
+            };
+          }
+        }
+      })
+      .addCase(likeTweet.rejected, (state, action) => {
+        state.loading = false;
+        state.ok = false;
+        state.message = action.error.message || "Erro no Like";
+      });
+
+    builder
+      .addCase(retweetTweet.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(retweetTweet.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ok = action.payload.ok;
+        state.message = action.payload.message;
+
+        if (state.ok && action.payload.data) {
+          const retweetIndex = state.tweets.findIndex(
+            (tweet) => tweet.id === action.payload.data?.tweetId
+          );
+
+          if (retweetIndex !== -1) {
+            state.tweets[retweetIndex] = {
+              ...state.tweets[retweetIndex],
+              retweetCount: action.payload.data.retweetCount,
+              retweets: [
+                ...state.tweets[retweetIndex].retweets,
+                action.payload.data,
+              ], // Adiciona o retweet (com ou sem comentário)
+            };
+          }
+        }
+      })
+      .addCase(retweetTweet.rejected, (state, action) => {
+        state.loading = false;
+        state.ok = false;
+        state.message = action.error.message || "Erro no Retweet";
+      });
+
+    builder
       .addCase(getTweets.pending, (state) => {
         state.loading = true;
       })
@@ -62,6 +128,25 @@ const tweetsSlice = createSlice({
         state.loading = false;
         state.ok = false;
         state.message = action.error.message || "Erro ao buscar Tweets";
+      });
+
+    builder
+      .addCase(getFeed.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getFeed.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ok = action.payload.ok;
+        state.message = action.payload.message;
+
+        if (state.ok && action.payload.data) {
+          state.feed = action.payload.data;
+        }
+      })
+      .addCase(getFeed.rejected, (state, action) => {
+        state.loading = false;
+        state.ok = false;
+        state.message = action.error.message || "Erro ao buscar Feed";
       });
 
     builder

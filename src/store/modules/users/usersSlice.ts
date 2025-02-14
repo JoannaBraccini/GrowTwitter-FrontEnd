@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../../types";
-import { getUsers, updateUser, deleteUser } from "./usersActions";
+import { getUsers, updateUser, deleteUser, followUser } from "./usersActions";
 
 interface InitialState {
   ok: boolean;
@@ -33,6 +33,48 @@ const usersSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
+    builder
+      .addCase(followUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(followUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ok = action.payload.ok;
+        state.message = action.payload.message;
+
+        if (state.ok && action.payload.data) {
+          const { followerId, followedId } = action.payload.data;
+          const userIndex = state.users.findIndex(
+            (user) => user.id === followedId
+          );
+
+          if (userIndex !== -1) {
+            const user = state.users[userIndex];
+
+            // Verifica se o usuário já está na lista de seguidores
+            const isFollowing = user.followers.some(
+              (f) => f.followerId === followerId
+            );
+
+            if (isFollowing) {
+              // Remove o seguidor (unfollow)
+              user.followers = user.followers.filter(
+                (f) => f.followerId !== followerId
+              );
+            } else {
+              // Adiciona o seguidor (follow)
+              user.followers.push(action.payload.data);
+            }
+
+            state.users[userIndex] = { ...user };
+          }
+        }
+      })
+      .addCase(followUser.rejected, (state, action) => {
+        state.loading = false;
+        state.ok = false;
+        state.message = action.error.message || "Erro no follow";
+      });
     builder
       .addCase(getUsers.pending, (state) => {
         state.loading = true;
