@@ -57,7 +57,6 @@ export function Feed() {
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(
     null
   );
-  const [tweetToEdit, setTweetToEdit] = useState<Tweet | null>(null);
   const [menuVisible, setMenuVisible] = useState<string | null>(null);
 
   const openModal = (title: string, content: React.ReactNode) => {
@@ -68,10 +67,8 @@ export function Feed() {
 
   const logoutUnauthorized = () => {
     dispatch(showAlert({ message: "Usuário não autorizado", type: "error" }));
-    setTimeout(() => {
-      dispatch(logout());
-      navigate("/sign");
-    }, 1000);
+    dispatch(logout());
+    navigate("/sign");
   };
 
   // Buscar tweets
@@ -152,7 +149,7 @@ export function Feed() {
   const handleUserDetail = (user: User) => {
     if (userLogged) {
       dispatch(getUserDetails(user.id));
-      navigate(`/profile/${user.username}`);
+      navigate(`/${user.username}`);
     }
   };
   const handleTweetDetail = (id: string) => {
@@ -227,7 +224,9 @@ export function Feed() {
                     <img
                       src={tweetUser?.avatarUrl}
                       alt={tweetUser?.name}
-                      onClick={() => handleUserDetail(tweetUser ?? user)}
+                      onClick={() =>
+                        handleUserDetail(tweetUser ?? ({} as User))
+                      }
                     />
                   </div>
                   <div className="post-body">

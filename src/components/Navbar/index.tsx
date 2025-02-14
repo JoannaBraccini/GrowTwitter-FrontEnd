@@ -20,36 +20,6 @@ import { Modal } from "../Modal";
 import { TweetBox } from "../TweetBox";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useTheme } from "../../configs/providers/useTheme";
-const navItems = [
-  {
-    icon: <HomeIcon />,
-    iconActive: <HomeFill />,
-    label: "Página Inicial",
-    alt: "Página Inicial",
-    to: "/feed",
-  },
-  {
-    icon: <ExploreIcon />,
-    iconActive: <ExploreFill />,
-    label: "Explorar",
-    alt: "Explorar",
-    to: "/explore",
-  },
-  {
-    icon: <NotificationIcon />,
-    iconActive: <NotificationFill />,
-    label: "Notificações",
-    alt: "Notificações",
-    to: "/notifications",
-  },
-  {
-    icon: <ProfileIcon />,
-    iconActive: <ProfileFill />,
-    label: "Perfil",
-    alt: "Perfil",
-    to: "/profile",
-  },
-];
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -60,6 +30,37 @@ export function Navbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { theme, toggleTheme } = useTheme();
+
+  const navItems = [
+    {
+      icon: <HomeIcon />,
+      iconActive: <HomeFill />,
+      label: "Página Inicial",
+      alt: "Página Inicial",
+      to: "/home",
+    },
+    {
+      icon: <ExploreIcon />,
+      iconActive: <ExploreFill />,
+      label: "Explorar",
+      alt: "Explorar",
+      to: "/explore",
+    },
+    {
+      icon: <NotificationIcon />,
+      iconActive: <NotificationFill />,
+      label: "Notificações",
+      alt: "Notificações",
+      to: "/notifications",
+    },
+    {
+      icon: <ProfileIcon />,
+      iconActive: <ProfileFill />,
+      label: "Perfil",
+      alt: "Perfil",
+      to: `/${user.username}`,
+    },
+  ];
 
   const getIcon = (
     pathname: string,
@@ -100,7 +101,7 @@ export function Navbar() {
       <div className="topWrapper">
         <div
           className="logo"
-          onClick={() => (user ? navigate("/feed") : navigate("/"))}
+          onClick={() => (user ? navigate("/home") : navigate("/sign"))}
         >
           <LogoIcon />
         </div>
@@ -171,6 +172,7 @@ export function Navbar() {
           userPhoto={user.avatarUrl}
           userName={user.name}
           onTweetSubmit={createTweet}
+          initialContent=""
         />
       </Modal>
     </NavbarStyle>

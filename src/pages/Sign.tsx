@@ -96,13 +96,13 @@ export function Sign() {
   useEffect(() => {
     if (token && ok) {
       setTimeout(() => {
-        navigate("/feed");
+        navigate("/home");
       }, 1000);
     }
   }, [token, ok, navigate]);
 
   return (
-    <SignStyle signinIn={signIn}>
+    <SignStyle signingIn={signIn}>
       <h1 className="banner"> GrowTwitter </h1>
       <div className="signup-container">
         <FormStyle onSubmit={handleSignupForm}>

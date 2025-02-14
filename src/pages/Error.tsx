@@ -16,7 +16,7 @@ export function Error() {
               </p>
               <div className="button">
                 <Button ghost>
-                  <Link to="/">Vamos voltar?</Link>
+                  <Link to="/sign">Vamos voltar?</Link>
                 </Button>
               </div>
             </div>

@@ -43,10 +43,8 @@ export function Profile() {
           type: "error",
         })
       );
-      setTimeout(() => {
-        dispatch(logout());
-        navigate("/sign");
-      }, 1000);
+      dispatch(logout());
+      navigate("/sign");
     } else if (!user) {
       dispatch(getUserDetails(userLogged.id));
     }

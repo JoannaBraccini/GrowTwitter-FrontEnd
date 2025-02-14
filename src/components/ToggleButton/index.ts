@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-export const ToggleButton = styled.div<{ isActive: boolean }>`
+export const ToggleButton = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "isActive", // Filtra a propriedade isActive
+})<{ isActive: boolean }>`
   position: relative;
   width: 64px;
   margin: 4px auto;

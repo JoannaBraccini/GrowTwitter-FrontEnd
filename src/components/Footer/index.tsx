@@ -4,7 +4,7 @@ export function Footer() {
   const year: number = new Date().getFullYear();
   return (
     <FooterStyle>
-      <p>GrowTwitter - Trabalho final do módulo intermediário</p>
+      <p>GrowTwitter - Aplicação Inspiradora - Módulo Avançado</p>
       <p>
         Criado por Joanna Braccini &copy;
         <a href="http://www.growdev.com.br" target="_blank">

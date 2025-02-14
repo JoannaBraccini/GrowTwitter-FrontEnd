@@ -8,6 +8,7 @@ export interface ButtonProps {
   text?: string;
 }
 
+// Filtra as props para que apenas as válidas sejam passadas para o DOM
 export const Button = styled.button<ButtonProps>`
   font-family: var(--Montserrat);
   border-radius: 30px;
@@ -40,10 +41,14 @@ export const Button = styled.button<ButtonProps>`
   &:active {
     transform: scale(0.95);
   }
+
   &:focus {
     outline: none;
   }
+
   @media screen and (max-width: 900px) {
     padding: 12px 25px;
   }
 `;
+// Não enviar para o DOM
+Button.shouldForwardProp = (prop) => prop !== "text" && prop !== "ghost";

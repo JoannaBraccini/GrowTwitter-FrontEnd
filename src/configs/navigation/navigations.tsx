@@ -5,7 +5,7 @@ const NavigationComponent = () => {
   const { username } = useAppSelector((state) => state.userDetail.user);
 
   const navigations = [
-    { title: "Feed", to: "/" },
+    { title: "Feed", to: "/home" },
     { title: "Login", to: "/sign" },
     { title: "Explore", to: "/explore" },
   ];

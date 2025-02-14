@@ -1,4 +1,4 @@
-import { useLoading } from "../../utils";
+import { useLoading } from "../../hooks";
 import { LoaderStyle } from "./LoaderStyle";
 
 export interface LoaderProps {

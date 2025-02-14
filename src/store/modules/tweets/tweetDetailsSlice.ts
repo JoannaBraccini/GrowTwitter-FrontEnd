@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Like, Retweeet, Tweet, TweetType } from "../../../types";
+import { Like, Retweet, Tweet, TweetType } from "../../../types";
 import { getTweetDetails } from "./tweetsActions";
 
 interface InitialState {
@@ -12,15 +12,15 @@ interface InitialState {
     tweetType: TweetType;
     parentId?: string;
     content: string;
-    createdAt: Date;
-    updatedAt?: Date;
+    createdAt: string;
+    updatedAt?: string;
 
     likeCount?: number;
     replyCount?: number;
     retweetCount?: number;
 
     likes: Like[];
-    retweets: Retweeet[];
+    retweets: Retweet[];
     replies: Tweet[];
   };
 }
@@ -35,7 +35,7 @@ const initialState: InitialState = {
     tweetType: "TWEET",
     parentId: undefined,
     content: "",
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
     updatedAt: undefined,
 
     likeCount: undefined,
@@ -73,8 +73,15 @@ const tweetDetailsSlice = createSlice({
         state.ok = action.payload.ok;
         state.message = action.payload.message;
 
-        if (state.ok && action.payload.data) {
-          state.tweet = action.payload.data;
+        if (action.payload.ok && action.payload.data) {
+          const tweetData = action.payload.data;
+          state.tweet = {
+            ...tweetData,
+            createdAt: new Date(tweetData.createdAt).toISOString(),
+            updatedAt: tweetData.updatedAt
+              ? new Date(tweetData.updatedAt).toISOString()
+              : undefined, // Garantir que seja undefined caso não exista
+          };
         }
       })
       .addCase(getTweetDetails.rejected, (state, action) => {

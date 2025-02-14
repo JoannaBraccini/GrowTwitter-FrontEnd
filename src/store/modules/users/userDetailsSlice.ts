@@ -13,7 +13,7 @@ interface InitialState {
     username: string;
     avatarUrl: string;
     bio: string;
-    createdAt: Date;
+    createdAt: string;
     followers: Follow[];
     following: Follow[];
     tweets: Tweet[];
@@ -31,7 +31,7 @@ const initialState: InitialState = {
     username: "",
     avatarUrl: "",
     bio: "",
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
     followers: [],
     following: [],
     tweets: [],
@@ -63,8 +63,12 @@ const userDetailsSlice = createSlice({
         state.ok = action.payload.ok;
         state.message = action.payload.message;
 
-        if (state.ok && action.payload.data) {
-          state.user = action.payload.data;
+        if (action.payload.ok && action.payload.data) {
+          const userData = action.payload.data;
+          state.user = {
+            ...userData,
+            createdAt: new Date(userData.createdAt).toISOString(),
+          };
         }
       })
       .addCase(getUserDetails.rejected, (state, action) => {

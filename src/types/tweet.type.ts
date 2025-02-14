@@ -22,6 +22,7 @@ export type Like = Pick<Tweet, "id" | "userId" | "createdAt"> & {
   tweetId: string;
   likeCount: number;
 };
+
 export type Retweet = Omit<Like, "likeCount"> & {
   retweetCount: number;
   comment?: string;

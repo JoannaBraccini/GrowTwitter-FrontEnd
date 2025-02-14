@@ -1,8 +1,9 @@
 import { useContext } from "react";
-import { ThemeContext } from "../../configs/providers/ThemeProviderWrapper";
+import { ThemeContext } from "../../context/ThemeContext";
 
 export function ExploreFill() {
-  const { theme } = useContext(ThemeContext);
+  const themeContext = useContext(ThemeContext);
+  const theme = themeContext?.theme ?? "light";
   const fillColor = theme === "dark" ? "#ffffff" : "#000000";
 
   return (

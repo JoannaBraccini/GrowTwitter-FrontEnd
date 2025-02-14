@@ -46,7 +46,7 @@ interface InitialState {
     username: string;
     email: string;
     avatarUrl: string;
-    createdAt: Date;
+    createdAt: string;
   };
 }
 
@@ -60,7 +60,7 @@ const initialState: InitialState = {
     username: "",
     email: "",
     avatarUrl: "",
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
   },
 };
 
@@ -82,7 +82,12 @@ const signupSlice = createSlice({
           state.message = action.payload.message;
 
           if (action.payload.ok && action.payload.data) {
-            state.user = action.payload.data;
+            // Converte createdAt para string ISO se necessário
+            const userData = action.payload.data;
+            state.user = {
+              ...userData,
+              createdAt: new Date(userData.createdAt).toISOString(), // Garantir que `createdAt` seja uma string
+            };
           }
         }
       )

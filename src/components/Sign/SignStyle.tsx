@@ -1,10 +1,12 @@
 import styled from "styled-components";
 
 export interface SignProps {
-  signinIn: boolean;
+  signingIn: boolean;
 }
 
-export const SignStyle = styled.div<SignProps>`
+export const SignStyle = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "signingIn", // Não permite que "signingIn" seja passada para o DOM
+})<SignProps>`
   font-family: var(--Poppins);
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -38,7 +40,7 @@ export const SignStyle = styled.div<SignProps>`
     transition: all 0.6s ease-in-out;
     z-index: 2;
     ${(props) =>
-      props.signinIn !== true ? `transform: translateX(100%);` : null}
+      props.signingIn !== true ? `transform: translateX(100%);` : null}
   }
   .signup-container {
     position: absolute;
@@ -50,7 +52,7 @@ export const SignStyle = styled.div<SignProps>`
     z-index: 1;
     transition: all 0.6s ease-in-out;
     ${(props) =>
-      props.signinIn !== true
+      props.signingIn !== true
         ? `
     transform: translateX(100%);
     opacity: 1;
@@ -69,7 +71,7 @@ export const SignStyle = styled.div<SignProps>`
     transition: transform 0.6s ease-in-out;
     z-index: 100;
     ${(props) =>
-      props.signinIn !== true ? `transform: translateX(-100%);` : null}
+      props.signingIn !== true ? `transform: translateX(-100%);` : null}
   }
   .overlay {
     background: linear-gradient(to bottom, #2ba9f8, #0066af);
@@ -84,7 +86,7 @@ export const SignStyle = styled.div<SignProps>`
     transition: transform 0.6s ease-in-out;
     transform: translateX(0);
     ${(props) =>
-      props.signinIn !== true ? `transform: translateX(50%);` : null}
+      props.signingIn !== true ? `transform: translateX(50%);` : null}
   }
 
   .overlay-panel {
@@ -104,14 +106,15 @@ export const SignStyle = styled.div<SignProps>`
 
   .left-overlay {
     transform: translateX(-20%);
-    ${(props) => (props.signinIn !== true ? `transform: translateX(0);` : null)}
+    ${(props) =>
+      props.signingIn !== true ? `transform: translateX(0);` : null}
   }
 
   .right-overlay {
     right: 0;
     transform: translateX(0);
     ${(props) =>
-      props.signinIn !== true ? `transform: translateX(20%);` : null}
+      props.signingIn !== true ? `transform: translateX(20%);` : null}
   }
 
   button {
