@@ -13,6 +13,7 @@ interface InitialState {
     username: string;
     avatarUrl: string;
     bio: string;
+    createdAt: Date;
     followers: Follow[];
     following: Follow[];
     tweets: Tweet[];
@@ -30,6 +31,7 @@ const initialState: InitialState = {
     username: "",
     avatarUrl: "",
     bio: "",
+    createdAt: new Date(),
     followers: [],
     following: [],
     tweets: [],

@@ -8,7 +8,6 @@ import { Loader } from "../components/Loader";
 import { Footer } from "../components/Footer";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { signupAsyncThunk } from "../store/modules/auth/signupSlice";
-import { hideAlert } from "../store/modules/alert/alertSlice";
 import { loginAsyncThunk } from "../store/modules/auth/loginSlice";
 import { useValidate } from "../hooks";
 
@@ -36,19 +35,6 @@ export function Sign() {
       document.body.classList.remove("sign-page");
     };
   }, []);
-
-  useEffect(() => {
-    if (open) {
-      setTimeout(() => {
-        dispatch(hideAlert()); // Após o tempo do toast, esconde ele
-      }, 3000); // 3 segundos de duração do toast
-    }
-  }, [open, dispatch]);
-
-  //Direcionamento de usuário logado
-  useEffect(() => {
-    if (token && ok) navigate("/feed");
-  }, [token, ok, navigate]);
 
   // Formulario de Cadastro
   function handleSignupForm(e: React.FormEvent<HTMLFormElement>) {
@@ -108,12 +94,12 @@ export function Sign() {
 
   //controle de login
   useEffect(() => {
-    if (token) {
+    if (token && ok) {
       setTimeout(() => {
         navigate("/feed");
       }, 1000);
     }
-  }, [token, navigate]);
+  }, [token, ok, navigate]);
 
   return (
     <SignStyle signinIn={signIn}>
@@ -204,9 +190,16 @@ export function Sign() {
             type="text"
             name="username"
             placeholder="Nome de usuário"
+            minLength={3}
             maxLength={30}
           />
-          <input type="password" name="password" placeholder="Senha" required />
+          <input
+            type="password"
+            name="password"
+            placeholder="Senha"
+            minLength={4}
+            required
+          />
           <div className="checkbox">
             <input
               type="checkbox"

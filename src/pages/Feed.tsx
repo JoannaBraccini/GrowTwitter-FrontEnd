@@ -22,9 +22,13 @@ import {
   deleteTweet,
   getTweetDetails,
   getTweets,
+  likeTweet,
   updateTweet,
 } from "../store/modules/tweets/tweetsActions";
-import { getUserDetails } from "../store/modules/users/usersActions";
+import {
+  followUser,
+  getUserDetails,
+} from "../store/modules/users/usersActions";
 import { formatDate } from "../utils";
 import { Modal } from "../components/Modal";
 import { Tabs } from "../components/Tabs";
@@ -60,6 +64,14 @@ export function Feed() {
     setModalTitle(title);
     setModalContent(content);
     setModalOpen(true);
+  };
+
+  const logoutUnauthorized = () => {
+    dispatch(showAlert({ message: "Usuário não autorizado", type: "error" }));
+    setTimeout(() => {
+      dispatch(logout());
+      navigate("/sign");
+    }, 1000);
   };
 
   // Buscar tweets
@@ -109,13 +121,6 @@ export function Feed() {
 
   const validateId = (tweet: Tweet): boolean => {
     const validId = tweet.userId === userLogged.id;
-    if (!validId) {
-      dispatch(showAlert({ message: "Usuário não autorizado", type: "error" }));
-      setTimeout(() => {
-        dispatch(logout());
-        navigate("/sign");
-      }, 1000);
-    }
     return validId;
   };
 
@@ -133,14 +138,14 @@ export function Feed() {
     if (validateId(tweet)) {
       const updatedTweet: Tweet = { ...tweet, content };
       dispatch(updateTweet(updatedTweet));
-    }
-    setMenuVisible(null); // Fechar o menu após a exclusão
+    } else logoutUnauthorized();
+    setMenuVisible(null);
   };
 
   const handleDeleteTweet = (tweet: Tweet) => {
     if (validateId(tweet)) {
       dispatch(deleteTweet(tweet.id));
-    }
+    } else logoutUnauthorized();
     setMenuVisible(null); // Fechar o menu após a exclusão
   };
 
@@ -153,8 +158,16 @@ export function Feed() {
   const handleTweetDetail = (id: string) => {
     dispatch(getTweetDetails(id));
   };
-  const handleLike = (id: string) => {};
-  const handleFollow = (id: string) => {};
+  const handleLike = (tweet: Tweet) => {
+    if (!validateId(tweet)) {
+      dispatch(likeTweet(tweet.id));
+    }
+  };
+  const handleFollow = (id: string) => {
+    if (userLogged.id === id) {
+      throw new Error("User cannot follow themselves");
+    } else dispatch(followUser(id));
+  };
 
   const isImageUrl = (url: string) =>
     /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
@@ -290,7 +303,11 @@ export function Feed() {
                           <button
                             onClick={() => handleFollow(tweetUser?.id ?? "")}
                           >
-                            Deixar de seguir
+                            {tweetUser?.followers.find(
+                              (user) => user.followerId === userLogged.id
+                            )
+                              ? "Deixar de seguir"
+                              : "Seguir"}
                           </button>
                         )}
                       </div>
@@ -320,10 +337,7 @@ export function Feed() {
                         >
                           <RetweetIcon /> {tweet.retweetCount}
                         </span>
-                        <span
-                          title="Curtir"
-                          onClick={() => handleLike(tweet.id)}
-                        >
+                        <span title="Curtir" onClick={() => handleLike(tweet)}>
                           <LikeIcon /> {tweet.likeCount}
                         </span>
                         <span

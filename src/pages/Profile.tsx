@@ -15,6 +15,7 @@ import callendar from "../assets/callendar.svg";
 import { Tabs } from "../components/Tabs";
 import { TabReplies } from "../components/Tabs/TabReplies";
 import { TabLikes } from "../components/Tabs/TabLikes";
+import { formatDate } from "../utils";
 
 export function Profile() {
   const navigate = useNavigate();
@@ -76,7 +77,9 @@ export function Profile() {
             <span>{verifiedBlue} Obter verificação</span>
             <small>@{user.username}</small>
             <textarea>{user.bio}</textarea>
-            <small>{callendar} Ingressou em user.createdAt</small>
+            <small>
+              {callendar} Ingressou em {formatDate(user.createdAt, "long")}
+            </small>
           </div>
           <div className="profile-follows">
             <p>
@@ -84,7 +87,7 @@ export function Profile() {
               {user.followers.length} Seguidores
             </p>
           </div>
-          <div className="profile-tweets-wrapper">
+          <div className="profile-tweets-section">
             <div className="profile-tweets-header">
               <Tabs
                 tabs={["Posts", "Respostas", "Mídia", "Curtidas"]}

@@ -7,6 +7,7 @@ export interface User {
   username: string;
   avatarUrl: string;
   bio: string;
+  createdAt: Date;
   followers: Follow[];
   following: Follow[];
   tweets: Tweet[];
