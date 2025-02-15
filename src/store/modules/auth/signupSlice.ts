@@ -86,7 +86,9 @@ const signupSlice = createSlice({
             const userData = action.payload.data;
             state.user = {
               ...userData,
-              createdAt: new Date(userData.createdAt).toISOString(), // Garantir que `createdAt` seja uma string
+              avatarUrl:
+                "https://www.svgrepo.com/show/485335/photo-image-image.svg", //Salvar uma imagem padrão
+              createdAt: new Date(userData.createdAt).toISOString(),
             };
           }
         }
