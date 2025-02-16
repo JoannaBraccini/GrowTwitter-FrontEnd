@@ -38,8 +38,8 @@ const initialState: InitialState = {
     parentId: undefined,
     content: "",
     imageUrl: "",
-    createdAt: new Date().toLocaleString(),
-    updatedAt: new Date().toLocaleString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
 
     likeCount: undefined,
     replyCount: undefined,
@@ -51,7 +51,7 @@ const initialState: InitialState = {
         tweetId: "",
         userId: "",
         likeCount: undefined,
-        createdAt: new Date().toLocaleString(),
+        createdAt: new Date().toISOString(),
       },
     ],
     retweets: [
@@ -60,7 +60,7 @@ const initialState: InitialState = {
         tweetId: "",
         userId: "",
         retweetCount: undefined,
-        createdAt: new Date().toLocaleString(),
+        createdAt: new Date().toISOString(),
       },
     ],
     replies: [],
@@ -98,9 +98,9 @@ const tweetDetailsSlice = createSlice({
             const tweetData = action.payload.data;
             state.tweet = {
               ...tweetData,
-              createdAt: new Date(tweetData.createdAt).toLocaleString(),
+              createdAt: new Date(tweetData.createdAt).toISOString(),
               updatedAt: tweetData.updatedAt
-                ? new Date(tweetData.updatedAt).toLocaleString()
+                ? new Date(tweetData.updatedAt).toISOString()
                 : undefined, // Garantir que seja undefined caso não exista
             };
           }

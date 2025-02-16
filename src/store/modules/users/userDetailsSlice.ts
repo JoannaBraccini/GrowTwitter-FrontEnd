@@ -32,7 +32,7 @@ const initialState: InitialState = {
     username: "",
     avatarUrl: "",
     bio: "",
-    createdAt: new Date().toLocaleDateString(),
+    createdAt: new Date().toISOString(),
     followers: [],
     following: [],
     tweets: [],
@@ -70,7 +70,7 @@ const userDetailsSlice = createSlice({
             const userData = action.payload.data;
             state.user = {
               ...userData,
-              createdAt: new Date(userData.createdAt).toLocaleDateString(),
+              createdAt: new Date(userData.createdAt).toISOString(),
             };
           }
         }

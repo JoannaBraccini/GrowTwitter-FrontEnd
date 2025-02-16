@@ -87,7 +87,7 @@ const signupSlice = createSlice({
             state.user = {
               ...userData,
               avatarUrl:
-                "https://www.svgrepo.com/show/485335/photo-image-image.svg", //Salvar uma imagem padrão
+                "https://image.lexica.art/full_webp/32aa7d88-986a-447a-b715-da718a47d709", //Salvar uma imagem padrão
               createdAt: new Date(userData.createdAt).toISOString(),
             };
           }

@@ -2,7 +2,15 @@ export const formatDate = (
   date: string | Date,
   formatType: "long" | "short" | "relative" = "short"
 ): string => {
-  const dateObj = new Date(date);
+  const dateObj =
+    typeof date === "string" && !isNaN(Date.parse(date))
+      ? new Date(date) // Converte string ISO para Date
+      : new Date(date); // Caso seja já um objeto Date, apenas usa diretamente
+
+  // Verifica se a data é válida
+  if (isNaN(dateObj.getTime())) {
+    return "Data inválida"; // Retorna uma mensagem de erro caso a data seja inválida
+  }
 
   // Função para formatar a data como "9 de fev"
   const formatToShortMonth = (dateObj: Date): string => {

@@ -9,7 +9,7 @@ export function useCreateTweet() {
   const userLogged = useAppSelector((state) => state.userLogged.user);
 
   const handleCreateTweet = useCallback(
-    (content: string, imageUrl: string, parentId: string) => {
+    (content: string, imageUrl: string, parentId?: string) => {
       if (!userLogged) {
         dispatch(
           showAlert({
@@ -18,16 +18,26 @@ export function useCreateTweet() {
           })
         );
         return;
-      } else {
-        const newTweet: CreateTweetRequest = {
-          userId: userLogged.id,
-          parentId,
-          content,
-          imageUrl,
-          tweetType: "TWEET",
-        };
-        dispatch(createTweet(newTweet));
       }
+
+      if (!content.trim() && !imageUrl.trim()) {
+        dispatch(
+          showAlert({
+            message: "Seu tweet não pode estar vazio.",
+            type: "warning",
+          })
+        );
+        return;
+      }
+
+      const newTweet: CreateTweetRequest = {
+        userId: userLogged.id,
+        parentId,
+        content,
+        imageUrl,
+        tweetType: parentId ? "REPLY" : "TWEET",
+      };
+      dispatch(createTweet(newTweet));
     },
     [dispatch, userLogged]
   );

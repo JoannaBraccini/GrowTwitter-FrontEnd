@@ -9,11 +9,10 @@ import {
   DotsIcon,
 } from "../../assets/icons";
 import verifiedBlue from "../../assets/verified-blue.svg";
-import { CreateTweetRequest, Tweet, User } from "../../types";
+import { Tweet, User } from "../../types";
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import {
-  createTweet,
   deleteTweet,
   likeTweet,
   updateTweet,
@@ -24,6 +23,7 @@ import { showAlert } from "../../store/modules/alert/alertSlice";
 import { logout } from "../../store/modules/auth/loginSlice";
 import { TweetBox } from "../TweetBox";
 import { Avatar } from "../Avatar";
+import { useCreateTweet, useProfileNavigation } from "../../hooks";
 
 interface PostProps {
   tweet: Tweet;
@@ -42,6 +42,8 @@ export function Post({
 }: PostProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { handleCreateTweet } = useCreateTweet();
+  const { handleProfileClick } = useProfileNavigation();
   const [menuVisible, setMenuVisible] = useState<string | null>(null);
 
   const isImageUrl = (url: string) =>
@@ -60,6 +62,16 @@ export function Post({
     initialImageUrl: string,
     onTweetSubmit: (content: string, imageUrl: string) => void
   ) => {
+    if (!userLogged.avatarUrl || !userLogged.name || !userLogged.id) {
+      dispatch(
+        showAlert({
+          message:
+            "Erro: informações do usuário ausentes. Faça login novamente.",
+          type: "error",
+        })
+      );
+      return;
+    }
     openModal(
       title,
       <TweetBox
@@ -108,29 +120,6 @@ export function Post({
     navigate("/sign");
   };
 
-  const handleReply = () => {
-    const { id } = userLogged;
-    openTweetBoxModal("Responder Tweet", "", "", (content, imageUrl) => {
-      if (!id) {
-        dispatch(
-          showAlert({
-            message: "Faça login para acessar esta funcção",
-            type: "warning",
-          })
-        );
-        return;
-      }
-      const reply: CreateTweetRequest = {
-        parentId: tweet.id,
-        userId: id,
-        content,
-        imageUrl,
-        tweetType: "REPLY",
-      };
-      dispatch(createTweet(reply));
-    });
-  };
-
   const handleDeleteTweet = (tweet: Tweet) => {
     if (isOwnTweet) {
       dispatch(deleteTweet(tweet.id));
@@ -142,16 +131,16 @@ export function Post({
     <div className="post">
       <Avatar>
         <img
-          src={tweetUser?.avatarUrl}
-          alt={tweetUser?.name}
-          onClick={() => navigate(`/${tweetUser?.username}`)}
+          src={tweetUser.avatarUrl}
+          alt={tweetUser.name}
+          onClick={() => handleProfileClick(tweetUser.id)}
         />
       </Avatar>
       <div className="post-body">
         <div className="post-header">
           <div className="post-headerText">
             <h3>
-              {tweetUser?.name}
+              {tweetUser.name}
               <span className="post-headerSpecial">
                 <span className="icons post-badge">
                   <img src={verifiedBlue} />
@@ -225,7 +214,7 @@ export function Post({
 
         <div className="post-footer">
           <div className="post-icons">
-            <span title="Responder" onClick={handleReply}>
+            <span title="Responder" onClick={() => handleCreateTweet}>
               <CommentIcon /> {tweet.replyCount}
             </span>
             <span

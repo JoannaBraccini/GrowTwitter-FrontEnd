@@ -25,7 +25,7 @@ const initialState: InitialState = {
       followers: [],
       following: [],
       tweets: [],
-      createdAt: new Date().toLocaleDateString(),
+      createdAt: new Date().toISOString(),
     },
   ],
 };

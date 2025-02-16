@@ -30,6 +30,7 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { handleCreateTweet } = useCreateTweet();
   const { user, token } = useAppSelector((state) => state.userLogged);
   const { handleProfileClick } = useProfileNavigation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -186,7 +187,7 @@ export function Navbar() {
           key="tweet-box"
           userPhoto={user.avatarUrl}
           userName={user.name}
-          onTweetSubmit={useCreateTweet}
+          onTweetSubmit={handleCreateTweet}
           initialContent=""
           initialImageUrl=""
         />

@@ -4,8 +4,8 @@ import linkPhoto from "../../assets/link-photo.svg";
 import { useState } from "react";
 
 export interface TweetBoxProps {
-  userPhoto: string | undefined;
-  userName: string | undefined;
+  userPhoto: string;
+  userName: string;
   initialContent?: string;
   initialImageUrl?: string;
   onTweetSubmit: (content: string, imageUrl: string) => void;
@@ -20,6 +20,15 @@ export function TweetBox({
 }: TweetBoxProps) {
   const [content, setContent] = useState(initialContent);
   const [imageUrl, setImageUrl] = useState(initialImageUrl);
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
+
+  const openImageModal = (imageSrc: string) => {
+    setExpandedImage(imageSrc);
+  };
+
+  const closeImageModal = () => {
+    setExpandedImage(null);
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -45,6 +54,8 @@ export function TweetBox({
               src={imageUrl}
               alt="Pré-visualização da imagem"
               className="tweetbox-image"
+              onClick={() => openImageModal(imageUrl)} // Clique para ampliar
+              style={{ cursor: "pointer" }}
             />
           </div>
         )}
@@ -63,6 +74,13 @@ export function TweetBox({
           </Button>
         </div>
       </form>
+      {expandedImage && (
+        <div className="image-modal" onClick={closeImageModal}>
+          <div className="image-modal-content">
+            <img src={expandedImage} alt="Imagem ampliada" />
+          </div>
+        </div>
+      )}
     </TweetBoxStyle>
   );
 }

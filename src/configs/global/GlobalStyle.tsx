@@ -46,6 +46,14 @@ export const GlobalStyle = createGlobalStyle`
   flex-direction: row;
   width: 100%;
   height: 100vh;
+  overflow-y: auto;
+
+  -webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 

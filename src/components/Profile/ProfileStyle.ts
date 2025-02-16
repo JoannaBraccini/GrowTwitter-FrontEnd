@@ -3,9 +3,7 @@ import styled from "styled-components";
 export const ProfileStyle = styled.div`
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
   flex: 1;
-  /* padding-right: 10px; */
   overflow-y: auto;
 
   .header {
@@ -14,24 +12,41 @@ export const ProfileStyle = styled.div`
     z-index: 10;
     background: ${({ theme }) => theme.background};
     border-bottom: 1px solid ${({ theme }) => theme.highlight};
-    padding: 15px 20px;
+    padding: 5px 10px;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 15px;
 
-    h2 {
-      font-size: 18px;
-      font-weight: bold;
+    .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: auto;
+      margin-bottom: auto;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+
+      &:hover {
+        border: 1px solid ${({ theme }) => theme.highlight};
+      }
     }
-    span {
-      font-size: 14px;
-      color: ${({ theme }) => theme.textSecondary};
+    .data {
+      h2 {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      span {
+        font-size: 14px;
+        color: ${({ theme }) => theme.textSecondary};
+      }
     }
   }
 
   .banner {
-    position: relative;
     width: 100%;
+    position: relative;
     .cover {
       width: 100%;
       height: 200px;
@@ -41,41 +56,81 @@ export const ProfileStyle = styled.div`
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: right;
+      }
+    }
+
+    .avatar {
+      position: absolute;
+      top: 50%;
+      margin-left: 20px;
+      border: 1px solid ${({ theme }) => theme.backgroundColor};
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background-color: ${({ theme }) => theme.highlight};
+      img {
+        width: 100%;
+        height: 100%;
+
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+    button {
+      position: absolute;
+      right: 0;
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid ${({ theme }) => theme.highlight};
+
+      &:hover {
+        background-color: ${({ theme }) => theme.highlight};
       }
     }
   }
 
   .details {
     padding: 50px 20px 10px;
-    h2 {
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .verified {
+
+    .user {
       display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 14px;
-      color: ${({ theme }) => theme.primary};
-      font-weight: bold;
+      gap: 10px;
+      h2 {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .verified {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 14px;
+        border-radius: 9999px;
+        padding: 0 10px;
+        border: 1px solid ${({ theme }) => theme.highlight};
+        color: ${({ theme }) => theme.primary};
+        font-weight: bold;
+        cursor: pointer;
+      }
     }
     small {
       color: ${({ theme }) => theme.textSecondary};
     }
-    textarea {
+    .bio {
       background: none;
       border: none;
       resize: none;
       width: 100%;
       font-size: 16px;
-      color: ${({ theme }) => theme.text};
-      margin-top: 5px;
-      padding: 5px 0;
+      color: ${({ theme }) => theme.textColor};
+      padding: 10px 0;
+      cursor: default;
     }
-    p {
+    .callendar {
+      gap: 5px;
       display: flex;
       align-items: center;
-      gap: 5px;
       color: ${({ theme }) => theme.textSecondary};
       font-size: 14px;
     }

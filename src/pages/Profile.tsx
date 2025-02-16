@@ -15,9 +15,7 @@ import { Tabs } from "../components/Tabs";
 import { formatDate } from "../utils";
 import { Post } from "../components/Post";
 import { Modal } from "../components/Modal";
-import { Avatar } from "../components/Avatar";
 import { ProfileStyle } from "../components/Profile/ProfileStyle";
-import { useProfileNavigation } from "../hooks/useProfileNavigation";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
 
@@ -29,7 +27,7 @@ export function Profile() {
     (state) => state.userLogged
   );
   const { user } = useAppSelector((state) => state.userDetail);
-  const { handleProfileClick } = useProfileNavigation();
+  const { users } = useAppSelector((state) => state.usersList);
   const { tweets } = useAppSelector((state) => state.tweetsList);
   const [activeTab, setActiveTab] = useState<TabOptions>("Posts");
 
@@ -45,8 +43,8 @@ export function Profile() {
     setModalOpen(true);
   };
 
-  const userWallpaper =
-    "https://th.bing.com/th/id/OIP.hg1BiocPGLHkoo5lOha7zwHaBK?rs=1&pid=ImgDetMain";
+  const defaultCover =
+    "https://media.licdn.com/dms/image/v2/D4E16AQHxso5JBwzWaQ/profile-displaybackgroundimage-shrink_350_1400/profile-displaybackgroundimage-shrink_350_1400/0/1732718244624?e=1745452800&v=beta&t=VU2WC0c6lIcYSA_qjf8zz8jdNKNKRtXPSogylskHlqY";
 
   useEffect(() => {
     if (!userLogged || !token) {
@@ -58,16 +56,21 @@ export function Profile() {
       );
       dispatch(logout());
       navigate("/sign");
-    } else if (!user) {
-      dispatch(getUserDetails(userLogged.id));
+    } else if (!user || (username && username !== user.username)) {
+      const userFound = users.find((user) => user.username === username);
+      if (userFound) {
+        dispatch(getUserDetails(userFound.id));
+      } else {
+        dispatch(
+          showAlert({
+            message: "Erro ao buscar dados do usuário",
+            type: "error",
+          })
+        );
+      }
     }
-  }, [token, user, userLogged, dispatch, navigate]);
+  }, [token, user, userLogged, dispatch, navigate, username, users]);
 
-  useEffect(() => {
-    if (username && username !== user.username) {
-      dispatch(getUserDetails(userLogged.id));
-    }
-  }, [dispatch, user.username, userLogged.id, username]);
   function handleEdit(user: User) {
     dispatch(setUserDetails(user));
   }
@@ -107,34 +110,39 @@ export function Profile() {
   return (
     <DefaultLayout>
       <ProfileStyle>
-        <BackIcon />
         <div className="header">
-          <h2>{user.name}</h2>
-          <span>{user?.tweets?.length} posts</span>
+          <div className="icon">
+            <BackIcon />
+          </div>
+          <div className="data">
+            <h2>{user.name}</h2>
+            <span>{user?.tweets?.length} posts</span>
+          </div>
         </div>
         <div className="banner">
           <div className="cover">
-            <img src={userWallpaper} />
+            <img src={defaultCover} />
           </div>
-          <Avatar>
-            <img
-              src={user.avatarUrl}
-              alt={user.name}
-              onClick={() => handleProfileClick(user.id)}
-            />
-          </Avatar>
-          <Button onClick={() => handleEdit}>Editar perfil</Button>
+          <div className="avatar">
+            <img src={user.avatarUrl} alt={user.name} />
+          </div>
+          <Button ghost size="small" onClick={() => handleEdit}>
+            Editar perfil
+          </Button>
         </div>
         <div className="details">
-          <h2>{user.name}</h2>
-          <span className="verified">
-            <img src={verifiedBlue} alt="Selo verificado" /> Obter verificação
-          </span>
+          <div className="user">
+            <h2>{user.name}</h2>
+            <span className="verified">
+              <img src={verifiedBlue} alt="Selo verificado" /> Obter verificação
+            </span>
+          </div>
           <small>@{user.username}</small>
-          <textarea>{user.bio}</textarea>
-          <p>
-            {callendar} Ingressou em {formatDate(user.createdAt, "long")}
-          </p>
+          <div className="bio">{user.bio}</div>
+          <span className="callendar">
+            <img src={callendar} />
+            Ingressou em {formatDate(user.createdAt, "long")}
+          </span>
         </div>
         <div className="follows">
           <p>

@@ -14,7 +14,7 @@ export function useProfileNavigation() {
     try {
       const response = await dispatch(getUserDetails(id)).unwrap();
       if (response.data) {
-        setUserDetails(response.data);
+        dispatch(setUserDetails(response.data));
         navigate(`/${response.data.username}`);
       } else {
         dispatch(

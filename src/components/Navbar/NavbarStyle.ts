@@ -56,7 +56,7 @@ export const NavbarStyle = styled.div`
 
   .navbar-tweet {
     margin-top: 2rem;
-    max-width: 250px;
+    max-width: 220px;
   }
 
   .account-container {
