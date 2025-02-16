@@ -23,6 +23,7 @@ import { followUser } from "../../store/modules/users/usersActions";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 import { logout } from "../../store/modules/auth/loginSlice";
 import { TweetBox } from "../TweetBox";
+import { Avatar } from "../Avatar";
 
 interface PostProps {
   tweet: Tweet;
@@ -139,13 +140,13 @@ export function Post({
 
   return (
     <div className="post">
-      <div className="post-avatar">
+      <Avatar>
         <img
           src={tweetUser?.avatarUrl}
           alt={tweetUser?.name}
           onClick={() => navigate(`/${tweetUser?.username}`)}
         />
-      </div>
+      </Avatar>
       <div className="post-body">
         <div className="post-header">
           <div className="post-headerText">

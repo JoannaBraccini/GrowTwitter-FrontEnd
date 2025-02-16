@@ -2,7 +2,6 @@ import { DefaultLayout } from "../configs/layouts/DefaultLayout";
 import { TweetBox } from "../components/TweetBox";
 import { FeedStyle } from "../components/Feed/FeedStyle";
 import { useEffect, useState } from "react";
-import { Loader } from "../components/Loader";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getTweets } from "../store/modules/tweets/tweetsActions";
 import { getUserDetails, getUsers } from "../store/modules/users/usersActions";
@@ -13,15 +12,11 @@ import { Post } from "../components/Post";
 
 export function Feed() {
   const dispatch = useAppDispatch();
-  const {
-    token,
-    user: userLogged,
-    loading,
-  } = useAppSelector((state) => state.userLogged);
-  const { user } = useAppSelector((state) => state.userDetail);
-  const { tweets, loading: loadingTweets } = useAppSelector(
-    (state) => state.tweetsList
+  const { token, user: userLogged } = useAppSelector(
+    (state) => state.userLogged
   );
+  const { user } = useAppSelector((state) => state.userDetail);
+  const { tweets } = useAppSelector((state) => state.tweetsList);
   const { users } = useAppSelector((state) => state.usersList);
   const [activeTab, setActiveTab] = useState<"Para você" | "Seguindo">(
     "Para você"
@@ -63,41 +58,38 @@ export function Feed() {
 
   return (
     <DefaultLayout>
-      {loading || loadingTweets ? (
-        <Loader />
-      ) : (
-        <FeedStyle>
-          <div className="feed-header">
-            <Tabs
-              tabs={["Para Você", "Seguindo"]}
-              activeTab={activeTab}
-              onTabChange={() => setActiveTab}
-            />
-          </div>
-          <TweetBox
-            key="tweet-box"
-            userPhoto={user.avatarUrl}
-            userName={user.name}
-            initialContent=""
-            onTweetSubmit={useCreateTweet}
+      <FeedStyle>
+        <div className="feed-header">
+          <Tabs
+            tabs={["Para Você", "Seguindo"]}
+            activeTab={activeTab}
+            onTabChange={() => setActiveTab}
           />
-          {filteredTweets?.map((tweet) => {
-            const tweetUser = users.find((user) => user.id === tweet.userId);
-            const isOwnTweet = tweet.userId === userLogged.id;
+        </div>
+        <TweetBox
+          key="tweet-box"
+          userPhoto={user.avatarUrl}
+          userName={user.name}
+          initialContent=""
+          onTweetSubmit={useCreateTweet}
+        />
+        {filteredTweets?.map((tweet) => {
+          const tweetUser = users.find((user) => user.id === tweet.userId);
+          const isOwnTweet = tweet.userId === userLogged.id;
+          if (!tweetUser) return null; // Se não encontrar o usuário, não renderiza o tweet
 
-            return (
-              <Post
-                key={tweet.id}
-                tweetUser={tweetUser}
-                isOwnTweet={isOwnTweet}
-                tweet={tweet}
-                userLogged={userLogged}
-                openModal={openModal}
-              />
-            );
-          })}
-        </FeedStyle>
-      )}
+          return (
+            <Post
+              key={tweet.id}
+              tweetUser={tweetUser}
+              isOwnTweet={isOwnTweet}
+              tweet={tweet}
+              userLogged={userLogged}
+              openModal={openModal}
+            />
+          );
+        })}
+      </FeedStyle>
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

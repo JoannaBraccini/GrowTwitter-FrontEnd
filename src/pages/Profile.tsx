@@ -6,34 +6,32 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { showAlert } from "../store/modules/alert/alertSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { logout } from "../store/modules/auth/loginSlice";
-import { Loader } from "../components/Loader";
 import { getUserDetails } from "../store/modules/users/usersActions";
 import { User } from "../types";
 import { setUserDetails } from "../store/modules/users/userDetailsSlice";
 import verifiedBlue from "../assets/verified-blue.svg";
 import callendar from "../assets/callendar.svg";
 import { Tabs } from "../components/Tabs";
-import { TabReplies } from "../components/Tabs/TabReplies";
-import { TabLikes } from "../components/Tabs/TabLikes";
 import { formatDate } from "../utils";
 import { Post } from "../components/Post";
 import { Modal } from "../components/Modal";
+import { Avatar } from "../components/Avatar";
+import { ProfileStyle } from "../components/Profile/ProfileStyle";
+import { useProfileNavigation } from "../hooks/useProfileNavigation";
+
+type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
 
 export function Profile() {
   const { username } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {
-    user: userLogged,
-    token,
-    loading,
-  } = useAppSelector((state) => state.userLogged);
-  const { user, loading: loadingDetails } = useAppSelector(
-    (state) => state.userDetail
+  const { user: userLogged, token } = useAppSelector(
+    (state) => state.userLogged
   );
-  const [activeTab, setActiveTab] = useState<
-    "Posts" | "Respostas" | "Mídia" | "Curtidas"
-  >("Posts");
+  const { user } = useAppSelector((state) => state.userDetail);
+  const { handleProfileClick } = useProfileNavigation();
+  const { tweets } = useAppSelector((state) => state.tweetsList);
+  const [activeTab, setActiveTab] = useState<TabOptions>("Posts");
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -74,77 +72,108 @@ export function Profile() {
     dispatch(setUserDetails(user));
   }
 
+  const getFilteredTweets = () => {
+    switch (activeTab) {
+      case "Posts":
+        return user.tweets || [];
+      case "Respostas":
+        return tweets.filter(
+          (tweet) =>
+            tweet.parentId &&
+            tweet.tweetType === "REPLY" &&
+            tweet.userId === user.id
+        );
+      case "Mídia":
+        return user.tweets.filter((tweet) => tweet.imageUrl) || [];
+      case "Curtidas":
+        return tweets.filter(
+          (tweet) =>
+            tweet.likes && tweet.likes.some((like) => like.userId === user.id)
+        );
+      default:
+        return [];
+    }
+  };
+
+  const emptyMessages = {
+    Posts: "Este usuário ainda não tweetou.",
+    Respostas: "Este usuário ainda não respondeu nenhum tweet.",
+    Mídia: "Este usuário ainda não postou nenhuma mídia.",
+    Curtidas: "Este usuário ainda não curtiu nenhum tweet.",
+  };
+
+  const filteredTweets = getFilteredTweets();
+
   return (
     <DefaultLayout>
-      {loading || loadingDetails ? (
-        <Loader />
-      ) : (
-        <div className="profile-wrapper">
-          <BackIcon />
-          <div className="profile-header">
-            <h1>{user.name}</h1>
-            <span>{user?.tweets?.length} posts</span>
-          </div>
-          <div className="profile-cover">
+      <ProfileStyle>
+        <BackIcon />
+        <div className="header">
+          <h2>{user.name}</h2>
+          <span>{user?.tweets?.length} posts</span>
+        </div>
+        <div className="banner">
+          <div className="cover">
             <img src={userWallpaper} />
-            <img src={user.avatarUrl} />
-            <Button onClick={() => handleEdit}>Editar perfil</Button>
           </div>
-          <div className="profile-details">
-            <h2>{user.name}</h2>
-            <span>{verifiedBlue} Obter verificação</span>
-            <small>@{user.username}</small>
-            <textarea>{user.bio}</textarea>
-            <small>
-              {callendar} Ingressou em {formatDate(user.createdAt, "long")}
-            </small>
+          <Avatar>
+            <img
+              src={user.avatarUrl}
+              alt={user.name}
+              onClick={() => handleProfileClick(user.id)}
+            />
+          </Avatar>
+          <Button onClick={() => handleEdit}>Editar perfil</Button>
+        </div>
+        <div className="details">
+          <h2>{user.name}</h2>
+          <span className="verified">
+            <img src={verifiedBlue} alt="Selo verificado" /> Obter verificação
+          </span>
+          <small>@{user.username}</small>
+          <textarea>{user.bio}</textarea>
+          <p>
+            {callendar} Ingressou em {formatDate(user.createdAt, "long")}
+          </p>
+        </div>
+        <div className="follows">
+          <p>
+            <strong>{user?.following?.length}</strong> Seguindo{" "}
+            {user?.followers?.length} Seguidores
+          </p>
+        </div>
+        <div className="tweets-section">
+          <div className="tabs">
+            <Tabs
+              tabs={["Posts", "Respostas", "Mídia", "Curtidas"] as TabOptions[]}
+              activeTab={activeTab}
+              onTabChange={(tab) => setActiveTab(tab as TabOptions)}
+            />
           </div>
-          <div className="profile-follows">
-            <p>
-              <strong>{user?.following?.length}</strong> Seguindo{" "}
-              {user?.followers?.length} Seguidores
-            </p>
-          </div>
-          <div className="profile-tweets-section">
-            <div className="profile-tweets-header">
-              <Tabs
-                tabs={["Posts", "Respostas", "Mídia", "Curtidas"]}
-                activeTab={activeTab}
-                onTabChange={() => setActiveTab}
-              />
-            </div>
-            <div className="profile-tweets-content">
-              {activeTab === "Posts" && (
-                <div>
-                  {user.tweets && user.tweets.length > 0 ? (
-                    user.tweets.map((tweet) => (
-                      <>
-                        {tweet.retweets?.length === 1 && (
-                          <span>
-                            <RetweetIcon /> 'Você repostou'
-                          </span>
-                        )}
-                        <Post
-                          key={tweet.id}
-                          tweetUser={user}
-                          isOwnTweet={true}
-                          tweet={tweet}
-                          userLogged={userLogged}
-                          openModal={openModal}
-                        />
-                      </>
-                    ))
-                  ) : (
-                    <p>Este usuário ainda não tweetou.</p>
+          <div className="tweets-content">
+            {filteredTweets.length > 0 ? (
+              filteredTweets.map((tweet) => (
+                <div className="tweet" key={tweet.id}>
+                  {activeTab === "Posts" && tweet.retweets?.length === 1 && (
+                    <span className="retweet">
+                      <RetweetIcon /> 'Você repostou'
+                    </span>
                   )}
+                  <Post
+                    tweetUser={user}
+                    isOwnTweet={true}
+                    tweet={tweet}
+                    userLogged={userLogged}
+                    openModal={openModal}
+                  />
                 </div>
-              )}
-              {activeTab === "Respostas" && <TabReplies />}
-              {activeTab === "Curtidas" && <TabLikes />}
-            </div>
+              ))
+            ) : (
+              <p className="empty-message">{emptyMessages[activeTab]}</p>
+            )}
           </div>
         </div>
-      )}
+      </ProfileStyle>
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

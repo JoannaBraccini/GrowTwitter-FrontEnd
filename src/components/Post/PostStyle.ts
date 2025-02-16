@@ -6,13 +6,13 @@ export const PostStyle = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.highlight};
   padding: 10px;
 
-  .post-avatar {
+  /* .post-avatar {
     padding: 0 10px 10px 10px;
     img {
       border-radius: 50%;
       height: 40px;
     }
-  }
+  } */
 
   .post-body {
     flex: 1;

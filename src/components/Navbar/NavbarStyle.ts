@@ -78,14 +78,6 @@ export const NavbarStyle = styled.div`
       width: 100%;
       height: 30px;
 
-      .account-image img {
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        padding: 0;
-        margin-right: 12px;
-      }
-
       .account-data {
         display: flex;
         flex-direction: column;

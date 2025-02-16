@@ -4,8 +4,18 @@ import { useAppSelector } from "../store/hooks";
 export function useLoading(initialMessage = "Aguarde...") {
   const loginLoad = useAppSelector((state) => state.userLogged.loading);
   const signupLoad = useAppSelector((state) => state.userSignup.loading);
+  const userLoad = useAppSelector((state) => state.userDetail.loading);
+  const userListLoad = useAppSelector((state) => state.usersList.loading);
+  const tweetLoad = useAppSelector((state) => state.tweetDetail.loading);
+  const tweetListLoad = useAppSelector((state) => state.tweetsList.loading);
 
-  const loading = loginLoad || signupLoad;
+  const loading =
+    loginLoad ||
+    signupLoad ||
+    userLoad ||
+    userListLoad ||
+    tweetLoad ||
+    tweetListLoad;
   const [loaderMessage, setLoaderMessage] = useState<string>(initialMessage);
 
   useEffect(() => {

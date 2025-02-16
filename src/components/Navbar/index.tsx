@@ -22,13 +22,16 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useTheme } from "../../configs/providers/useTheme";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 import { useCreateTweet } from "../../hooks/useCreateTweet";
-import { getUserDetails } from "../../store/modules/users/usersActions";
+import { Avatar } from "../Avatar";
+import { logout } from "../../store/modules/auth/loginSlice";
+import { useProfileNavigation } from "../../hooks/useProfileNavigation";
 
 export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { user, token } = useAppSelector((state) => state.userLogged);
+  const { handleProfileClick } = useProfileNavigation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -90,8 +93,8 @@ export function Navbar() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMenuOpen]);
 
-  const logout = useCallback(() => {
-    dispatch(logout);
+  const handleLogout = useCallback(() => {
+    dispatch(logout());
     navigate("/sign");
   }, [dispatch, navigate]);
 
@@ -100,26 +103,9 @@ export function Navbar() {
       dispatch(
         showAlert({ message: "Faça login para acessar", type: "warning" })
       );
-      logout();
+      handleLogout();
     }
-  }, [dispatch, logout, navigate, token, user]);
-
-  const handleProfileClick = async () => {
-    if (user) {
-      const response = await dispatch(getUserDetails(user.id)).unwrap();
-      if (response.data) {
-        navigate(`/${response.data.username}`);
-      } else {
-        dispatch(
-          showAlert({
-            message: "Erro ao buscar dados do usuário",
-            type: "error",
-          })
-        );
-      }
-      return;
-    }
-  };
+  }, [dispatch, handleLogout, navigate, token, user]);
 
   return (
     <NavbarStyle>
@@ -166,13 +152,13 @@ export function Navbar() {
             aria-expanded={isMenuOpen}
             aria-label="Abrir menu da conta"
           >
-            <div className="account-image">
+            <Avatar>
               <img
                 src={user.avatarUrl}
                 alt={user.name}
-                onClick={handleProfileClick}
+                onClick={() => handleProfileClick(user.id)}
               />
-            </div>
+            </Avatar>
             <div className="account-data">
               <span className="account-name">{user.name}</span>
               <span className="account-username">@{user.username}</span>
@@ -183,7 +169,7 @@ export function Navbar() {
           </div>
           {isMenuOpen && ( //mostra somente se menu aberto
             <ul className="navbar-menu">
-              <li onClick={logout}>
+              <li onClick={handleLogout}>
                 <LogoutIcon />
                 Logout
               </li>
