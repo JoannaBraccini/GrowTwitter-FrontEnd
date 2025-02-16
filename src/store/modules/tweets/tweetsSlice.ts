@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { Tweet } from "../../../types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Like, Retweet, Tweet } from "../../../types";
 import {
   createTweet,
   deleteTweet,
@@ -9,6 +9,7 @@ import {
   retweetTweet,
   updateTweet,
 } from "./tweetsActions";
+import { ResponseApi } from "../../../configs/services/api.service";
 
 interface InitialState {
   ok: boolean;
@@ -35,15 +36,18 @@ const tweetsSlice = createSlice({
       .addCase(createTweet.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createTweet.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ok = action.payload.ok;
-        state.message = action.payload.message;
+      .addCase(
+        createTweet.fulfilled,
+        (state, action: PayloadAction<ResponseApi<Tweet>>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
 
-        if (state.ok && action.payload.data) {
-          state.tweets.push(action.payload.data);
+          if (state.ok && action.payload.data) {
+            state.tweets.push(action.payload.data);
+          }
         }
-      })
+      )
       .addCase(createTweet.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;
@@ -54,25 +58,28 @@ const tweetsSlice = createSlice({
       .addCase(likeTweet.pending, (state) => {
         state.loading = true;
       })
-      .addCase(likeTweet.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ok = action.payload.ok;
-        state.message = action.payload.message;
+      .addCase(
+        likeTweet.fulfilled,
+        (state, action: PayloadAction<ResponseApi<Like>>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
 
-        if (state.ok && action.payload.data) {
-          const likedTweetIndex = state.tweets.findIndex(
-            (tweet) => tweet.id === action.payload.data?.tweetId
-          );
+          if (state.ok && action.payload.data) {
+            const likedTweetIndex = state.tweets.findIndex(
+              (tweet) => tweet.id === action.payload.data?.tweetId
+            );
 
-          if (likedTweetIndex !== -1) {
-            // Garante uma atualização imutável do tweet
-            state.tweets[likedTweetIndex] = {
-              ...state.tweets[likedTweetIndex],
-              likeCount: action.payload.data.likeCount,
-            };
+            if (likedTweetIndex !== -1) {
+              // Garante uma atualização imutável do tweet
+              state.tweets[likedTweetIndex] = {
+                ...state.tweets[likedTweetIndex],
+                likeCount: action.payload.data.likeCount,
+              };
+            }
           }
         }
-      })
+      )
       .addCase(likeTweet.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;
@@ -83,28 +90,31 @@ const tweetsSlice = createSlice({
       .addCase(retweetTweet.pending, (state) => {
         state.loading = true;
       })
-      .addCase(retweetTweet.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ok = action.payload.ok;
-        state.message = action.payload.message;
+      .addCase(
+        retweetTweet.fulfilled,
+        (state, action: PayloadAction<ResponseApi<Retweet>>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
 
-        if (state.ok && action.payload.data) {
-          const retweetIndex = state.tweets.findIndex(
-            (tweet) => tweet.id === action.payload.data?.tweetId
-          );
+          if (state.ok && action.payload.data) {
+            const retweetIndex = state.tweets.findIndex(
+              (tweet) => tweet.id === action.payload.data?.tweetId
+            );
 
-          if (retweetIndex !== -1) {
-            state.tweets[retweetIndex] = {
-              ...state.tweets[retweetIndex],
-              retweetCount: action.payload.data.retweetCount,
-              retweets: [
-                ...state.tweets[retweetIndex].retweets,
-                action.payload.data,
-              ], // Adiciona o retweet (com ou sem comentário)
-            };
+            if (retweetIndex !== -1) {
+              state.tweets[retweetIndex] = {
+                ...state.tweets[retweetIndex],
+                retweetCount: action.payload.data.retweetCount,
+                retweets: [
+                  ...state.tweets[retweetIndex].retweets,
+                  action.payload.data,
+                ], // Adiciona o retweet (com ou sem comentário)
+              };
+            }
           }
         }
-      })
+      )
       .addCase(retweetTweet.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;
@@ -115,15 +125,18 @@ const tweetsSlice = createSlice({
       .addCase(getTweets.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getTweets.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ok = action.payload.ok;
-        state.message = action.payload.message;
+      .addCase(
+        getTweets.fulfilled,
+        (state, action: PayloadAction<ResponseApi<Tweet[]>>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
 
-        if (state.ok && action.payload.data) {
-          state.tweets = action.payload.data;
+          if (state.ok && action.payload.data) {
+            state.tweets = action.payload.data;
+          }
         }
-      })
+      )
       .addCase(getTweets.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;
@@ -134,15 +147,18 @@ const tweetsSlice = createSlice({
       .addCase(getFeed.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getFeed.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ok = action.payload.ok;
-        state.message = action.payload.message;
+      .addCase(
+        getFeed.fulfilled,
+        (state, action: PayloadAction<ResponseApi<Tweet[]>>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
 
-        if (state.ok && action.payload.data) {
-          state.feed = action.payload.data;
+          if (state.ok && action.payload.data) {
+            state.feed = action.payload.data;
+          }
         }
-      })
+      )
       .addCase(getFeed.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;
@@ -153,24 +169,27 @@ const tweetsSlice = createSlice({
       .addCase(updateTweet.pending, (state) => {
         state.loading = true;
       })
-      .addCase(updateTweet.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ok = action.payload.ok;
-        state.message = action.payload.message;
+      .addCase(
+        updateTweet.fulfilled,
+        (state, action: PayloadAction<ResponseApi<Tweet>>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
 
-        if (state.ok && action.payload.data) {
-          const index = state.tweets.findIndex(
-            (tweet) => tweet.id === action.payload.data?.id
-          );
+          if (state.ok && action.payload.data) {
+            const index = state.tweets.findIndex(
+              (tweet) => tweet.id === action.payload.data?.id
+            );
 
-          if (index !== -1) {
-            state.tweets[index] = {
-              ...state.tweets[index],
-              ...action.payload.data,
-            };
+            if (index !== -1) {
+              state.tweets[index] = {
+                ...state.tweets[index],
+                ...action.payload.data,
+              };
+            }
           }
         }
-      })
+      )
       .addCase(updateTweet.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;
@@ -182,21 +201,24 @@ const tweetsSlice = createSlice({
       .addCase(deleteTweet.pending, (state) => {
         state.loading = true;
       })
-      .addCase(deleteTweet.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ok = action.payload.ok;
-        state.message = action.payload.message;
+      .addCase(
+        deleteTweet.fulfilled,
+        (state, action: PayloadAction<ResponseApi<Tweet>>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
 
-        if (state.ok && action.payload.data) {
-          const index = state.tweets.findIndex(
-            (tweet) => tweet.id === action.payload.data?.id
-          );
+          if (state.ok && action.payload.data) {
+            const index = state.tweets.findIndex(
+              (tweet) => tweet.id === action.payload.data?.id
+            );
 
-          if (index !== -1) {
-            state.tweets.splice(index, 1);
+            if (index !== -1) {
+              state.tweets.splice(index, 1);
+            }
           }
         }
-      })
+      )
       .addCase(deleteTweet.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;

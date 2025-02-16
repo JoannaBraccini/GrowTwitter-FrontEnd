@@ -7,7 +7,7 @@ export function StatisticIcon() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_59_1085)">
+      <g clipPath="url(#clip0_59_1085)">
         <path d="M1.2 4.75183H0V11.0008H1.2V4.75183Z" fill="#626161" />
         <path
           d="M7.06621 6.83508H5.86621V11.0008H7.06621V6.83508Z"

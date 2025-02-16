@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export interface ButtonProps {
   ghost?: boolean;
-  fullWidth?: boolean;
+  fullwidth?: boolean;
   shadow?: boolean;
   size?: "small" | "medium" | "large";
   text?: string;
@@ -21,7 +21,7 @@ export const Button = styled.button<ButtonProps>`
     ghost ? theme.backgroundColor : theme.accent};
   box-shadow: ${({ shadow }) =>
     shadow ? "0px 5px 10px rgba(0, 0, 0, 0.1)" : "none"};
-  width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
+  width: ${({ fullwidth }) => (fullwidth ? "100%" : "auto")};
   max-width: 300px;
   height: ${({ size }) => (size === "large" ? "50px" : "auto")};
   font-size: ${({ size }) =>
@@ -51,4 +51,8 @@ export const Button = styled.button<ButtonProps>`
   }
 `;
 // Não enviar para o DOM
-Button.shouldForwardProp = (prop) => prop !== "text" && prop !== "ghost";
+Button.shouldForwardProp = (prop) =>
+  prop !== "text" &&
+  prop !== "ghost" &&
+  prop !== "fullwidth" &&
+  prop !== "shadow";

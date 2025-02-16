@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Follow, Tweet, User } from "../../../types";
 import { getUserDetails } from "./usersActions";
+import { ResponseApi } from "../../../configs/services/api.service";
 
 interface InitialState {
   ok: boolean;
@@ -31,7 +32,7 @@ const initialState: InitialState = {
     username: "",
     avatarUrl: "",
     bio: "",
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toLocaleDateString(),
     followers: [],
     following: [],
     tweets: [],
@@ -58,19 +59,22 @@ const userDetailsSlice = createSlice({
       .addCase(getUserDetails.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getUserDetails.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ok = action.payload.ok;
-        state.message = action.payload.message;
+      .addCase(
+        getUserDetails.fulfilled,
+        (state, action: PayloadAction<ResponseApi<User>>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
 
-        if (action.payload.ok && action.payload.data) {
-          const userData = action.payload.data;
-          state.user = {
-            ...userData,
-            createdAt: new Date(userData.createdAt).toISOString(),
-          };
+          if (action.payload.ok && action.payload.data) {
+            const userData = action.payload.data;
+            state.user = {
+              ...userData,
+              createdAt: new Date(userData.createdAt).toLocaleDateString(),
+            };
+          }
         }
-      })
+      )
       .addCase(getUserDetails.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;

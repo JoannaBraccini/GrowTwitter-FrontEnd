@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Post = styled.div`
+export const PostStyle = styled.div`
   display: flex;
   align-items: flex-start;
   border-bottom: 1px solid ${({ theme }) => theme.highlight};

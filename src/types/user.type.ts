@@ -7,7 +7,7 @@ export interface User {
   username: string;
   avatarUrl: string;
   bio: string;
-  createdAt: Date;
+  createdAt: string;
   followers: Follow[];
   following: Follow[];
   tweets: Tweet[];
@@ -18,7 +18,7 @@ export interface Follow {
   id: string;
   followerId: string;
   followedId: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export type UserSearchRequest = Partial<

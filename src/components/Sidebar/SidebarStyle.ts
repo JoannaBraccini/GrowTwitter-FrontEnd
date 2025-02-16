@@ -6,7 +6,7 @@ export const SidebarStyle = styled.aside`
   position: relative;
   margin-right: 1rem;
   padding: 0 8px;
-  min-width: 24.5vw;
+  min-width: 27vw;
   flex: 0.5;
   border-left: 1px solid ${({ theme }) => theme.highlight};
 
@@ -16,10 +16,10 @@ export const SidebarStyle = styled.aside`
     align-items: center;
     gap: 10px;
     background-color: ${({ theme }) => theme.highlight};
-    padding: 10px;
+    padding: 8px;
     border-radius: 20px;
-    padding-left: 20px;
-    margin: 10px 0 10px 20px;
+    padding-left: 12px;
+    margin: 6px 0 10px 20px;
   }
 
   .sidebar-input input {

@@ -1,7 +1,7 @@
 import { Button } from "../Button";
 import { NavbarStyle } from "./NavbarStyle";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ToggleButton } from "../ToggleButton";
 import {
   DotsIcon,
@@ -20,12 +20,15 @@ import { Modal } from "../Modal";
 import { TweetBox } from "../TweetBox";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useTheme } from "../../configs/providers/useTheme";
+import { showAlert } from "../../store/modules/alert/alertSlice";
+import { useCreateTweet } from "../../hooks/useCreateTweet";
+import { getUserDetails } from "../../store/modules/users/usersActions";
 
 export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.userLogged);
+  const { user, token } = useAppSelector((state) => state.userLogged);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -87,14 +90,36 @@ export function Navbar() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMenuOpen]);
 
-  function logout() {
+  const logout = useCallback(() => {
     dispatch(logout);
     navigate("/sign");
-  }
+  }, [dispatch, navigate]);
 
-  function createTweet(): void {
-    throw new Error("Function not implemented yet.");
-  }
+  useEffect(() => {
+    if (!user || !token) {
+      dispatch(
+        showAlert({ message: "Faça login para acessar", type: "warning" })
+      );
+      logout();
+    }
+  }, [dispatch, logout, navigate, token, user]);
+
+  const handleProfileClick = async () => {
+    if (user) {
+      const response = await dispatch(getUserDetails(user.id)).unwrap();
+      if (response.data) {
+        navigate(`/${response.data.username}`);
+      } else {
+        dispatch(
+          showAlert({
+            message: "Erro ao buscar dados do usuário",
+            type: "error",
+          })
+        );
+      }
+      return;
+    }
+  };
 
   return (
     <NavbarStyle>
@@ -125,7 +150,7 @@ export function Navbar() {
         </Link>
       ))}
       <Button
-        fullWidth
+        fullwidth
         shadow
         size="large"
         className="navbar-tweet"
@@ -142,7 +167,11 @@ export function Navbar() {
             aria-label="Abrir menu da conta"
           >
             <div className="account-image">
-              <img src={user.avatarUrl} alt={user.name} />
+              <img
+                src={user.avatarUrl}
+                alt={user.name}
+                onClick={handleProfileClick}
+              />
             </div>
             <div className="account-data">
               <span className="account-name">{user.name}</span>
@@ -171,8 +200,9 @@ export function Navbar() {
           key="tweet-box"
           userPhoto={user.avatarUrl}
           userName={user.name}
-          onTweetSubmit={createTweet}
+          onTweetSubmit={useCreateTweet}
           initialContent=""
+          initialImageUrl=""
         />
       </Modal>
     </NavbarStyle>

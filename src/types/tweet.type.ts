@@ -5,9 +5,10 @@ export interface Tweet {
   userId: string;
   tweetType: TweetType;
   parentId?: string;
-  content: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  content?: string;
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt?: string;
 
   likeCount?: number;
   replyCount?: number;
@@ -18,24 +19,25 @@ export interface Tweet {
   replies: Tweet[];
 }
 
-export type Like = Pick<Tweet, "id" | "userId" | "createdAt"> & {
+export type Like = Pick<Tweet, "id" | "userId" | "createdAt" | "likeCount"> & {
   tweetId: string;
-  likeCount: number;
 };
 
 export type Retweet = Omit<Like, "likeCount"> & {
-  retweetCount: number;
+  retweetCount?: number;
   comment?: string;
 };
 
 // Para tweet e comentário
-export type CreateTweetRequest = Pick<Tweet, "parentId"> & {
-  userId: string;
-  type: TweetType;
-  content: string;
-};
+export type CreateTweetRequest = Pick<
+  Tweet,
+  "parentId" | "content" | "imageUrl" | "userId" | "tweetType"
+>;
 
-export type UpdateTweetRequest = Pick<Tweet, "id" | "userId" | "content">;
+export type UpdateTweetRequest = Pick<
+  Tweet,
+  "id" | "userId" | "content" | "imageUrl"
+>;
 export type RetweetRequest = Pick<Retweet, "id" | "comment">;
 
 export interface TweetSearchRequest {

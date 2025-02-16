@@ -5,15 +5,15 @@ export function RetweetIcon() {
       height="24"
       viewBox="0 0 64 64"
       xmlns="http://www.w3.org/2000/svg"
-      stroke-width="5"
+      strokeWidth="5"
       stroke="#626161"
       fill="none"
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g
         id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
         <path d="M52.94,42.93V18.3a5.54,5.54,0,0,0-5.54-5.54H11.83"></path>

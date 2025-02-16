@@ -4,7 +4,7 @@ import { BackIcon, RetweetIcon } from "../assets/icons";
 import { Button } from "../components/Button";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { showAlert } from "../store/modules/alert/alertSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { logout } from "../store/modules/auth/loginSlice";
 import { Loader } from "../components/Loader";
 import { getUserDetails } from "../store/modules/users/usersActions";
@@ -16,8 +16,11 @@ import { Tabs } from "../components/Tabs";
 import { TabReplies } from "../components/Tabs/TabReplies";
 import { TabLikes } from "../components/Tabs/TabLikes";
 import { formatDate } from "../utils";
+import { Post } from "../components/Post";
+import { Modal } from "../components/Modal";
 
 export function Profile() {
+  const { username } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
@@ -31,6 +34,18 @@ export function Profile() {
   const [activeTab, setActiveTab] = useState<
     "Posts" | "Respostas" | "Mídia" | "Curtidas"
   >("Posts");
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalContent, setModalContent] = useState<React.ReactNode | null>(
+    null
+  );
+
+  const openModal = (title: string, content: React.ReactNode) => {
+    setModalTitle(title);
+    setModalContent(content);
+    setModalOpen(true);
+  };
 
   const userWallpaper =
     "https://th.bing.com/th/id/OIP.hg1BiocPGLHkoo5lOha7zwHaBK?rs=1&pid=ImgDetMain";
@@ -50,6 +65,11 @@ export function Profile() {
     }
   }, [token, user, userLogged, dispatch, navigate]);
 
+  useEffect(() => {
+    if (username && username !== user.username) {
+      dispatch(getUserDetails(userLogged.id));
+    }
+  }, [dispatch, user.username, userLogged.id, username]);
   function handleEdit(user: User) {
     dispatch(setUserDetails(user));
   }
@@ -63,7 +83,7 @@ export function Profile() {
           <BackIcon />
           <div className="profile-header">
             <h1>{user.name}</h1>
-            <span>{user.tweets.length}</span>
+            <span>{user?.tweets?.length} posts</span>
           </div>
           <div className="profile-cover">
             <img src={userWallpaper} />
@@ -81,8 +101,8 @@ export function Profile() {
           </div>
           <div className="profile-follows">
             <p>
-              <strong>{user.following.length}</strong> Seguindo{" "}
-              {user.followers.length} Seguidores
+              <strong>{user?.following?.length}</strong> Seguindo{" "}
+              {user?.followers?.length} Seguidores
             </p>
           </div>
           <div className="profile-tweets-section">
@@ -98,14 +118,21 @@ export function Profile() {
                 <div>
                   {user.tweets && user.tweets.length > 0 ? (
                     user.tweets.map((tweet) => (
-                      <div key={tweet.id} className="post-tweet">
-                        {tweet.retweets.length === 1 && (
+                      <>
+                        {tweet.retweets?.length === 1 && (
                           <span>
                             <RetweetIcon /> 'Você repostou'
                           </span>
                         )}
-                        <p>{tweet.content}</p>
-                      </div>
+                        <Post
+                          key={tweet.id}
+                          tweetUser={user}
+                          isOwnTweet={true}
+                          tweet={tweet}
+                          userLogged={userLogged}
+                          openModal={openModal}
+                        />
+                      </>
                     ))
                   ) : (
                     <p>Este usuário ainda não tweetou.</p>
@@ -118,6 +145,13 @@ export function Profile() {
           </div>
         </div>
       )}
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={modalTitle}
+      >
+        {modalContent}
+      </Modal>
     </DefaultLayout>
   );
 }

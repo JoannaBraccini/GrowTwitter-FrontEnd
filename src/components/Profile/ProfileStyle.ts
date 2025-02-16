@@ -1,0 +1,29 @@
+import styled from "styled-components";
+
+export const ProfileStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  flex: 1;
+  padding-right: 10px;
+
+  .profile-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid ${({ theme }) => theme.highlight};
+    padding: 15px 20px;
+  }
+
+  .profile-header h2 {
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  -webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+`;

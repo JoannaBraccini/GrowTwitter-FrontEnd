@@ -5,6 +5,8 @@ export const MainContent = styled.div`
   display: flex;
   flex-direction: row;
   flex: 1;
+  width: 44vw;
+  overflow: hidden;
 
   .content-container {
     display: flex;

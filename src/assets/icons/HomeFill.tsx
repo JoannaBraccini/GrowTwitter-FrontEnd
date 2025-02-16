@@ -15,7 +15,7 @@ export function HomeFill() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <polygon
-        fill-rule="evenodd"
+        fillRule="evenodd"
         points="192 0 0 153.6 0 384 149.333 384 149.333 256 234.667 256 234.667 384 384 384 384 153.6"
         transform="translate(64 64)"
       />

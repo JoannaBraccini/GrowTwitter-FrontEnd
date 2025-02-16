@@ -13,8 +13,8 @@ const router = createBrowserRouter([
   { path: "/feed", element: <Feed /> },
   { path: "/home", element: <Feed /> },
   { path: "/explore", element: <Explore /> },
+  { path: "/notifications", element: <Error /> },
   { path: "/profile/:username", element: <Profile /> },
-  { path: "/:username", element: <Profile /> },
   {
     path: "/:username",
     element: <Profile />, // Mantém o profile como componente pai

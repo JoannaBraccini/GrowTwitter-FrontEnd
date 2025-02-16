@@ -8,6 +8,7 @@ const NavigationComponent = () => {
     { title: "Feed", to: "/home" },
     { title: "Login", to: "/sign" },
     { title: "Explore", to: "/explore" },
+    { title: "Notificações", to: "/notifications" },
   ];
 
   return (

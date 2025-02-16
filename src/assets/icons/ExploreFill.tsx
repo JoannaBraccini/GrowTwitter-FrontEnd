@@ -14,22 +14,22 @@ export function ExploreFill() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       stroke={fillColor}
-      stroke-width="1.6800000000000002"
+      strokeWidth="1.6800000000000002"
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0" />
+      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
 
       <g
         id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
 
       <g id="SVGRepo_iconCarrier">
         <path
-          clip-rule="evenodd"
+          clipRule="evenodd"
           d="M12.2852 4.05704C7.74092 4.05704 4.05704 7.74092 4.05704 12.2852C4.05704 16.8295 7.74092 20.5134 12.2852 20.5134C16.8295 20.5134 20.5134 16.8295 20.5134 12.2852C20.5134 7.74092 16.8295 4.05704 12.2852 4.05704ZM2 12.2852C2 6.60485 6.60485 2 12.2852 2C17.9656 2 22.5704 6.60485 22.5704 12.2852C22.5704 17.9656 17.9656 22.5704 12.2852 22.5704C6.60485 22.5704 2 17.9656 2 12.2852Z"
           fill={fillColor}
-          fill-rule="evenodd"
+          fillRule="evenodd"
         />
 
         <path

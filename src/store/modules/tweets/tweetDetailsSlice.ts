@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Like, Retweet, Tweet, TweetType } from "../../../types";
 import { getTweetDetails } from "./tweetsActions";
+import { ResponseApi } from "../../../configs/services/api.service";
 
 interface InitialState {
   ok: boolean;
@@ -11,7 +12,8 @@ interface InitialState {
     userId: string;
     tweetType: TweetType;
     parentId?: string;
-    content: string;
+    content?: string;
+    imageUrl?: string;
     createdAt: string;
     updatedAt?: string;
 
@@ -35,15 +37,32 @@ const initialState: InitialState = {
     tweetType: "TWEET",
     parentId: undefined,
     content: "",
-    createdAt: new Date().toISOString(),
-    updatedAt: undefined,
+    imageUrl: "",
+    createdAt: new Date().toLocaleString(),
+    updatedAt: new Date().toLocaleString(),
 
     likeCount: undefined,
     replyCount: undefined,
     retweetCount: undefined,
 
-    likes: [],
-    retweets: [],
+    likes: [
+      {
+        id: "",
+        tweetId: "",
+        userId: "",
+        likeCount: undefined,
+        createdAt: new Date().toLocaleString(),
+      },
+    ],
+    retweets: [
+      {
+        id: "",
+        tweetId: "",
+        userId: "",
+        retweetCount: undefined,
+        createdAt: new Date().toLocaleString(),
+      },
+    ],
     replies: [],
   },
 };
@@ -68,22 +87,25 @@ const tweetDetailsSlice = createSlice({
       .addCase(getTweetDetails.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getTweetDetails.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ok = action.payload.ok;
-        state.message = action.payload.message;
+      .addCase(
+        getTweetDetails.fulfilled,
+        (state, action: PayloadAction<ResponseApi<Tweet>>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
 
-        if (action.payload.ok && action.payload.data) {
-          const tweetData = action.payload.data;
-          state.tweet = {
-            ...tweetData,
-            createdAt: new Date(tweetData.createdAt).toISOString(),
-            updatedAt: tweetData.updatedAt
-              ? new Date(tweetData.updatedAt).toISOString()
-              : undefined, // Garantir que seja undefined caso não exista
-          };
+          if (action.payload.ok && action.payload.data) {
+            const tweetData = action.payload.data;
+            state.tweet = {
+              ...tweetData,
+              createdAt: new Date(tweetData.createdAt).toLocaleString(),
+              updatedAt: tweetData.updatedAt
+                ? new Date(tweetData.updatedAt).toLocaleString()
+                : undefined, // Garantir que seja undefined caso não exista
+            };
+          }
         }
-      })
+      )
       .addCase(getTweetDetails.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;
