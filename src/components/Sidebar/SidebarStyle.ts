@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const SidebarStyle = styled.aside`
   display: flex;
   flex-direction: column;
-  position: relative;
   margin-right: 1rem;
   padding: 0 8px;
   min-width: 27vw;

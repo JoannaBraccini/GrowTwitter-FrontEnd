@@ -130,7 +130,7 @@ export function Post({
 
   return (
     <PostStyle>
-      <div className="details">
+      <div className="header">
         <Avatar>
           <img
             src={tweetUser.avatarUrl}
@@ -147,12 +147,55 @@ export function Post({
             @{tweetUser.username} &middot;{" "}
             {formatDate(tweet.updatedAt ?? tweet.createdAt, "relative")}
           </small>
-          <div className="dots" onClick={() => setMenuVisible(tweet.id)}>
+          <span className="dots" onClick={() => setMenuVisible(tweet.id)}>
             <DotsIcon />
-          </div>
+          </span>
         </div>
       </div>
       <div className="tweet-content">
+        {menuVisible === tweet.id && (
+          <div className="menu">
+            {isOwnTweet ? (
+              <>
+                <button
+                  onClick={() =>
+                    openTweetBoxModal(
+                      "Editar Tweet",
+                      tweet.content ?? "",
+                      tweet.imageUrl ?? "",
+                      (content, imageUrl) => {
+                        handleEditTweet(tweet, content, imageUrl);
+                      }
+                    )
+                  }
+                >
+                  Editar
+                </button>
+                <button onClick={() => handleDeleteTweet(tweet)}>
+                  Excluir
+                </button>
+              </>
+            ) : (
+              <button onClick={handleFollow}>
+                {tweetUser?.followers.find(
+                  (user) => user.followerId === userLogged.id
+                )
+                  ? "Deixar de seguir"
+                  : "Seguir"}
+              </button>
+            )}
+          </div>
+        )}
+        {/* Verifica se há um link e renderiza */}
+        {tweet.content && isLinkUrl(tweet.content) ? (
+          <a href={tweet.content} target="_blank" rel="noopener noreferrer">
+            {tweet.content}
+          </a>
+        ) : (
+          tweet.content && <p>{tweet.content}</p>
+        )}
+
+        {/* Renderiza a imagem se houver uma URL de imagem */}
         {tweet.imageUrl && isImageUrl(tweet.imageUrl) && (
           <img
             src={tweet.imageUrl}
@@ -160,47 +203,7 @@ export function Post({
             onError={(e) => (e.currentTarget.style.display = "none")}
           />
         )}
-        {tweet.content &&
-          (isLinkUrl(tweet.content) ? (
-            <a href={tweet.content} target="_blank" rel="noopener noreferrer">
-              {tweet.content}
-            </a>
-          ) : (
-            <p>{tweet.content}</p>
-          ))}
       </div>
-
-      {menuVisible === tweet.id && (
-        <div className="menu">
-          {isOwnTweet ? (
-            <>
-              <button
-                onClick={() =>
-                  openTweetBoxModal(
-                    "Editar Tweet",
-                    tweet.content ?? "",
-                    tweet.imageUrl ?? "",
-                    (content, imageUrl) => {
-                      handleEditTweet(tweet, content, imageUrl);
-                    }
-                  )
-                }
-              >
-                Editar
-              </button>
-              <button onClick={() => handleDeleteTweet}>Excluir</button>
-            </>
-          ) : (
-            <button onClick={handleFollow}>
-              {tweetUser?.followers.find(
-                (user) => user.followerId === userLogged.id
-              )
-                ? "Deixar de seguir"
-                : "Seguir"}
-            </button>
-          )}
-        </div>
-      )}
 
       <div className="tweet-footer">
         <div className="icons">

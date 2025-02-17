@@ -1,12 +1,15 @@
+import { TabsStyle } from "./TabsStyle";
+
 interface TabProps {
   tabs: string[];
   activeTab: string;
   onTabChange: (tab: string) => void;
+  paddingTop?: string;
 }
 
-export function Tabs({ tabs, activeTab, onTabChange }: TabProps) {
+export function Tabs({ tabs, activeTab, onTabChange, paddingTop }: TabProps) {
   return (
-    <div className="tabs">
+    <TabsStyle paddingTop={paddingTop}>
       {tabs.map((tab) => (
         <button
           key={tab}
@@ -16,6 +19,6 @@ export function Tabs({ tabs, activeTab, onTabChange }: TabProps) {
           {tab}
         </button>
       ))}
-    </div>
+    </TabsStyle>
   );
 }

@@ -15,6 +15,7 @@ import { Post } from "../components/Post";
 import { Modal } from "../components/Modal";
 import { ProfileStyle } from "../components/Profile/ProfileStyle";
 import { useLogout } from "../hooks/useLogout";
+import { Tabs } from "../components/Tabs";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
 
@@ -165,17 +166,12 @@ export function Profile() {
           )}
         </div>
         <div className="tweets-section">
-          <div className="tabs">
-            {["Posts", "Respostas", "Mídia", "Curtidas"].map((tab) => (
-              <button
-                key={tab}
-                className={activeTab === tab ? "active" : ""}
-                onClick={() => setActiveTab(tab as TabOptions)}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+          <Tabs
+            tabs={["Posts", "Respostas", "Mídia", "Curtidas"]}
+            activeTab={activeTab}
+            onTabChange={(tab) => setActiveTab(tab as TabOptions)}
+            paddingTop="10px"
+          ></Tabs>
           <div className="tweets-content">
             {filteredTweets.length > 0 ? (
               filteredTweets.map((tweet) => (

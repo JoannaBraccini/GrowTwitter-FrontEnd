@@ -3,11 +3,11 @@ import { DefaultTheme } from "styled-components";
 import dark from "../../assets/dark.svg";
 
 export const light: DefaultTheme = {
-  backgroundColor: "#eeeeee",
+  backgroundColor: "#E7E7E7",
   textColor: "#292929",
   textSecondary: "#0f1419",
-  textExtra: "#536471",
+  textExtra: "#2D496A",
   accent: "#4595e1",
-  highlight: "#dadada",
+  highlight: "#D2D3DB",
   toggle: `url(${dark})`,
 };

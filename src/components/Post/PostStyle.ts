@@ -3,37 +3,45 @@ import styled from "styled-components";
 export const PostStyle = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   border-bottom: 1px solid ${({ theme }) => theme.highlight};
-  padding: 10px 20px;
   flex: 1;
 
-  .details {
+  .header {
+    width: 100%;
     display: flex;
+    flex-direction: row;
+    align-items: flex-start;
     gap: 10px;
+    padding: 0;
+    margin: 0;
+
     .user {
       display: flex;
-      align-items: baseline;
+      align-items: flex-start;
+      width: 100%;
       gap: 5px;
       h3 {
-        /* font-size: 20px; */
         font-weight: bold;
+        line-height: 16px;
       }
       .verified {
-        width: 12px;
-        height: 12px;
+        img {
+          width: 16px;
+          height: 16px;
+        }
       }
     }
     small {
       color: ${({ theme }) => theme.textSecondary};
-      gap: 5px;
       font-size: 14px;
     }
     .dots {
+      margin-left: auto;
     }
   }
 
   .tweet-content {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -47,7 +55,31 @@ export const PostStyle = styled.div`
     }
 
     .menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: ${({ theme }) => theme.background};
+      border: 1px solid ${({ theme }) => theme.highlight};
+      border-radius: 5px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      width: 150px; /* Ajuste o tamanho conforme necessário */
+      display: none; /* Inicialmente invisível */
+      flex-direction: column;
+      padding: 5px 0;
+
+      /* Estilos para os botões */
       button {
+        padding: 8px 12px;
+        border: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+        font-size: 14px;
+        color: ${({ theme }) => theme.textColor};
+
+        &:hover {
+          background-color: ${({ theme }) => theme.highlight};
+        }
       }
     }
 

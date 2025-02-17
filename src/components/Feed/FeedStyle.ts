@@ -5,14 +5,13 @@ export const FeedStyle = styled.div`
   flex-direction: column;
   overflow-y: scroll;
   flex: 1;
-  /* padding-right: 10px; */
 
   .feed-header {
     position: sticky;
     top: 0;
     z-index: 100;
     border-bottom: 1px solid ${({ theme }) => theme.highlight};
-    padding: 15px 20px;
+    padding: 15px 20px 0 20px;
   }
 
   .feed-header h2 {

@@ -10,7 +10,7 @@ export const ProfileStyle = styled.div`
     position: sticky;
     top: 0;
     z-index: 10;
-    background: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.backgroundColor};
     border-bottom: 1px solid ${({ theme }) => theme.highlight};
     padding: 5px 10px;
     display: flex;
@@ -62,9 +62,9 @@ export const ProfileStyle = styled.div`
 
     .avatar {
       position: absolute;
-      top: 50%;
-      margin-left: 20px;
-      border: 1px solid ${({ theme }) => theme.backgroundColor};
+      top: 62%;
+      margin-left: 18px;
+      border: 3px outset ${({ theme }) => theme.backgroundColor};
       width: 140px;
       height: 140px;
       border-radius: 50%;
@@ -92,10 +92,11 @@ export const ProfileStyle = styled.div`
   }
 
   .details {
-    padding: 50px 20px 10px;
+    padding: 75px 20px 10px;
 
     .user {
       display: flex;
+      align-items: baseline;
       gap: 10px;
       h2 {
         font-size: 20px;
@@ -107,6 +108,7 @@ export const ProfileStyle = styled.div`
         gap: 5px;
         font-size: 14px;
         border-radius: 9999px;
+        height: 25px;
         padding: 0 10px;
         border: 1px solid ${({ theme }) => theme.highlight};
         color: ${({ theme }) => theme.primary};
@@ -116,6 +118,7 @@ export const ProfileStyle = styled.div`
     }
     small {
       color: ${({ theme }) => theme.textSecondary};
+      font-size: 14px;
     }
     .bio {
       background: none;
@@ -154,46 +157,18 @@ export const ProfileStyle = styled.div`
 
   .tweets-section {
     margin-top: 10px;
-    border-bottom: 1px solid ${({ theme }) => theme.highlight};
-    .tabs {
-      display: flex;
-      justify-content: space-around;
-      padding-top: 8px;
 
-      button {
-        background: none;
-        border: none;
-        font-size: 16px;
-        font-weight: bold;
-        padding: 10px;
-        cursor: pointer;
-        color: ${({ theme }) => theme.textSecondary};
-
-        &:hover {
-          color: ${({ theme }) => theme.primary};
-        }
-
-        &.active {
-          color: ${({ theme }) => theme.textColor};
-          border-bottom: 2px solid ${({ theme }) => theme.accent};
-        }
-      }
-    }
     .tweets-content {
       border-top: 1px solid ${({ theme }) => theme.highlight};
       padding: 10px 20px;
-      .tweet {
-        .tweet {
-          padding: 10px 0;
-          border-bottom: 1px solid ${({ theme }) => theme.highlight};
 
-          .retweet {
-            font-size: 12px;
-            color: ${({ theme }) => theme.textSecondary};
-            display: flex;
-            align-items: center;
-            gap: 5px;
-          }
+      .tweet {
+        .retweet {
+          font-size: 12px;
+          color: ${({ theme }) => theme.textSecondary};
+          display: flex;
+          align-items: center;
+          gap: 5px;
         }
       }
       .empty-message {

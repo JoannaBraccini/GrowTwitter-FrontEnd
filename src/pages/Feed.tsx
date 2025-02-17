@@ -8,6 +8,7 @@ import { getUserDetails, getUsers } from "../store/modules/users/usersActions";
 import { Modal } from "../components/Modal";
 import { useCreateTweet } from "../hooks/useCreateTweet";
 import { Post } from "../components/Post";
+import { Tabs } from "../components/Tabs";
 
 type TabOptions = "Para você" | "Seguindo";
 export function Feed() {
@@ -58,17 +59,11 @@ export function Feed() {
     <DefaultLayout>
       <FeedStyle>
         <div className="feed-header">
-          <div className="tabs">
-            {["Para Você", "Seguindo"].map((tab) => (
-              <button
-                key={tab}
-                className={activeTab === tab ? "active" : ""}
-                onClick={() => setActiveTab(tab as TabOptions)}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+          <Tabs
+            tabs={["Para você", "Seguindo"]}
+            activeTab={activeTab}
+            onTabChange={(tab) => setActiveTab(tab as TabOptions)}
+          />
         </div>
         <TweetBox
           key="tweet-box"
