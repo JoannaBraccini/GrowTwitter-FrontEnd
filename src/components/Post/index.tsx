@@ -20,10 +20,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { followUser } from "../../store/modules/users/usersActions";
 import { showAlert } from "../../store/modules/alert/alertSlice";
-import { logout } from "../../store/modules/auth/loginSlice";
 import { TweetBox } from "../TweetBox";
 import { Avatar } from "../Avatar";
 import { useCreateTweet, useProfileNavigation } from "../../hooks";
+import { useLogout } from "../../hooks/useLogout";
+import { PostStyle } from "./PostStyle";
 
 interface PostProps {
   tweet: Tweet;
@@ -42,6 +43,7 @@ export function Post({
 }: PostProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet();
   const { handleProfileClick } = useProfileNavigation();
   const [menuVisible, setMenuVisible] = useState<string | null>(null);
@@ -116,8 +118,7 @@ export function Post({
 
   const logoutUnauthorized = () => {
     dispatch(showAlert({ message: "Usuário não autorizado", type: "error" }));
-    dispatch(logout());
-    navigate("/sign");
+    handleLogout();
   };
 
   const handleDeleteTweet = (tweet: Tweet) => {
@@ -128,127 +129,113 @@ export function Post({
   };
 
   return (
-    <div className="post">
-      <Avatar>
-        <img
-          src={tweetUser.avatarUrl}
-          alt={tweetUser.name}
-          onClick={() => handleProfileClick(tweetUser.id)}
-        />
-      </Avatar>
-      <div className="post-body">
-        <div className="post-header">
-          <div className="post-headerText">
-            <h3>
-              {tweetUser.name}
-              <span className="post-headerSpecial">
-                <span className="icons post-badge">
-                  <img src={verifiedBlue} />
-                </span>
-                @{tweetUser?.username} &middot;{" "}
-                {formatDate(tweet.updatedAt ?? tweet.createdAt, "relative")}
-              </span>
-              <div
-                className="dots-container"
-                onClick={() => setMenuVisible(tweet.id)}
-              >
-                <DotsIcon />
-              </div>
-            </h3>
-          </div>
-          <div className="post-content">
-            {tweet.imageUrl && isImageUrl(tweet.imageUrl) && (
-              <img
-                src={tweet.imageUrl}
-                alt="Tweet content"
-                className="tweet-image"
-                onError={(e) => (e.currentTarget.style.display = "none")}
-              />
-            )}
-            {tweet.content &&
-              (isLinkUrl(tweet.content) ? (
-                <a
-                  href={tweet.content}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {tweet.content}
-                </a>
-              ) : (
-                <p>{tweet.content}</p>
-              ))}
-          </div>
-        </div>
-
-        {menuVisible === tweet.id && (
-          <div className="tweet-menu">
-            {isOwnTweet ? (
-              <>
-                <button
-                  onClick={() =>
-                    openTweetBoxModal(
-                      "Editar Tweet",
-                      tweet.content ?? "",
-                      tweet.imageUrl ?? "",
-                      (content, imageUrl) => {
-                        handleEditTweet(tweet, content, imageUrl);
-                      }
-                    )
-                  }
-                >
-                  Editar
-                </button>
-                <button onClick={() => handleDeleteTweet}>Excluir</button>
-              </>
-            ) : (
-              <button onClick={handleFollow}>
-                {tweetUser?.followers.find(
-                  (user) => user.followerId === userLogged.id
-                )
-                  ? "Deixar de seguir"
-                  : "Seguir"}
-              </button>
-            )}
-          </div>
-        )}
-
-        <div className="post-footer">
-          <div className="post-icons">
-            <span title="Responder" onClick={() => handleCreateTweet}>
-              <CommentIcon /> {tweet.replyCount}
-            </span>
-            <span
-              title="Repostar"
-              onClick={() =>
-                openModal(
-                  "Compartilhar Tweet",
-                  <p>
-                    Compartilhe este tweet: {tweet.content ?? tweet.imageUrl}
-                  </p>
-                )
-              }
-            >
-              <RetweetIcon /> {tweet.retweetCount}
-            </span>
-            <span title="Curtir" onClick={handleLike}>
-              <LikeIcon /> {tweet.likeCount}
-            </span>
-            <span title="Ver" onClick={() => navigate(`/tweets/${tweet.id}`)}>
-              <StatisticIcon />
-            </span>
-            <div className="post-actions">
-              <span title="Salvar Tweet">
-                {/* dispatch(addSaved(tweet)) */}
-                <SaveIcon />
-              </span>
-              <span title="Compartilhar">
-                {/* handleExternalShare(tweet)) */}
-                <ShareIcon />
-              </span>
-            </div>
+    <PostStyle>
+      <div className="details">
+        <Avatar>
+          <img
+            src={tweetUser.avatarUrl}
+            alt={tweetUser.name}
+            onClick={() => handleProfileClick(tweetUser.id)}
+          />
+        </Avatar>
+        <div className="user">
+          <h3>{tweetUser.name}</h3>
+          <span className="verified">
+            <img src={verifiedBlue} alt="Selo verificado" />
+          </span>
+          <small>
+            @{tweetUser.username} &middot;{" "}
+            {formatDate(tweet.updatedAt ?? tweet.createdAt, "relative")}
+          </small>
+          <div className="dots" onClick={() => setMenuVisible(tweet.id)}>
+            <DotsIcon />
           </div>
         </div>
       </div>
-    </div>
+      <div className="tweet-content">
+        {tweet.imageUrl && isImageUrl(tweet.imageUrl) && (
+          <img
+            src={tweet.imageUrl}
+            alt="Imagem"
+            onError={(e) => (e.currentTarget.style.display = "none")}
+          />
+        )}
+        {tweet.content &&
+          (isLinkUrl(tweet.content) ? (
+            <a href={tweet.content} target="_blank" rel="noopener noreferrer">
+              {tweet.content}
+            </a>
+          ) : (
+            <p>{tweet.content}</p>
+          ))}
+      </div>
+
+      {menuVisible === tweet.id && (
+        <div className="menu">
+          {isOwnTweet ? (
+            <>
+              <button
+                onClick={() =>
+                  openTweetBoxModal(
+                    "Editar Tweet",
+                    tweet.content ?? "",
+                    tweet.imageUrl ?? "",
+                    (content, imageUrl) => {
+                      handleEditTweet(tweet, content, imageUrl);
+                    }
+                  )
+                }
+              >
+                Editar
+              </button>
+              <button onClick={() => handleDeleteTweet}>Excluir</button>
+            </>
+          ) : (
+            <button onClick={handleFollow}>
+              {tweetUser?.followers.find(
+                (user) => user.followerId === userLogged.id
+              )
+                ? "Deixar de seguir"
+                : "Seguir"}
+            </button>
+          )}
+        </div>
+      )}
+
+      <div className="tweet-footer">
+        <div className="icons">
+          <span title="Responder" onClick={() => handleCreateTweet}>
+            <CommentIcon /> {tweet.replyCount}
+          </span>
+          <span
+            title="Repostar"
+            onClick={() =>
+              openModal(
+                "Compartilhar Tweet",
+                <p>Compartilhe este tweet: {tweet.content ?? tweet.imageUrl}</p>
+              )
+            }
+          >
+            <RetweetIcon /> {tweet.retweetCount}
+          </span>
+          <span title="Curtir" onClick={handleLike}>
+            <LikeIcon /> {tweet.likeCount}
+          </span>
+          <span title="Ver" onClick={() => navigate(`/tweets/${tweet.id}`)}>
+            <StatisticIcon />
+          </span>
+          <div className="actions">
+            <span title="Salvar Tweet">
+              {/* dispatch(addSaved(tweet)) */}
+              <SaveIcon />
+            </span>
+            <span title="Compartilhar">
+              {/* handleExternalShare(tweet)) */}
+              <ShareIcon />
+            </span>
+          </div>
+        </div>
+      </div>
+    </PostStyle>
   );
 }

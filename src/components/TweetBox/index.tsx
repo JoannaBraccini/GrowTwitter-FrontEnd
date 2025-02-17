@@ -42,7 +42,7 @@ export function TweetBox({
       <form onSubmit={handleSubmit}>
         <div className="tweetbox-input">
           <img src={userPhoto} alt={userName} />
-          <textarea
+          <input
             placeholder="O que está acontecendo?"
             value={content}
             onChange={(e) => setContent(e.target.value)}

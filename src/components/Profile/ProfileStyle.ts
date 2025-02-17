@@ -142,44 +142,45 @@ export const ProfileStyle = styled.div`
     gap: 20px;
     font-size: 14px;
 
-    p {
+    span {
       color: ${({ theme }) => theme.textSecondary};
 
       strong {
-        color: ${({ theme }) => theme.text};
+        padding: 0 1px;
+        color: ${({ theme }) => theme.textColor};
       }
     }
   }
 
   .tweets-section {
     margin-top: 10px;
-    border-top: 1px solid ${({ theme }) => theme.highlight};
+    border-bottom: 1px solid ${({ theme }) => theme.highlight};
     .tabs {
       display: flex;
       justify-content: space-around;
-      padding: 10px 0;
-      border-bottom: 1px solid ${({ theme }) => theme.highlight};
+      padding-top: 8px;
 
       button {
         background: none;
         border: none;
-        font-size: 14px;
+        font-size: 16px;
+        font-weight: bold;
         padding: 10px;
         cursor: pointer;
         color: ${({ theme }) => theme.textSecondary};
-        border-bottom: none;
 
         &:hover {
           color: ${({ theme }) => theme.primary};
         }
 
         &.active {
-          color: ${({ theme }) => theme.primary};
-          border-bottom: 2px solid ${({ theme }) => theme.primary};
+          color: ${({ theme }) => theme.textColor};
+          border-bottom: 2px solid ${({ theme }) => theme.accent};
         }
       }
     }
     .tweets-content {
+      border-top: 1px solid ${({ theme }) => theme.highlight};
       padding: 10px 20px;
       .tweet {
         .tweet {

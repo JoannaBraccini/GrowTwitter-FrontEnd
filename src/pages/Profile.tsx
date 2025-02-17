@@ -5,17 +5,16 @@ import { Button } from "../components/Button";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { showAlert } from "../store/modules/alert/alertSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import { logout } from "../store/modules/auth/loginSlice";
 import { getUserDetails } from "../store/modules/users/usersActions";
 import { User } from "../types";
 import { setUserDetails } from "../store/modules/users/userDetailsSlice";
 import verifiedBlue from "../assets/verified-blue.svg";
 import callendar from "../assets/callendar.svg";
-import { Tabs } from "../components/Tabs";
 import { formatDate } from "../utils";
 import { Post } from "../components/Post";
 import { Modal } from "../components/Modal";
 import { ProfileStyle } from "../components/Profile/ProfileStyle";
+import { useLogout } from "../hooks/useLogout";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
 
@@ -23,6 +22,7 @@ export function Profile() {
   const { username } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { handleLogout } = useLogout();
   const { user: userLogged, token } = useAppSelector(
     (state) => state.userLogged
   );
@@ -54,8 +54,7 @@ export function Profile() {
           type: "error",
         })
       );
-      dispatch(logout());
-      navigate("/sign");
+      handleLogout();
     } else if (!user || (username && username !== user.username)) {
       const userFound = users.find((user) => user.username === username);
       if (userFound) {
@@ -69,7 +68,16 @@ export function Profile() {
         );
       }
     }
-  }, [token, user, userLogged, dispatch, navigate, username, users]);
+  }, [
+    token,
+    user,
+    userLogged,
+    dispatch,
+    navigate,
+    username,
+    users,
+    handleLogout,
+  ]);
 
   function handleEdit(user: User) {
     dispatch(setUserDetails(user));
@@ -145,18 +153,28 @@ export function Profile() {
           </span>
         </div>
         <div className="follows">
-          <p>
-            <strong>{user?.following?.length}</strong> Seguindo{" "}
-            {user?.followers?.length} Seguidores
-          </p>
+          {user?.following?.length > 0 && (
+            <span>
+              <strong>{user.following.length}</strong> Seguindo
+            </span>
+          )}
+          {user?.followers?.length > 0 && (
+            <span>
+              <strong>{user.followers.length}</strong> Seguidores
+            </span>
+          )}
         </div>
         <div className="tweets-section">
           <div className="tabs">
-            <Tabs
-              tabs={["Posts", "Respostas", "Mídia", "Curtidas"] as TabOptions[]}
-              activeTab={activeTab}
-              onTabChange={(tab) => setActiveTab(tab as TabOptions)}
-            />
+            {["Posts", "Respostas", "Mídia", "Curtidas"].map((tab) => (
+              <button
+                key={tab}
+                className={activeTab === tab ? "active" : ""}
+                onClick={() => setActiveTab(tab as TabOptions)}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
           <div className="tweets-content">
             {filteredTweets.length > 0 ? (

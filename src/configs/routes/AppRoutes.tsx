@@ -6,6 +6,7 @@ import { Explore } from "../../pages/Explore";
 import { Error } from "../../pages/Error";
 import { TabReplies } from "../../components/Tabs/TabReplies";
 import { TabLikes } from "../../components/Tabs/TabLikes";
+import { TabMedia } from "../../components/Tabs/TabMedia";
 
 const router = createBrowserRouter([
   { path: "/", element: <Sign /> },
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
     children: [
       { path: "replies", element: <TabReplies /> }, // Componente para as respostas
       { path: "likes", element: <TabLikes /> }, // Componente para os tweets curtidos
+      { path: "media", element: <TabMedia /> }, // Componente para imagens postadas
     ],
   },
   { path: "*", element: <Error /> },

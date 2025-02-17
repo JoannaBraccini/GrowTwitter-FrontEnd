@@ -15,7 +15,7 @@ import { rootReducer } from "./modules/rootReducer";
 const persistConfig = {
   key: "growtwitter-app",
   storage,
-  whitelist: ["userLogged", "userDetails", "settings"],
+  whitelist: ["userLogged", "userDetail", "settings"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

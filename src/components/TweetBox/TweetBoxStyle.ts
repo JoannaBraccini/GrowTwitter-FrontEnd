@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
 export const TweetBoxStyle = styled.div`
-  padding-bottom: 10px;
-  padding-right: 10px;
+  padding: 13px 10px 5px 15px;
   border-bottom: 8px inset ${({ theme }) => theme.highlight};
 
   form {
@@ -12,24 +11,27 @@ export const TweetBoxStyle = styled.div`
 
   .tweetbox-input {
     display: flex;
-    padding: 20px;
+    align-items: center;
     background-color: ${({ theme }) => theme.backgroundColor};
-  }
 
-  .tweetbox-input img {
-    border-radius: 50%;
-    height: 38px;
-  }
+    input {
+      flex: 1;
+      margin-left: 15px;
+      min-height: 50px;
+      max-height: 300px;
+      font-size: 18px;
+      font-family: var(--Poppins);
+      outline: none;
+      border: none;
+      background-color: ${({ theme }) => theme.backgroundColor};
+      &:focus {
+        color: ${({ theme }) => theme.textColor};
+      }
+    }
 
-  .tweetbox-input input {
-    flex: 1;
-    margin-left: 20px;
-    font-size: 18px;
-    outline: none;
-    border: none;
-    background-color: ${({ theme }) => theme.backgroundColor};
-    &:focus {
-      color: ${({ theme }) => theme.textColor};
+    img {
+      border-radius: 50%;
+      height: 38px;
     }
   }
 

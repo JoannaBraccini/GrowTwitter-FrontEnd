@@ -1,7 +1,7 @@
 import { Button } from "../Button";
 import { NavbarStyle } from "./NavbarStyle";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ToggleButton } from "../ToggleButton";
 import {
   DotsIcon,
@@ -23,13 +23,14 @@ import { useTheme } from "../../configs/providers/useTheme";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 import { useCreateTweet } from "../../hooks/useCreateTweet";
 import { Avatar } from "../Avatar";
-import { logout } from "../../store/modules/auth/loginSlice";
 import { useProfileNavigation } from "../../hooks/useProfileNavigation";
+import { useLogout } from "../../hooks/useLogout";
 
 export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet();
   const { user, token } = useAppSelector((state) => state.userLogged);
   const { handleProfileClick } = useProfileNavigation();
@@ -93,11 +94,6 @@ export function Navbar() {
     }
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMenuOpen]);
-
-  const handleLogout = useCallback(() => {
-    dispatch(logout());
-    navigate("/sign");
-  }, [dispatch, navigate]);
 
   useEffect(() => {
     if (!user || !token) {

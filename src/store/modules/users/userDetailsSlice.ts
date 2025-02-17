@@ -68,10 +68,20 @@ const userDetailsSlice = createSlice({
 
           if (action.payload.ok && action.payload.data) {
             const userData = action.payload.data;
-            state.user = {
-              ...userData,
-              createdAt: new Date(userData.createdAt).toISOString(),
-            };
+            const createdAt = new Date(userData.createdAt);
+
+            // Verifique se a data é válida
+            if (!isNaN(createdAt.getTime())) {
+              state.user = {
+                ...userData,
+                createdAt: createdAt.toISOString(),
+              };
+            } else {
+              state.user = {
+                ...userData,
+                createdAt: new Date().toISOString(), // Usa a data atual se for inválido
+              };
+            }
           }
         }
       )

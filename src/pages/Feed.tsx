@@ -6,10 +6,10 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getTweets } from "../store/modules/tweets/tweetsActions";
 import { getUserDetails, getUsers } from "../store/modules/users/usersActions";
 import { Modal } from "../components/Modal";
-import { Tabs } from "../components/Tabs";
 import { useCreateTweet } from "../hooks/useCreateTweet";
 import { Post } from "../components/Post";
 
+type TabOptions = "Para você" | "Seguindo";
 export function Feed() {
   const dispatch = useAppDispatch();
   const { token, user: userLogged } = useAppSelector(
@@ -18,9 +18,7 @@ export function Feed() {
   const { user } = useAppSelector((state) => state.userDetail);
   const { tweets } = useAppSelector((state) => state.tweetsList);
   const { users } = useAppSelector((state) => state.usersList);
-  const [activeTab, setActiveTab] = useState<"Para você" | "Seguindo">(
-    "Para você"
-  );
+  const [activeTab, setActiveTab] = useState<TabOptions>("Para você");
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -60,11 +58,17 @@ export function Feed() {
     <DefaultLayout>
       <FeedStyle>
         <div className="feed-header">
-          <Tabs
-            tabs={["Para Você", "Seguindo"]}
-            activeTab={activeTab}
-            onTabChange={() => setActiveTab}
-          />
+          <div className="tabs">
+            {["Para Você", "Seguindo"].map((tab) => (
+              <button
+                key={tab}
+                className={activeTab === tab ? "active" : ""}
+                onClick={() => setActiveTab(tab as TabOptions)}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </div>
         <TweetBox
           key="tweet-box"

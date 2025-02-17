@@ -2,46 +2,38 @@ import styled from "styled-components";
 
 export const PostStyle = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   border-bottom: 1px solid ${({ theme }) => theme.highlight};
-  padding: 10px;
+  padding: 10px 20px;
+  flex: 1;
 
-  /* .post-avatar {
-    padding: 0 10px 10px 10px;
-    img {
-      border-radius: 50%;
-      height: 40px;
-    }
-  } */
-
-  .post-body {
-    flex: 1;
-  }
-
-  .post-footer {
+  .details {
     display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
+    gap: 10px;
+    .user {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      h3 {
+        /* font-size: 20px; */
+        font-weight: bold;
+      }
+      .verified {
+        width: 12px;
+        height: 12px;
+      }
+    }
+    small {
+      color: ${({ theme }) => theme.textSecondary};
+      gap: 5px;
+      font-size: 14px;
+    }
+    .dots {
+    }
   }
 
-  .post-badge {
-    font-size: 14px !important;
-    color: ${({ theme }) => theme.accent};
-    margin-right: 5px;
-  }
-
-  .post-headerSpecial {
-    font-weight: 600;
-    font-size: 12px;
-    color: ${({ theme }) => theme.textSecondary};
-  }
-
-  .post-headerText h3 {
-    font-size: 15px;
-    margin-bottom: 5px;
-  }
-
-  .post-content {
+  .tweet-content {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -53,21 +45,39 @@ export const PostStyle = styled.div`
       width: 100%;
       height: auto;
     }
-  }
 
-  .post-icons {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
+    .menu {
+      button {
+      }
+    }
 
-    .post-actions {
+    .tweet-footer {
       display: flex;
-      width: 60px;
       justify-content: space-between;
-      align-items: end;
-      padding-bottom: 6px;
+      margin-top: 10px;
+    }
+
+    .icons {
+      display: flex;
+      flex-direction: row;
+      width: 40px;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+
+      img {
+        font-size: 14px;
+        color: ${({ theme }) => theme.accent};
+        margin-right: 5px;
+        width: 100%;
+      }
+      .actions {
+        display: flex;
+        width: 60px;
+        justify-content: space-between;
+        align-items: end;
+        padding-bottom: 6px;
+      }
     }
   }
 `;
