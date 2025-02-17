@@ -8,7 +8,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getUserDetails } from "../store/modules/users/usersActions";
 import { User } from "../types";
 import { setUserDetails } from "../store/modules/users/userDetailsSlice";
-import verifiedBlue from "../assets/verified-blue.svg";
 import callendar from "../assets/callendar.svg";
 import { formatDate } from "../utils";
 import { Post } from "../components/Post";
@@ -16,6 +15,7 @@ import { Modal } from "../components/Modal";
 import { ProfileStyle } from "../components/Profile/ProfileStyle";
 import { useLogout } from "../hooks/useLogout";
 import { Tabs } from "../components/Tabs";
+import { useVerificationIcon } from "../hooks/useVerifyIcon";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
 
@@ -31,12 +31,12 @@ export function Profile() {
   const { users } = useAppSelector((state) => state.usersList);
   const { tweets } = useAppSelector((state) => state.tweetsList);
   const [activeTab, setActiveTab] = useState<TabOptions>("Posts");
-
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(
     null
   );
+  const { icon, label } = useVerificationIcon(user);
 
   const openModal = (title: string, content: React.ReactNode) => {
     setModalTitle(title);
@@ -143,7 +143,8 @@ export function Profile() {
           <div className="user">
             <h2>{user.name}</h2>
             <span className="verified">
-              <img src={verifiedBlue} alt="Selo verificado" /> Obter verificação
+              <img src={icon} alt={label} />
+              {label === "Obter verificação" && label}
             </span>
           </div>
           <small>@{user.username}</small>

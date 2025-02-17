@@ -1,4 +1,5 @@
 import { Tweet } from "./tweet.type";
+export type Verified = "NONE" | "BLUE" | "GOLD";
 
 export interface User {
   id: string;
@@ -7,13 +8,17 @@ export interface User {
   username: string;
   avatarUrl: string;
   bio: string;
+  verified: Verified;
   createdAt: string;
   followers: Follow[];
   following: Follow[];
   tweets: Tweet[];
 }
 
-export type UserBase = Pick<User, "id" | "name" | "username" | "avatarUrl">;
+export type UserBase = Pick<
+  User,
+  "id" | "name" | "username" | "avatarUrl" | "verified"
+>;
 export interface Follow {
   id: string;
   followerId: string;

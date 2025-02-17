@@ -2,50 +2,31 @@ import { Link } from "react-router-dom";
 import { ExploreIcon } from "../../assets/icons";
 import { SidebarStyle } from "./SidebarStyle";
 import { Button } from "../Button";
-import verifiedGold from "../../assets/verified-gold.svg";
-import verifiedBlue from "../../assets/verified-blue.svg";
-
-const trends = [
-  {
-    category: "Entretenimento · Assunto do Momento",
-    topic: "#GoldenGlobes",
-    posts: "310 mil posts",
-  },
-  {
-    category: "Assunto do Momento em Brasil",
-    topic: "Bridgerton",
-    posts: "6.378 posts",
-  },
-  {
-    category: "Minecraft · Assunto do Momento",
-    topic: "Minecraft",
-    posts: "56,6 mil posts",
-  },
-  {
-    category: "Notícias · Assuntos do Momento",
-    topic: "Racista",
-    posts: "48 mil posts",
-  },
-];
-const follow = [
-  {
-    name: "g1",
-    user: "g1",
-    verified: "gold",
-  },
-  {
-    name: "Central Reality #BBB25",
-    user: "centralreality",
-    verified: "blue",
-  },
-  {
-    name: "Dr Disrespect",
-    user: "DrDisrespect",
-    verified: "blue",
-  },
-];
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useEffect, useState } from "react";
+import { fetchTrends } from "../../store/modules/trends/trendsSlice";
+import { getUsers } from "../../store/modules/users/usersActions";
+import { User } from "../../types";
+import { useVerificationIcon } from "../../hooks";
 
 export function Sidebar() {
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.userLogged);
+  const { trends } = useAppSelector((state) => state.trends);
+  const { users } = useAppSelector((state) => state.usersList);
+  const [follow, setFollow] = useState<User[]>([]);
+  const { icon, label } = useVerificationIcon(user);
+
+  // Dispara a ação fetchTrends ao carregar o componente
+  useEffect(() => {
+    dispatch(fetchTrends());
+    dispatch(getUsers({}));
+    const followList = users.filter((flwrs) =>
+      flwrs.followers.find((usr) => usr.followerId !== user.id)
+    );
+    setFollow(followList);
+  }, [dispatch, user.id, users]);
+
   return (
     <SidebarStyle>
       {/* Busca */}
@@ -77,18 +58,12 @@ export function Sidebar() {
                 <div>
                   <strong className="trend-topic">
                     {person.name}
-                    {person.verified && (
-                      <img
-                        src={
-                          person.verified === "gold"
-                            ? verifiedGold
-                            : verifiedBlue
-                        }
-                        alt="Verificado"
-                      />
-                    )}
+                    <span className="verified">
+                      <img src={icon} alt={label} />
+                      {label === "Obter verificação" && label}
+                    </span>
                   </strong>
-                  <p className="trend-user">@{person.user}</p>
+                  <p className="trend-user">@{person.username}</p>
                 </div>
                 <Button className="trend-button" size="small">
                   Seguir

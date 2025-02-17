@@ -8,7 +8,6 @@ import {
   ShareIcon,
   DotsIcon,
 } from "../../assets/icons";
-import verifiedBlue from "../../assets/verified-blue.svg";
 import { Tweet, User } from "../../types";
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
@@ -22,7 +21,11 @@ import { followUser } from "../../store/modules/users/usersActions";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 import { TweetBox } from "../TweetBox";
 import { Avatar } from "../Avatar";
-import { useCreateTweet, useProfileNavigation } from "../../hooks";
+import {
+  useCreateTweet,
+  useProfileNavigation,
+  useVerificationIcon,
+} from "../../hooks";
 import { useLogout } from "../../hooks/useLogout";
 import { PostStyle } from "./PostStyle";
 
@@ -47,6 +50,7 @@ export function Post({
   const { handleCreateTweet } = useCreateTweet();
   const { handleProfileClick } = useProfileNavigation();
   const [menuVisible, setMenuVisible] = useState<string | null>(null);
+  const { icon, label } = useVerificationIcon(tweetUser);
 
   const isImageUrl = (url: string) =>
     /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
@@ -141,7 +145,8 @@ export function Post({
         <div className="user">
           <h3>{tweetUser.name}</h3>
           <span className="verified">
-            <img src={verifiedBlue} alt="Selo verificado" />
+            <img src={icon} alt={label} />
+            {label === "Obter verificação" && label}
           </span>
           <small>
             @{tweetUser.username} &middot;{" "}
