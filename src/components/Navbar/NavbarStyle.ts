@@ -29,7 +29,7 @@ export const NavbarStyle = styled.div`
     margin-right: 1rem;
   }
 
-  .topWrapper {
+  .header {
     display: flex;
     justify-content: center;
     align-items: bottom;
@@ -54,7 +54,7 @@ export const NavbarStyle = styled.div`
     }
   }
 
-  .navbar-tweet {
+  .post-tweet {
     margin-top: 2rem;
     max-width: 220px;
   }
@@ -74,20 +74,25 @@ export const NavbarStyle = styled.div`
     .account-button {
       display: flex;
       align-items: center;
-      padding: 0 12px;
+      padding: 10px;
       width: 100%;
-      height: 30px;
+      height: 25px;
+      img {
+        width: 40px;
+        height: 40px;
+      }
 
       .account-data {
         display: flex;
         flex-direction: column;
         text-overflow: unset;
         align-items: stretch;
-        padding: 0;
+
+        margin-left: 5px;
         width: 100%;
 
         .account-name {
-          font-size: 14px;
+          font-size: 15px;
           color: ${({ theme }) => theme.textSecondary};
           padding: 0;
           font-weight: bold;
@@ -100,6 +105,7 @@ export const NavbarStyle = styled.div`
         .account-username {
           color: ${({ theme }) => theme.textExtra};
           padding: 0;
+          font-size: 14px;
         }
       }
 

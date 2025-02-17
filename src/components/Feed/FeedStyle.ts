@@ -5,7 +5,7 @@ export const FeedStyle = styled.div`
   flex-direction: column;
   overflow-y: scroll;
   flex: 1;
-  padding-right: 10px;
+  /* padding-right: 10px; */
 
   .feed-header {
     position: sticky;

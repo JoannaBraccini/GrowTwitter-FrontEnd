@@ -23,7 +23,6 @@ import { useTheme } from "../../configs/providers/useTheme";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 import { useCreateTweet } from "../../hooks/useCreateTweet";
 import { Avatar } from "../Avatar";
-import { useProfileNavigation } from "../../hooks/useProfileNavigation";
 import { useLogout } from "../../hooks/useLogout";
 
 export function Navbar() {
@@ -33,7 +32,6 @@ export function Navbar() {
   const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet();
   const { user, token } = useAppSelector((state) => state.userLogged);
-  const { handleProfileClick } = useProfileNavigation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -106,7 +104,7 @@ export function Navbar() {
 
   return (
     <NavbarStyle>
-      <div className="topWrapper">
+      <div className="header">
         <div
           className="logo"
           onClick={() => (user ? navigate("/home") : navigate("/sign"))}
@@ -136,7 +134,7 @@ export function Navbar() {
         fullwidth
         shadow
         size="large"
-        className="navbar-tweet"
+        className="post-tweet"
         onClick={handleModal}
       >
         Postar
@@ -150,11 +148,7 @@ export function Navbar() {
             aria-label="Abrir menu da conta"
           >
             <Avatar>
-              <img
-                src={user.avatarUrl}
-                alt={user.name}
-                onClick={() => handleProfileClick(user.id)}
-              />
+              <img src={user.avatarUrl} alt={user.name} />
             </Avatar>
             <div className="account-data">
               <span className="account-name">{user.name}</span>
