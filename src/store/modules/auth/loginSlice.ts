@@ -54,7 +54,6 @@ interface InitialState {
     username: string;
     email: string;
     avatarUrl: string;
-    bio?: string;
   };
 }
 
@@ -70,7 +69,6 @@ const initialState: InitialState = {
     username: "",
     email: "",
     avatarUrl: "",
-    bio: "",
   },
 };
 

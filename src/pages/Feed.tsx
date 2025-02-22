@@ -9,9 +9,11 @@ import { Modal } from "../components/Modal";
 import { useCreateTweet } from "../hooks/useCreateTweet";
 import { Post } from "../components/Post";
 import { Tabs } from "../components/Tabs";
+import { useNavigate } from "react-router-dom";
 
 type TabOptions = "Para você" | "Seguindo";
 export function Feed() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { token, user: userLogged } = useAppSelector(
     (state) => state.userLogged
@@ -39,10 +41,12 @@ export function Feed() {
       if (!user || user.id !== userLogged.id) {
         dispatch(getUserDetails(userLogged.id));
       }
-      dispatch(getTweets({ page: 1, take: 20 }));
-      dispatch(getUsers({}));
+      if (!users) dispatch(getUsers({}));
+      if (!tweets) dispatch(getTweets({ page: 1, take: 20 }));
+    } else {
+      navigate("/sign");
     }
-  }, [dispatch, token, user, userLogged]);
+  }, [dispatch, navigate, token, tweets, user, userLogged, users]);
 
   // Filtrar tweets dependendo da aba
   const filteredTweets =

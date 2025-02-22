@@ -8,7 +8,6 @@ export function useLoading(initialMessage = "Aguarde...") {
   const userListLoad = useAppSelector((state) => state.usersList.loading);
   const tweetLoad = useAppSelector((state) => state.tweetDetail.loading);
   const tweetListLoad = useAppSelector((state) => state.tweetsList.loading);
-  const trendsLoad = useAppSelector((state) => state.trends.loading);
 
   const loading =
     loginLoad ||
@@ -16,8 +15,7 @@ export function useLoading(initialMessage = "Aguarde...") {
     userLoad ||
     userListLoad ||
     tweetLoad ||
-    tweetListLoad ||
-    trendsLoad;
+    tweetListLoad;
   const [loaderMessage, setLoaderMessage] = useState<string>(initialMessage);
 
   useEffect(() => {

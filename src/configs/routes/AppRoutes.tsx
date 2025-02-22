@@ -7,6 +7,7 @@ import { Error } from "../../pages/Error";
 import { TabReplies } from "../../components/Tabs/TabReplies";
 import { TabLikes } from "../../components/Tabs/TabLikes";
 import { TabMedia } from "../../components/Tabs/TabMedia";
+import { Notifications } from "../../pages/Notifications";
 
 const router = createBrowserRouter([
   { path: "/", element: <Sign /> },
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
   { path: "/feed", element: <Feed /> },
   { path: "/home", element: <Feed /> },
   { path: "/explore", element: <Explore /> },
-  { path: "/notifications", element: <Error /> },
+  { path: "/notifications", element: <Notifications /> },
   { path: "/profile/:username", element: <Profile /> },
   {
     path: "/:username",

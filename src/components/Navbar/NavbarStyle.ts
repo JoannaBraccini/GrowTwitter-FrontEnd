@@ -77,6 +77,7 @@ export const NavbarStyle = styled.div`
       padding: 10px;
       width: 100%;
       height: 25px;
+      gap: 5px;
       img {
         width: 40px;
         height: 40px;

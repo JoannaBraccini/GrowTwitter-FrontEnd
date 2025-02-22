@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Follow, Tweet, User } from "../../../types";
+import { Follow, Tweet, User, Verified } from "../../../types";
 import { getUserDetails } from "./usersActions";
 import { ResponseApi } from "../../../configs/services/api.service";
-import { Verified } from "../../../types/verified.type";
 
 interface InitialState {
   ok: boolean;
@@ -33,7 +32,7 @@ const initialState: InitialState = {
     email: "",
     username: "",
     avatarUrl: "",
-    verified: "none",
+    verified: "NONE",
     bio: "",
     createdAt: new Date().toISOString(),
     followers: [],

@@ -29,6 +29,7 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const alert = useAppSelector((state) => state.alert);
   const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet();
   const { user, token } = useAppSelector((state) => state.userLogged);
@@ -101,6 +102,15 @@ export function Navbar() {
       handleLogout();
     }
   }, [dispatch, handleLogout, navigate, token, user]);
+
+  useEffect(() => {
+    if (
+      alert.type === "error" &&
+      alert.message === "Unauthorized: Invalid or expired token"
+    ) {
+      handleLogout();
+    }
+  }, [alert, handleLogout, navigate]);
 
   return (
     <NavbarStyle>

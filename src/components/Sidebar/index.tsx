@@ -4,28 +4,91 @@ import { SidebarStyle } from "./SidebarStyle";
 import { Button } from "../Button";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useState } from "react";
-import { fetchTrends } from "../../store/modules/trends/trendsSlice";
-import { getUsers } from "../../store/modules/users/usersActions";
-import { User } from "../../types";
+import {
+  getUserDetails,
+  getUsers,
+} from "../../store/modules/users/usersActions";
+import { Follow, Tweet, User } from "../../types";
 import { useVerificationIcon } from "../../hooks";
+import { showAlert } from "../../store/modules/alert/alertSlice";
+import { Trend } from "../../types/trends.type";
+import { getTweets } from "../../store/modules/tweets/tweetsActions";
 
 export function Sidebar() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.userLogged);
-  const { trends } = useAppSelector((state) => state.trends);
   const { users } = useAppSelector((state) => state.usersList);
+  const { tweets } = useAppSelector((state) => state.tweetsList);
   const [follow, setFollow] = useState<User[]>([]);
   const { icon, label } = useVerificationIcon(user);
+  const [userDetails, setUserDetails] = useState<User>();
+  const [trends, setTrends] = useState<Trend[]>([]);
 
-  // Dispara a ação fetchTrends ao carregar o componente
+  // Dispara a ação getUsers e getTweets ao carregar o componente
   useEffect(() => {
-    dispatch(fetchTrends());
     dispatch(getUsers({}));
-    const followList = users.filter((flwrs) =>
-      flwrs.followers.find((usr) => usr.followerId !== user.id)
-    );
-    setFollow(followList);
-  }, [dispatch, user.id, users]);
+    dispatch(getTweets({ page: 1, take: 100 }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user.id && !userDetails) {
+      // Verifica se o userDetails já foi carregado
+      const fetchUserDetails = async () => {
+        try {
+          const data = await dispatch(getUserDetails(user.id)).unwrap();
+          setUserDetails(data.data);
+        } catch {
+          dispatch(
+            showAlert({
+              message: "Erro ao carregar os detalhes do usuário:",
+              type: "error",
+            })
+          );
+        }
+      };
+      fetchUserDetails();
+    }
+  }, [dispatch, user.id, userDetails]); // Adicionando dependência de user.id
+
+  // Filtrar os usuários que não estão sendo seguidos
+  useEffect(() => {
+    if (userDetails) {
+      const followList = users.filter((userItem) => {
+        return !userDetails.following.some(
+          (follow: Follow) => follow.id === userItem.id
+        );
+      });
+      setFollow(followList);
+    }
+  }, [userDetails, users]); // Depende apenas de userDetails e users
+
+  // Calcular tendências com base nos tweets
+  useEffect(() => {
+    if (tweets.length > 0) {
+      const trendMap: {
+        [key: string]: { category: string; topic: string; posts: number };
+      } = {};
+
+      tweets.forEach((tweet: Tweet) => {
+        const words = tweet.content?.split(" ");
+        words?.forEach((word) => {
+          if (word.startsWith("#")) {
+            const topic = word.toLowerCase();
+            if (trendMap[topic]) {
+              trendMap[topic].posts += 1;
+            } else {
+              trendMap[topic] = { category: "Trending", topic, posts: 1 };
+            }
+          }
+        });
+      });
+
+      const trendList = Object.values(trendMap)
+        .sort((a, b) => b.posts - a.posts)
+        .slice(0, 10);
+      setTrends(trendList);
+    }
+  }, [tweets]);
 
   return (
     <SidebarStyle>
@@ -58,10 +121,11 @@ export function Sidebar() {
                 <div>
                   <strong className="trend-topic">
                     {person.name}
-                    <span className="verified">
-                      <img src={icon} alt={label} />
-                      {label === "Obter verificação" && label}
-                    </span>
+                    {label !== "Obter verificação" && (
+                      <span className="verified">
+                        <img src={icon} alt={label} />
+                      </span>
+                    )}
                   </strong>
                   <p className="trend-user">@{person.username}</p>
                 </div>
