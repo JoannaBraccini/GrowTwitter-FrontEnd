@@ -1,25 +1,17 @@
-import { useState } from "react";
 import { Post } from "../components/Post";
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { showAlert } from "../store/modules/alert/alertSlice";
 import { User } from "../types";
 import { Modal } from "../components/Modal";
+import { useModal } from "../hooks";
 
 export const TweetPage = () => {
   const dispatch = useAppDispatch();
   const { tweet } = useAppSelector((state) => state.tweetDetail);
   const { users } = useAppSelector((state) => state.usersList);
   const { user } = useAppSelector((state) => state.userLogged);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<React.ReactNode | null>(
-    null
-  );
-
-  const openModal = (content: React.ReactNode) => {
-    setModalContent(content);
-    setModalOpen(true);
-  };
+  const { modalOpen, modalContent, openModal, closeModal } = useModal();
 
   const tweetUser = () => {
     const user = users.find((user) => user.id === tweet.userId);
@@ -41,7 +33,7 @@ export const TweetPage = () => {
         tweetUser={tweetUser()}
         userLogged={user}
       />
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+      <Modal isOpen={modalOpen} onClose={closeModal}>
         {modalContent}
       </Modal>
     </DefaultLayout>

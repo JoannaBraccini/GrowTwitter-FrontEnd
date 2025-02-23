@@ -16,6 +16,7 @@ import { ProfileStyle } from "../components/Profile/ProfileStyle";
 import { useLogout } from "../hooks/useLogout";
 import { Tabs } from "../components/Tabs";
 import { useVerificationIcon } from "../hooks/useVerifyIcon";
+import { useModal } from "../hooks";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
 
@@ -30,17 +31,10 @@ export function Profile() {
   const { user } = useAppSelector((state) => state.userDetail);
   const { users } = useAppSelector((state) => state.usersList);
   const { tweets } = useAppSelector((state) => state.tweetsList);
+  const { modalOpen, modalContent, openModal, closeModal } = useModal();
   const [activeTab, setActiveTab] = useState<TabOptions>("Posts");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<React.ReactNode | null>(
-    null
-  );
-  const { icon, label } = useVerificationIcon(user);
 
-  const openModal = (content: React.ReactNode) => {
-    setModalContent(content);
-    setModalOpen(true);
-  };
+  const { icon, label } = useVerificationIcon(user);
 
   const defaultCover =
     "https://media.licdn.com/dms/image/v2/D4E16AQHxso5JBwzWaQ/profile-displaybackgroundimage-shrink_350_1400/profile-displaybackgroundimage-shrink_350_1400/0/1732718244624?e=1745452800&v=beta&t=VU2WC0c6lIcYSA_qjf8zz8jdNKNKRtXPSogylskHlqY";
@@ -195,7 +189,7 @@ export function Profile() {
           </div>
         </div>
       </ProfileStyle>
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+      <Modal isOpen={modalOpen} onClose={closeModal}>
         {modalContent}
       </Modal>
     </DefaultLayout>

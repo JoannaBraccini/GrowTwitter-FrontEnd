@@ -1,3 +1,4 @@
+export * from "./useModal";
 export * from "./useLogout";
 export * from "./useLoading";
 export * from "./useValidate";

@@ -10,6 +10,7 @@ import { useCreateTweet } from "../hooks/useCreateTweet";
 import { Post } from "../components/Post";
 import { Tabs } from "../components/Tabs";
 import { useNavigate } from "react-router-dom";
+import { useModal } from "../hooks";
 
 type TabOptions = "Para você" | "Seguindo";
 export function Feed() {
@@ -21,17 +22,8 @@ export function Feed() {
   const { user } = useAppSelector((state) => state.userDetail);
   const { tweets } = useAppSelector((state) => state.tweetsList);
   const { users } = useAppSelector((state) => state.usersList);
+  const { modalOpen, modalContent, openModal, closeModal } = useModal();
   const [activeTab, setActiveTab] = useState<TabOptions>("Para você");
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<React.ReactNode | null>(
-    null
-  );
-
-  const openModal = (content: React.ReactNode) => {
-    setModalContent(content);
-    setModalOpen(true);
-  };
 
   // Buscar tweets
   useEffect(() => {
@@ -95,7 +87,7 @@ export function Feed() {
           );
         })}
       </FeedStyle>
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+      <Modal isOpen={modalOpen} onClose={closeModal}>
         {modalContent}
       </Modal>
     </DefaultLayout>
