@@ -24,13 +24,11 @@ export function Feed() {
   const [activeTab, setActiveTab] = useState<TabOptions>("Para você");
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(
     null
   );
 
-  const openModal = (title: string, content: React.ReactNode) => {
-    setModalTitle(title);
+  const openModal = (content: React.ReactNode) => {
     setModalContent(content);
     setModalOpen(true);
   };
@@ -51,13 +49,15 @@ export function Feed() {
   // Filtrar tweets dependendo da aba
   const filteredTweets =
     activeTab === "Para você"
-      ? tweets
-      : tweets.filter((tweet) =>
-          user?.following?.some(
-            (follow) =>
-              follow.id === tweet.userId || tweet.userId === userLogged.id
-          )
-        );
+      ? tweets.filter((tweet) => tweet.tweetType !== "REPLY")
+      : tweets
+          .filter((tweet) => tweet.tweetType !== "REPLY")
+          .filter((tweet) =>
+            user?.following?.some(
+              (follow) =>
+                follow.id === tweet.userId || tweet.userId === userLogged.id
+            )
+          );
 
   return (
     <DefaultLayout>
@@ -74,8 +74,10 @@ export function Feed() {
           userPhoto={user.avatarUrl}
           userName={user.name}
           initialContent=""
+          mode="create"
           onTweetSubmit={useCreateTweet}
         />
+        <span className="divider" />
         {filteredTweets?.map((tweet) => {
           const tweetUser = users.find((user) => user.id === tweet.userId);
           const isOwnTweet = tweet.userId === userLogged.id;
@@ -93,11 +95,7 @@ export function Feed() {
           );
         })}
       </FeedStyle>
-      <Modal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={modalTitle}
-      >
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         {modalContent}
       </Modal>
     </DefaultLayout>

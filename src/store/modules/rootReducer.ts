@@ -7,6 +7,7 @@ import { usersReducer } from "./users/usersSlice";
 import { userDetailsReducer } from "./users/userDetailsSlice";
 import { tweetsReducer } from "./tweets/tweetsSlice";
 import { tweetDetailsReducer } from "./tweets/tweetDetailsSlice";
+import { trendsReducer } from "./trends/trendsSlice";
 
 export const rootReducer = combineReducers({
   alert: alertReducer,
@@ -17,4 +18,5 @@ export const rootReducer = combineReducers({
   tweetsList: tweetsReducer,
   userDetail: userDetailsReducer,
   tweetDetail: tweetDetailsReducer,
+  trends: trendsReducer,
 });

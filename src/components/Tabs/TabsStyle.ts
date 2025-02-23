@@ -46,3 +46,5 @@ export const TabsStyle = styled.div<TabProps>`
     }
   }
 `;
+
+TabsStyle.shouldForwardProp = (prop) => prop !== "paddingTop";

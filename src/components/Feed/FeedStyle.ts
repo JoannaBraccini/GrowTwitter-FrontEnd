@@ -6,6 +6,10 @@ export const FeedStyle = styled.div`
   overflow-y: scroll;
   flex: 1;
 
+  .divider {
+    border-bottom: 8px inset ${({ theme }) => theme.highlight};
+  }
+
   .feed-header {
     position: sticky;
     top: 0;

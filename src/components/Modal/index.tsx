@@ -1,13 +1,13 @@
+import { CloseIcon } from "../../assets/icons";
 import { ModalContent, ModalHeader, ModalStyle } from "./ModalStyle";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
   children: React.ReactNode;
 }
 
-export function Modal({ isOpen, children, title, onClose }: ModalProps) {
+export function Modal({ isOpen, children, onClose }: ModalProps) {
   return (
     <>
       {isOpen ? (
@@ -18,9 +18,10 @@ export function Modal({ isOpen, children, title, onClose }: ModalProps) {
             }}
           >
             <ModalHeader>
-              <h2>{title}</h2>
+              <span onClick={onClose}>
+                <CloseIcon />
+              </span>
             </ModalHeader>
-
             <div>{children}</div>
           </ModalContent>
         </ModalStyle>

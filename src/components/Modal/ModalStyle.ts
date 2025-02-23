@@ -11,24 +11,25 @@ export const ModalStyle = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  background-color: white;
+  background-color: ${({ theme }) => theme.backgroundColor};
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  min-width: 300px;
+  max-width: 40%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 16px;
-`;
-
-export const ModalActions = styled.div`
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  gap: 8px;
+  width: 100%;
+  span {
+    transform: scale(1.4);
+    cursor: pointer;
+  }
 `;

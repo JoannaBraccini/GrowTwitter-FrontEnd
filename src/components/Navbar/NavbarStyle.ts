@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 export const NavbarStyle = styled.div`
+  position: sticky;
+  top: 0;
   flex: 0.5;
-  width: 16.5vw;
+  min-width: 260px;
   margin-left: 1rem;
   padding: 8px;
   border-right: 1px solid ${({ theme }) => theme.highlight};

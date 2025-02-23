@@ -12,10 +12,10 @@ export const GlobalStyle = createGlobalStyle`
       padding: 0;
       box-sizing: border-box;
     }
-
-  body {    
+    
+    body {    
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
     max-width: 1300px;
     margin: 0 auto;
     padding: 0 10px;
@@ -24,6 +24,7 @@ export const GlobalStyle = createGlobalStyle`
     color: ${(props) => props.theme.textColor};
     transition: all 0.3s ease;
     justify-content: space-between;
+    
 
     &.sign-page {
       flex-direction: column;
@@ -41,19 +42,29 @@ export const GlobalStyle = createGlobalStyle`
   color: ${({ theme }) => theme.accent}
   }
 
+  input, textarea {
+    font-family: var(--Poppins);
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.textColor};
+    border: none;
+    outline: none;  
+    resize: none;
+  }
+
   .layout-container {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 100vh;
-  overflow-y: auto;
-
+  height: 100%;
+  /* overflow-y: auto;
+  
   -webkit-scrollbar {
     display: none;
-  }
-
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+    }
+    
+    -ms-overflow-style: none;
+  scrollbar-width: none; 
+  */
 }
 
 

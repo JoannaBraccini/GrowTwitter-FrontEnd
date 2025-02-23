@@ -178,11 +178,7 @@ export function Navbar() {
           )}
         </div>
       )}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Postar"
-      >
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <TweetBox
           key="tweet-box"
           userPhoto={user.avatarUrl}
@@ -190,6 +186,7 @@ export function Navbar() {
           onTweetSubmit={handleCreateTweet}
           initialContent=""
           initialImageUrl=""
+          mode="create"
         />
       </Modal>
     </NavbarStyle>

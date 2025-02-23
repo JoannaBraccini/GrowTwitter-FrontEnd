@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ExploreIcon } from "../../assets/icons";
 import { SidebarStyle } from "./SidebarStyle";
 import { Button } from "../Button";
@@ -13,16 +13,18 @@ import { useVerificationIcon } from "../../hooks";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 import { Trend } from "../../types/trends.type";
 import { getTweets } from "../../store/modules/tweets/tweetsActions";
+import { setTrends } from "../../store/modules/trends/trendsSlice";
 
 export function Sidebar() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.userLogged);
   const { users } = useAppSelector((state) => state.usersList);
   const { tweets } = useAppSelector((state) => state.tweetsList);
+  const { trends } = useAppSelector((state) => state.trends);
   const [follow, setFollow] = useState<User[]>([]);
   const { icon, label } = useVerificationIcon(user);
   const [userDetails, setUserDetails] = useState<User>();
-  const [trends, setTrends] = useState<Trend[]>([]);
 
   // Dispara a ação getUsers e getTweets ao carregar o componente
   useEffect(() => {
@@ -66,29 +68,40 @@ export function Sidebar() {
   useEffect(() => {
     if (tweets.length > 0) {
       const trendMap: {
-        [key: string]: { category: string; topic: string; posts: number };
+        [key: string]: Trend;
       } = {};
 
       tweets.forEach((tweet: Tweet) => {
-        const words = tweet.content?.split(" ");
-        words?.forEach((word) => {
-          if (word.startsWith("#")) {
-            const topic = word.toLowerCase();
-            if (trendMap[topic]) {
-              trendMap[topic].posts += 1;
-            } else {
-              trendMap[topic] = { category: "Trending", topic, posts: 1 };
-            }
+        const hashtags = tweet.content?.match(/#[^\s#]+/gi) || [];
+        hashtags.forEach((hashtag) => {
+          const topic = formatTopic(hashtag.toLowerCase());
+          if (trendMap[topic]) {
+            trendMap[topic].posts.push(tweet);
+          } else {
+            trendMap[topic] = {
+              category: "Assuntos do Momento",
+              topic,
+              posts: [tweet],
+            };
           }
         });
       });
 
-      const trendList = Object.values(trendMap)
-        .sort((a, b) => b.posts - a.posts)
-        .slice(0, 10);
-      setTrends(trendList);
+      const trendList = Object.values(trendMap).sort(
+        (a, b) => b.posts.length - a.posts.length
+      );
+      dispatch(setTrends(trendList));
     }
-  }, [tweets]);
+  }, [tweets, dispatch]);
+
+  function formatTopic(topic: string): string {
+    const formattedTopic = topic.replace(/^#/, ""); // Remove o #
+    return formattedTopic.charAt(0).toUpperCase() + formattedTopic.slice(1); // Capitaliza a primeira letra
+  }
+
+  function handleTrendClick(trend: Trend) {
+    navigate(`/explore/${trend.topic.toLowerCase()}`);
+  }
 
   return (
     <SidebarStyle>
@@ -101,11 +114,13 @@ export function Sidebar() {
       <div className="sidebar-trends">
         <h2>O que está acontecendo?</h2>
         <ul>
-          {trends.map((trend, index) => (
-            <li key={index}>
+          {trends.slice(0, 4).map((trend, index) => (
+            <li key={index} onClick={() => handleTrendClick(trend)}>
               <p className="trend-category">{trend.category}</p>
               <strong className="trend-topic">{trend.topic}</strong>
-              <p className="trend-posts">{trend.posts}</p>
+              <p className="trend-posts">
+                {trend.posts.length} {trend.posts.length > 1 ? "posts" : "post"}
+              </p>
             </li>
           ))}
         </ul>

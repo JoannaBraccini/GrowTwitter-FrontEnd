@@ -5,6 +5,7 @@ export const PostStyle = styled.div`
   flex-direction: column;
   border-bottom: 1px solid ${({ theme }) => theme.highlight};
   flex: 1;
+  padding: 15px;
 
   .header {
     width: 100%;
@@ -22,21 +23,22 @@ export const PostStyle = styled.div`
       gap: 5px;
       h3 {
         font-weight: bold;
-        line-height: 16px;
+        font-size: 16px;
       }
       .verified {
         img {
-          width: 16px;
-          height: 16px;
+          width: 12px;
+          height: 12px;
         }
       }
     }
     small {
       color: ${({ theme }) => theme.textSecondary};
-      font-size: 14px;
+      line-height: 22px;
     }
     .dots {
       margin-left: auto;
+      cursor: pointer;
     }
   }
 
@@ -44,6 +46,8 @@ export const PostStyle = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
+    padding-left: 48px;
+    padding-right: 5px;
     gap: 10px;
     font-size: 15px;
     img {
@@ -58,11 +62,11 @@ export const PostStyle = styled.div`
       position: absolute;
       top: 100%;
       right: 0;
-      background-color: ${({ theme }) => theme.background};
+      background-color: ${({ theme }) => theme.backgroundColor};
       border: 1px solid ${({ theme }) => theme.highlight};
       border-radius: 5px;
       box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      width: 150px; /* Ajuste o tamanho conforme necessário */
+      width: 150px;
       display: none; /* Inicialmente invisível */
       flex-direction: column;
       padding: 5px 0;
@@ -82,33 +86,36 @@ export const PostStyle = styled.div`
         }
       }
     }
-
-    .tweet-footer {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
+  }
+  .tweet-footer {
+    padding: 10px 10px 0 48px;
 
     .icons {
       display: flex;
-      flex-direction: row;
-      width: 40px;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      gap: 15px;
       cursor: pointer;
 
-      img {
+      span {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* img {
         font-size: 14px;
         color: ${({ theme }) => theme.accent};
         margin-right: 5px;
         width: 100%;
-      }
+      } */
       .actions {
         display: flex;
-        width: 60px;
-        justify-content: space-between;
-        align-items: end;
-        padding-bottom: 6px;
+        align-items: baseline;
+        justify-content: end;
+        gap: 15px;
+        width: 20px;
+        height: 20px;
+        margin-bottom: 10px;
       }
     }
   }

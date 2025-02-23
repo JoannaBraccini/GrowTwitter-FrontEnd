@@ -14,6 +14,7 @@ import { useAppDispatch } from "../../store/hooks";
 import {
   deleteTweet,
   likeTweet,
+  retweetTweet,
   updateTweet,
 } from "../../store/modules/tweets/tweetsActions";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +35,7 @@ interface PostProps {
   tweetUser: User;
   isOwnTweet: boolean;
   userLogged: Partial<User>;
-  openModal: (title: string, content: React.ReactNode) => void;
+  openModal: (content: React.ReactNode) => void;
 }
 
 export function Post({
@@ -49,7 +50,7 @@ export function Post({
   const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet();
   const { handleProfileClick } = useProfileNavigation();
-  const [menuVisible, setMenuVisible] = useState<string | null>(null);
+  const [menuVisible, setMenuVisible] = useState<boolean>(false);
   const { icon, label } = useVerificationIcon(tweetUser);
 
   const isImageUrl = (url: string) =>
@@ -63,10 +64,15 @@ export function Post({
     }
   };
   const openTweetBoxModal = (
-    title: string,
     initialContent: string,
     initialImageUrl: string,
-    onTweetSubmit: (content: string, imageUrl: string) => void
+    mode: "create" | "edit" | "reply" | "retweet",
+    onTweetSubmit: (
+      content: string,
+      imageUrl: string,
+      parentI?: string,
+      comment?: string
+    ) => void
   ) => {
     if (!userLogged.avatarUrl || !userLogged.name || !userLogged.id) {
       dispatch(
@@ -79,15 +85,20 @@ export function Post({
       return;
     }
     openModal(
-      title,
       <TweetBox
         userPhoto={userLogged.avatarUrl}
         userName={userLogged.name}
+        parentId={tweet.id}
         initialContent={initialContent}
         initialImageUrl={initialImageUrl}
+        mode={mode}
         onTweetSubmit={onTweetSubmit}
       />
     );
+  };
+
+  const handleRetweet = (id: string, comment: string) => {
+    dispatch(retweetTweet({ id, comment }));
   };
 
   const handleLike = () => {
@@ -117,7 +128,7 @@ export function Post({
     } else {
       logoutUnauthorized();
     }
-    setMenuVisible(null);
+    setMenuVisible(false);
   };
 
   const logoutUnauthorized = () => {
@@ -129,7 +140,7 @@ export function Post({
     if (isOwnTweet) {
       dispatch(deleteTweet(tweet.id));
     } else logoutUnauthorized();
-    setMenuVisible(null);
+    setMenuVisible(false);
   };
 
   return (
@@ -146,28 +157,27 @@ export function Post({
           <h3>{tweetUser.name}</h3>
           <span className="verified">
             <img src={icon} alt={label} />
-            {label === "Obter verificação" && label}
           </span>
           <small>
             @{tweetUser.username} &middot;{" "}
             {formatDate(tweet.updatedAt ?? tweet.createdAt, "relative")}
           </small>
-          <span className="dots" onClick={() => setMenuVisible(tweet.id)}>
+          <span className="dots" onClick={() => setMenuVisible(true)}>
             <DotsIcon />
           </span>
         </div>
       </div>
       <div className="tweet-content">
-        {menuVisible === tweet.id && (
+        {menuVisible && tweet.id && (
           <div className="menu">
             {isOwnTweet ? (
               <>
                 <button
                   onClick={() =>
                     openTweetBoxModal(
-                      "Editar Tweet",
                       tweet.content ?? "",
                       tweet.imageUrl ?? "",
+                      "edit",
                       (content, imageUrl) => {
                         handleEditTweet(tweet, content, imageUrl);
                       }
@@ -182,7 +192,7 @@ export function Post({
               </>
             ) : (
               <button onClick={handleFollow}>
-                {tweetUser?.followers.find(
+                {tweetUser.followers.some(
                   (user) => user.followerId === userLogged.id
                 )
                   ? "Deixar de seguir"
@@ -205,22 +215,33 @@ export function Post({
           <img
             src={tweet.imageUrl}
             alt="Imagem"
-            onError={(e) => (e.currentTarget.style.display = "none")}
+            // onError={(e) => (e.currentTarget.style.display = "none")}
           />
         )}
       </div>
 
       <div className="tweet-footer">
         <div className="icons">
-          <span title="Responder" onClick={() => handleCreateTweet}>
+          <span
+            title="Responder"
+            onClick={() =>
+              openTweetBoxModal("", "", "reply", (content, imageUrl) => {
+                handleCreateTweet(content, imageUrl, tweet.id);
+              })
+            }
+          >
             <CommentIcon /> {tweet.replyCount}
           </span>
           <span
             title="Repostar"
             onClick={() =>
-              openModal(
-                "Compartilhar Tweet",
-                <p>Compartilhe este tweet: {tweet.content ?? tweet.imageUrl}</p>
+              openTweetBoxModal(
+                tweet.content ?? "",
+                tweet.imageUrl ?? "",
+                "retweet",
+                (comment) => {
+                  handleRetweet(tweet.id, comment ?? "");
+                }
               )
             }
           >
@@ -229,7 +250,7 @@ export function Post({
           <span title="Curtir" onClick={handleLike}>
             <LikeIcon /> {tweet.likeCount}
           </span>
-          <span title="Ver" onClick={() => navigate(`/tweets/${tweet.id}`)}>
+          <span title="Ver" onClick={() => navigate(`/tweet/${tweet.id}`)}>
             <StatisticIcon />
           </span>
           <div className="actions">

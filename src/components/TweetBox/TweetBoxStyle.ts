@@ -2,17 +2,32 @@ import styled from "styled-components";
 
 export const TweetBoxStyle = styled.div`
   padding: 13px 10px 5px 15px;
-  border-bottom: 8px inset ${({ theme }) => theme.highlight};
+  background-color: ${({ theme }) => theme.backgroundColor};
 
   form {
     display: flex;
     flex-direction: column;
   }
 
-  .tweetbox-input {
+  .tweetbox-comment {
+    padding-bottom: 10px;
+    max-width: 500px;
+    textarea {
+      font-size: 14px;
+      width: 100%;
+    }
+  }
+
+  .tweetbox-content {
     display: flex;
     align-items: center;
+    gap: 10px;
     background-color: ${({ theme }) => theme.backgroundColor};
+
+    img {
+      border-radius: 50%;
+      height: 38px;
+    }
 
     input {
       flex: 1;
@@ -20,18 +35,20 @@ export const TweetBoxStyle = styled.div`
       min-height: 50px;
       max-height: 300px;
       font-size: 18px;
-      font-family: var(--Poppins);
-      outline: none;
-      border: none;
-      background-color: ${({ theme }) => theme.backgroundColor};
-      &:focus {
-        color: ${({ theme }) => theme.textColor};
-      }
     }
+  }
 
+  .tweetbox-image-preview {
+    display: flex;
+    margin-top: 15px;
+    margin-left: 48px;
+    align-items: center;
     img {
-      border-radius: 50%;
-      height: 38px;
+      border: 2px outset ${({ theme }) => theme.highlight};
+      max-width: 450px;
+      max-height: 450px;
+      object-fit: cover;
+      border-radius: 16px;
     }
   }
 
@@ -39,17 +56,31 @@ export const TweetBoxStyle = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    img {
-      margin-left: 70px;
-      cursor: pointer;
+    gap: 20px;
+    width: 100%;
+
+    .image-link {
+      margin-left: 50px;
+      display: flex;
+      gap: 5px;
+      input {
+        padding: 0 5px;
+        width: 250px;
+      }
     }
   }
-
-  .tweetbox-tweetButton {
-    margin: 5px 0;
-    background-color: ${({ theme }) => theme.backgroundColor};
-    &:hover {
-      background-color: ${({ theme }) => theme.accent};
+  .tweetbox-actions {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    .tweetbox-tweetButton {
+      margin-top: 15px;
+      background-color: ${({ theme }) => theme.backgroundColor};
+      &:hover {
+        background-color: ${({ theme }) => theme.accent};
+      }
     }
   }
 

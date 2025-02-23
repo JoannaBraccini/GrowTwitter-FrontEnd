@@ -155,12 +155,12 @@ export const getTweetDetails = createAsyncThunk(
       return response;
     }
 
-    dispatch(
-      showAlert({
-        type: "success",
-        message: response.message,
-      })
-    );
+    // dispatch(
+    //   showAlert({
+    //     type: "success",
+    //     message: response.message,
+    //   })
+    // );
 
     return response;
   }

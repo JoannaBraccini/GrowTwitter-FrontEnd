@@ -22,7 +22,7 @@ const initialState: InitialState = {
       email: "",
       avatarUrl: "",
       bio: "",
-      verified: "none",
+      verified: "NONE",
       followers: [],
       following: [],
       tweets: [],

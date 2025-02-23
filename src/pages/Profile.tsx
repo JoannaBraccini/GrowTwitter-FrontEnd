@@ -32,14 +32,12 @@ export function Profile() {
   const { tweets } = useAppSelector((state) => state.tweetsList);
   const [activeTab, setActiveTab] = useState<TabOptions>("Posts");
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(
     null
   );
   const { icon, label } = useVerificationIcon(user);
 
-  const openModal = (title: string, content: React.ReactNode) => {
-    setModalTitle(title);
+  const openModal = (content: React.ReactNode) => {
     setModalContent(content);
     setModalOpen(true);
   };
@@ -197,11 +195,7 @@ export function Profile() {
           </div>
         </div>
       </ProfileStyle>
-      <Modal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={modalTitle}
-      >
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         {modalContent}
       </Modal>
     </DefaultLayout>
