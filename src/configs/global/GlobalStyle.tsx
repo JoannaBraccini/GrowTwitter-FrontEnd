@@ -11,6 +11,17 @@ export const GlobalStyle = createGlobalStyle`
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: ${({ theme }) => theme.accent};
+        border-radius: 4px;
+      }
+      &::-webkit-scrollbar-track {
+        background-color: ${({ theme }) => theme.backgroundColor};
+      }
     }
     
     body {    
@@ -56,15 +67,6 @@ export const GlobalStyle = createGlobalStyle`
   flex-direction: row;
   width: 100%;
   height: 100%;
-  /* overflow-y: auto;
-  
-  -webkit-scrollbar {
-    display: none;
-    }
-    
-    -ms-overflow-style: none;
-  scrollbar-width: none; 
-  */
 }
 
 

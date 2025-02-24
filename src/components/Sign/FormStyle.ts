@@ -13,23 +13,51 @@ export const FormStyle = styled.form`
     padding: 0 10px;
   }
 
+  .input-container {
+    position: relative;
+    width: 100%;
+    margin: 8px 0;
+  }
+
   input {
     background-color: #eee;
-    border: none;
+    color: #333;
+    border-radius: 20px;
     padding: 12px 15px;
-    margin: 8px 0;
     width: 100%;
     @media (max-width: 768px) {
       border-radius: 0.5rem;
     }
+    &:focus {
+      outline: 2px double ${({ theme }) => theme.accent};
+      background-color: #ffffff;
+    }
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
+      top: -8px;
+      left: 10px;
+      font-size: 12px;
+      color: ${({ theme }) => theme.accent};
+    }
   }
 
+  label {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    padding: 0 5px;
+    transition: 0.3s ease all;
+    pointer-events: none;
+    color: #4c4c4c;
+    font-size: 16px;
+  }
   .name-container {
     display: flex;
     gap: 10px;
   }
 
-  .name-container input {
+  .name-container .input-container {
     flex: 1;
   }
 
@@ -37,18 +65,21 @@ export const FormStyle = styled.form`
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 0;
     padding: 0;
-    margin: 10px 0;
+    margin: 10px;
   }
 
-  .error-message {
-    color: red;
-    font-size: 12px;
-    min-height: 16px;
-    margin-bottom: 4px;
-    text-align: left;
+  .checkbox input {
     width: 100%;
+    margin-right: auto;
+  }
+
+  .checkbox label {
+    position: static;
+    transform: none;
+    padding: 0;
+    color: #4c4c4c;
+    font-size: 14px;
   }
 
   label,

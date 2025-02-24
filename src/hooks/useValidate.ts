@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback, useState } from "react";
 
 // Tipos de erro para o formulário
 interface ValidationErrors {
@@ -7,19 +8,25 @@ interface ValidationErrors {
 
 export function useValidate() {
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [debounceTimeout, setDebounceTimeout] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null);
 
   // Função para validar o email
-  const validateEmail = (email: string): string | null => {
-    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return regex.test(email) ? null : "Email inválido";
+  const validateEmail = (email: string): string => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Email inválido";
+    }
+    return "";
   };
 
   // Função para validar igualdade de senhas
   const validatePasswords = (
     password: string,
     passwordConfirm: string
-  ): string | null => {
-    return password === passwordConfirm ? null : "As senhas não são iguais";
+  ): string => {
+    return password === passwordConfirm ? "" : "As senhas não são iguais";
   };
 
   // Função genérica para validar campos comuns
@@ -46,6 +53,38 @@ export function useValidate() {
     return newErrors;
   };
 
+  // Função para validar o campo com debounce
+  const validateField = useCallback(
+    (name: string, value: string, additionalFields: any = {}) => {
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+      }
+
+      const newTimeout = setTimeout(() => {
+        let error = "";
+        switch (name) {
+          case "email":
+            error = validateEmail(value);
+            break;
+          case "passwordConfirm":
+            error = validatePasswords(additionalFields.password, value);
+            break;
+          // Outras validações
+          default:
+            break;
+        }
+
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: error,
+        }));
+      }, 500); // Atraso de 500ms
+
+      setDebounceTimeout(newTimeout);
+    },
+    [debounceTimeout]
+  );
+
   // Validação ao submeter o formulário de cadastro
   const validateSignup = (data: {
     email: string;
@@ -62,22 +101,6 @@ export function useValidate() {
     const newErrors = validateCommonFields(data);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  // Validação em tempo real ao preencher os campos
-  const validateField = (
-    name: string,
-    value: string,
-    formData?: { password?: string }
-  ) => {
-    let error = "";
-
-    if (name === "email") error = validateEmail(value) || "";
-    if (name === "passwordConfirm" && formData?.password) {
-      error = validatePasswords(formData.password, value) || "";
-    }
-
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
   };
 
   return {

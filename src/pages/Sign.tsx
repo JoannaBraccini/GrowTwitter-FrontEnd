@@ -106,62 +106,85 @@ export function Sign() {
       <h1 className="banner"> GrowTwitter </h1>
       <div className="signup-container">
         <FormStyle onSubmit={handleSignupForm}>
-          <h1 style={{ color: "#3a3a3a" }}>Primeira vez aqui?</h1>
+          <h1 style={{ color: "#3a3a3a" }}>Cadastrar</h1>
           <span className="mobile">Faça parte desta comunidade.</span>
           <div className="name-container">
-            <input
-              type="text"
-              name="first-name"
-              placeholder="Nome"
-              minLength={3}
-              maxLength={20}
-              required
-            />
-            <input
-              type="text"
-              name="surname"
-              placeholder="Sobrenome"
-              minLength={3}
-              maxLength={79}
-              required
-            />
+            <div className="input-container">
+              <input
+                type="text"
+                name="first-name"
+                placeholder=""
+                minLength={3}
+                maxLength={20}
+                required
+                className={errors["first-name"] ? "error" : ""}
+              />
+              <label htmlFor="first-name">Nome</label>
+            </div>
+            <div className="input-container">
+              <input
+                type="text"
+                name="surname"
+                placeholder=""
+                minLength={3}
+                maxLength={79}
+                required
+                className={errors.surname ? "error" : ""}
+              />
+              <label htmlFor="surname">Sobrenome</label>
+            </div>
           </div>
-          <input
-            type="text"
-            name="username"
-            placeholder="Nome de usuário"
-            minLength={3}
-            maxLength={30}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Seu melhor e-mail"
-            maxLength={50}
-            required
-            onChange={handleFieldChange}
-          />
-          <div className="error-message">{errors.email || " "}</div>
-          <input
-            type="password"
-            name="password"
-            placeholder="Insira uma senha"
-            minLength={4}
-            maxLength={30}
-            required
-            onChange={handleFieldChange}
-          />
-          <input
-            type="password"
-            name="passwordConfirm"
-            placeholder="Confirme a Senha"
-            minLength={4}
-            maxLength={30}
-            required
-            onChange={handleFieldChange}
-          />
-          <div className="error-message">{errors.passwordConfirm || " "}</div>
+          <div className="input-container">
+            <input
+              type="text"
+              name="username"
+              placeholder=""
+              minLength={3}
+              maxLength={30}
+              required
+              className={errors.username ? "error" : ""}
+            />
+            <label htmlFor="username">Nome de usuário</label>
+          </div>
+
+          <div className="input-container">
+            <input
+              type="email"
+              name="email"
+              placeholder=""
+              maxLength={50}
+              required
+              onChange={handleFieldChange}
+              className={errors.email ? "error" : ""}
+            />
+            <label htmlFor="email">Seu melhor e-mail</label>
+          </div>
+          <div className="input-container">
+            <input
+              type="password"
+              name="password"
+              placeholder=""
+              minLength={4}
+              maxLength={30}
+              required
+              onChange={handleFieldChange}
+              className={errors.password ? "error" : ""}
+            />
+            <label htmlFor="password">Insira uma senha</label>
+          </div>
+          <div className="input-container">
+            <input
+              type="password"
+              name="passwordConfirm"
+              placeholder=""
+              minLength={4}
+              maxLength={30}
+              required
+              onChange={handleFieldChange}
+              className={errors.passwordConfirm ? "error" : ""}
+            />
+            <label htmlFor="passwordConfirm">Confirme a Senha</label>
+          </div>
           <Button text="white" size="small" disabled={loading}>
             Cadastrar
           </Button>
@@ -180,26 +203,38 @@ export function Sign() {
           <span className="mobile">
             A plataforma definitiva para todos os apaixonados por redes sociais
           </span>
-          <input
-            type="email"
-            name="email"
-            placeholder="E-mail"
-            maxLength={50}
-          />
-          <input
-            type="text"
-            name="username"
-            placeholder="Nome de usuário"
-            minLength={3}
-            maxLength={30}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Senha"
-            minLength={4}
-            required
-          />
+          <div className="input-container">
+            <input
+              type="email"
+              name="email"
+              placeholder=""
+              maxLength={50}
+              className={errors.email ? "error" : ""}
+            />
+            <label htmlFor="email">E-mail</label>
+          </div>
+          <div className="input-container">
+            <input
+              type="text"
+              name="username"
+              placeholder=""
+              minLength={3}
+              maxLength={30}
+              className={errors.username ? "error" : ""}
+            />
+            <label htmlFor="username">Nome de usuário</label>
+          </div>
+          <div className="input-container">
+            <input
+              type="password"
+              name="password"
+              placeholder=""
+              minLength={4}
+              required
+              className={errors.password ? "error" : ""}
+            />
+            <label htmlFor="password">Senha</label>
+          </div>
           <div className="checkbox">
             <input
               type="checkbox"

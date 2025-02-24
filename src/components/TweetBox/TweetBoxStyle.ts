@@ -3,25 +3,34 @@ import styled from "styled-components";
 export const TweetBoxStyle = styled.div`
   padding: 13px 10px 5px 15px;
   background-color: ${({ theme }) => theme.backgroundColor};
-
   form {
     display: flex;
     flex-direction: column;
   }
 
   .tweetbox-comment {
+    display: flex;
+    gap: 10px;
     padding-bottom: 10px;
+    border-bottom: 1px inset ${({ theme }) => theme.highlight};
     max-width: 500px;
+    img {
+      border-radius: 50%;
+      height: 50px;
+    }
     textarea {
-      font-size: 14px;
+      font-size: 16px;
       width: 100%;
+      overflow: auto;
     }
   }
 
-  .tweetbox-content {
+  .tweetbox-content,
+  .tweetbox-reply {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    align-items: start;
+    padding-top: 10px;
+    gap: 12px;
     background-color: ${({ theme }) => theme.backgroundColor};
 
     img {
@@ -29,13 +38,27 @@ export const TweetBoxStyle = styled.div`
       height: 38px;
     }
 
-    input {
-      flex: 1;
+    input,
+    textarea {
       margin-left: 15px;
-      min-height: 50px;
-      max-height: 300px;
       font-size: 18px;
+      overflow: auto;
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: ${({ theme }) => theme.accent};
+        border-radius: 4px;
+      }
+      &::-webkit-scrollbar-track {
+        background-color: ${({ theme }) => theme.backgroundColor};
+      }
     }
+  }
+
+  .tweetbox-reply span {
+    max-width: 450px;
+    max-height: 450px;
   }
 
   .tweetbox-image-preview {

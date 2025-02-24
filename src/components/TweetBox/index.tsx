@@ -53,12 +53,20 @@ export function TweetBox({
       <form onSubmit={handleSubmit}>
         {mode === "retweet" && (
           <div className="tweetbox-comment">
+            <img src={userPhoto} alt={userName} />
             <textarea
               placeholder="Adicionar um comentário"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
+              maxLength={140}
               rows={3}
             />
+          </div>
+        )}
+        {mode === "reply" && (
+          <div className="tweetbox-reply">
+            <img src={userPhoto} alt={userName} />
+            <span>{content}</span>
           </div>
         )}
         <div className="tweetbox-content">
