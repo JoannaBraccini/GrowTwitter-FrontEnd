@@ -8,38 +8,28 @@ export const TweetBoxStyle = styled.div`
     flex-direction: column;
   }
 
-  .tweetbox-comment {
+  .reply-content {
     display: flex;
-    gap: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px inset ${({ theme }) => theme.highlight};
-    max-width: 500px;
-    img {
-      border-radius: 50%;
-      height: 50px;
-    }
-    textarea {
-      font-size: 16px;
-      width: 100%;
-      overflow: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    width: 100%;
+    max-width: 452px;
+    .content {
+      margin-top: -15px;
+      font-size: small;
+      margin-left: 48px;
     }
   }
 
-  .tweetbox-content,
-  .tweetbox-reply {
+  .tweetbox-content {
     display: flex;
     align-items: start;
-    padding-top: 10px;
+    padding: 10px;
     gap: 12px;
     background-color: ${({ theme }) => theme.backgroundColor};
 
-    img {
-      border-radius: 50%;
-      height: 38px;
-    }
-
-    input,
-    textarea {
+    input {
       margin-left: 15px;
       font-size: 18px;
       overflow: auto;
@@ -56,22 +46,69 @@ export const TweetBoxStyle = styled.div`
     }
   }
 
-  .tweetbox-reply span {
+  .tweetbox-retweet {
+    display: flex;
+    gap: 10px;
     max-width: 450px;
-    max-height: 450px;
+    img {
+      border-radius: 50%;
+      height: 50px;
+      width: 50px;
+      flex: none;
+    }
+    textarea {
+      font-size: 18px;
+      width: 100%;
+      padding: 10px;
+      overflow: auto;
+    }
+  }
+
+  .retweet-content {
+    display: flex;
+    align-items: start;
+    margin-left: 48px;
+    gap: 12px;
+    padding: 10px;
+    width: fit-content;
+    max-width: 452px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top: 1px solid ${({ theme }) => theme.highlight};
+    border-left: 1px solid ${({ theme }) => theme.highlight};
+    border-right: 1px solid ${({ theme }) => theme.highlight};
+    img {
+      border-radius: 50%;
+      height: 28px;
+      flex: none;
+    }
   }
 
   .tweetbox-image-preview {
     display: flex;
-    margin-top: 15px;
     margin-left: 48px;
-    align-items: center;
+    align-items: end;
+    justify-content: center;
+    width: fit-content;
+    padding-top: 10px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom: 1px solid ${({ theme }) => theme.highlight};
+    border-left: 1px solid ${({ theme }) => theme.highlight};
+    border-right: 1px solid ${({ theme }) => theme.highlight};
+
     img {
-      border: 2px outset ${({ theme }) => theme.highlight};
+      width: 100%;
+      height: 100%;
       max-width: 450px;
       max-height: 450px;
-      object-fit: cover;
-      border-radius: 16px;
+      object-fit: contain;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+    span {
+      width: 450px;
+      height: 20px;
     }
   }
 

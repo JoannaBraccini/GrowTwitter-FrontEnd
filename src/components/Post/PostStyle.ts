@@ -16,26 +16,6 @@ export const PostStyle = styled.div`
     padding: 0;
     margin: 0;
 
-    .user {
-      display: flex;
-      align-items: flex-start;
-      width: 100%;
-      gap: 5px;
-      h3 {
-        font-weight: bold;
-        font-size: 16px;
-      }
-      .verified {
-        img {
-          width: 12px;
-          height: 12px;
-        }
-      }
-    }
-    small {
-      color: ${({ theme }) => theme.textSecondary};
-      line-height: 22px;
-    }
     .dots {
       margin-left: auto;
       cursor: pointer;

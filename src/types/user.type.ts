@@ -19,6 +19,7 @@ export type UserBase = Pick<
   User,
   "id" | "name" | "username" | "avatarUrl" | "verified"
 >;
+
 export interface Follow {
   id: string;
   followerId: string;

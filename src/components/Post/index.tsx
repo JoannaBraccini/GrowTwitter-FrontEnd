@@ -1,4 +1,3 @@
-import { formatDate } from "../../utils";
 import {
   RetweetIcon,
   CommentIcon,
@@ -21,14 +20,10 @@ import { useNavigate } from "react-router-dom";
 import { followUser } from "../../store/modules/users/usersActions";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 import { TweetBox } from "../TweetBox";
-import { Avatar } from "../Avatar";
-import {
-  useCreateTweet,
-  useProfileNavigation,
-  useVerificationIcon,
-} from "../../hooks";
+import { useCreateTweet } from "../../hooks";
 import { useLogout } from "../../hooks/useLogout";
 import { PostStyle } from "./PostStyle";
+import { UserCard } from "../UserCard";
 
 interface PostProps {
   tweet: Tweet;
@@ -49,9 +44,7 @@ export function Post({
   const navigate = useNavigate();
   const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet();
-  const { handleProfileClick } = useProfileNavigation();
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
-  const { icon, label } = useVerificationIcon(tweetUser);
 
   const isImageUrl = (url: string) =>
     /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
@@ -64,8 +57,9 @@ export function Post({
     }
   };
   const openTweetBoxModal = (
-    initialContent: string,
-    initialImageUrl: string,
+    // initialContent: string,
+    // initialImageUrl: string,
+    tweet: Tweet,
     mode: "create" | "edit" | "reply" | "retweet",
     onTweetSubmit: (
       content: string,
@@ -77,8 +71,7 @@ export function Post({
     if (!userLogged.avatarUrl || !userLogged.name || !userLogged.id) {
       dispatch(
         showAlert({
-          message:
-            "Erro: informações do usuário ausentes. Faça login novamente.",
+          message: "Informações do usuário ausentes. Faça login novamente.",
           type: "error",
         })
       );
@@ -86,11 +79,8 @@ export function Post({
     }
     openModal(
       <TweetBox
-        userPhoto={userLogged.avatarUrl}
-        userName={userLogged.name}
-        parentId={tweet.id}
-        initialContent={initialContent}
-        initialImageUrl={initialImageUrl}
+        tweetUser={tweetUser}
+        tweet={tweet}
         mode={mode}
         onTweetSubmit={onTweetSubmit}
       />
@@ -146,26 +136,11 @@ export function Post({
   return (
     <PostStyle>
       <div className="header">
-        <Avatar>
-          <img
-            src={tweetUser.avatarUrl}
-            alt={tweetUser.name}
-            onClick={() => handleProfileClick(tweetUser.id)}
-          />
-        </Avatar>
-        <div className="user">
-          <h3>{tweetUser.name}</h3>
-          <span className="verified">
-            <img src={icon} alt={label} />
-          </span>
-          <small>
-            @{tweetUser.username} &middot;{" "}
-            {formatDate(tweet.updatedAt ?? tweet.createdAt, "relative")}
-          </small>
+        <UserCard user={tweetUser} tweet={tweet}>
           <span className="dots" onClick={() => setMenuVisible(true)}>
             <DotsIcon />
           </span>
-        </div>
+        </UserCard>
       </div>
       <div className="tweet-content">
         {menuVisible && tweet.id && (
@@ -174,14 +149,9 @@ export function Post({
               <>
                 <button
                   onClick={() =>
-                    openTweetBoxModal(
-                      tweet.content ?? "",
-                      tweet.imageUrl ?? "",
-                      "edit",
-                      (content, imageUrl) => {
-                        handleEditTweet(tweet, content, imageUrl);
-                      }
-                    )
+                    openTweetBoxModal(tweet, "edit", (content, imageUrl) => {
+                      handleEditTweet(tweet, content, imageUrl);
+                    })
                   }
                 >
                   Editar
@@ -225,8 +195,8 @@ export function Post({
           <span
             title="Responder"
             onClick={() =>
-              openTweetBoxModal("", "", "reply", (content, imageUrl) => {
-                handleCreateTweet(content, imageUrl, tweet.id);
+              openTweetBoxModal(tweet, "reply", (comment, imageUrl) => {
+                handleCreateTweet(comment, imageUrl, tweet.id);
               })
             }
           >
@@ -235,14 +205,9 @@ export function Post({
           <span
             title="Repostar"
             onClick={() =>
-              openTweetBoxModal(
-                tweet.content ?? "",
-                tweet.imageUrl ?? "",
-                "retweet",
-                (comment) => {
-                  handleRetweet(tweet.id, comment ?? "");
-                }
-              )
+              openTweetBoxModal(tweet, "retweet", (comment) => {
+                handleRetweet(tweet.id, comment ?? "");
+              })
             }
           >
             <RetweetIcon /> {tweet.retweetCount}

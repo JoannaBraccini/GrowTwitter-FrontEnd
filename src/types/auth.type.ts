@@ -1,3 +1,5 @@
+import { Verified } from "./user.type";
+
 export interface LoginRequest {
   username?: string;
   email?: string;
@@ -13,6 +15,7 @@ export interface LoginResponse {
     username: string;
     email: string;
     avatarUrl: string;
+    verified: Verified;
   };
 }
 

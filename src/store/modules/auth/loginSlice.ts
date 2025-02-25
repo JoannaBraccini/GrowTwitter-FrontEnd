@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LoginRequest, LoginResponse } from "../../../types";
+import { LoginRequest, LoginResponse, Verified } from "../../../types";
 import { showAlert } from "../alert/alertSlice";
 import { loginService } from "../../../configs/services/auth.service";
 import { ResponseApi } from "../../../configs/services/api.service";
@@ -54,6 +54,7 @@ interface InitialState {
     username: string;
     email: string;
     avatarUrl: string;
+    verified: Verified;
   };
 }
 
@@ -69,6 +70,7 @@ const initialState: InitialState = {
     username: "",
     email: "",
     avatarUrl: "",
+    verified: "NONE",
   },
 };
 

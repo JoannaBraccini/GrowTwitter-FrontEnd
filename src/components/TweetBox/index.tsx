@@ -2,13 +2,14 @@ import { Button } from "../Button";
 import { TweetBoxStyle } from "./TweetBoxStyle";
 import linkPhoto from "../../assets/link-photo.svg";
 import { useState } from "react";
+import { useAppSelector } from "../../store/hooks";
+import { Tweet, UserBase } from "../../types";
+import { UserCard } from "../UserCard";
+import { Avatar } from "../Avatar";
 
 export interface TweetBoxProps {
-  userPhoto: string;
-  userName: string;
-  parentId?: string;
-  initialContent?: string;
-  initialImageUrl?: string;
+  tweetUser: UserBase;
+  tweet: Tweet;
   mode: "create" | "edit" | "reply" | "retweet";
   onTweetSubmit: (
     content: string,
@@ -19,18 +20,16 @@ export interface TweetBoxProps {
 }
 
 export function TweetBox({
-  userPhoto,
-  userName,
-  parentId,
-  initialContent = "",
-  initialImageUrl = "",
+  tweetUser,
+  tweet,
   mode,
   onTweetSubmit,
 }: TweetBoxProps) {
-  const [content, setContent] = useState(initialContent);
-  const [imageUrl, setImageUrl] = useState(initialImageUrl);
-  const [comment, setComment] = useState<string | undefined>(undefined);
+  const [content, setContent] = useState(tweet.content || "");
+  const [imageUrl, setImageUrl] = useState(tweet.imageUrl || "");
+  const [comment, setComment] = useState<string>("");
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
+  const { user } = useAppSelector((state) => state.userLogged);
 
   const openImageModal = (imageSrc: string) => {
     setExpandedImage(imageSrc);
@@ -42,61 +41,69 @@ export function TweetBox({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onTweetSubmit(content, imageUrl, parentId, comment);
+    onTweetSubmit(content, imageUrl, tweet.parentId, comment);
     setContent("");
     setImageUrl("");
-    setComment(undefined);
+    setComment("");
   };
 
   return (
     <TweetBoxStyle>
       <form onSubmit={handleSubmit}>
-        {mode === "retweet" && (
-          <div className="tweetbox-comment">
-            <img src={userPhoto} alt={userName} />
-            <textarea
-              placeholder="Adicionar um comentário"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              maxLength={140}
-              rows={3}
-            />
-          </div>
-        )}
         {mode === "reply" && (
-          <div className="tweetbox-reply">
-            <img src={userPhoto} alt={userName} />
-            <span>{content}</span>
+          <div className="reply-content">
+            <UserCard user={tweetUser} tweet={tweet} />
+            <span className="content">{content}</span>
           </div>
         )}
-        <div className="tweetbox-content">
-          <img src={userPhoto} alt={userName} />
-          {mode !== "retweet" ? (
+
+        {mode !== "retweet" && (
+          <div className="tweetbox-content">
+            <Avatar user={user} />
             <input
               placeholder={
                 mode === "reply"
                   ? "Postar sua resposta"
                   : "O que está acontencendo?"
               }
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          ) : (
-            <span>{content}</span>
-          )}
-        </div>
-        {imageUrl && (
-          <div className="tweetbox-image-preview">
-            <img
-              src={imageUrl}
-              alt="Pré-visualização da imagem"
-              onClick={() => openImageModal(imageUrl)} // Clique para ampliar
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
             />
           </div>
         )}
 
+        {mode === "retweet" && (
+          <>
+            <div className="tweetbox-retweet">
+              <img src={user.avatarUrl} alt={user.name} />
+              <textarea
+                placeholder="Adicionar um comentário"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                maxLength={140}
+                rows={3}
+              />
+            </div>
+            <div className="retweet-content">
+              <img src={tweetUser.avatarUrl} alt={tweetUser.name} />
+              <span>{content}</span>
+            </div>
+            <div className="tweetbox-image-preview">
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt="Pré-visualização da imagem"
+                  onClick={() => openImageModal(imageUrl)} // Clique para ampliar
+                />
+              ) : (
+                <span></span>
+              )}
+            </div>
+          </>
+        )}
+
         <div className="tweetbox-links">
-          {mode !== "retweet" && (
+          {mode !== "retweet" && mode !== "reply" && (
             <div className="image-link">
               <img src={linkPhoto} title="Mídia" />
               <input

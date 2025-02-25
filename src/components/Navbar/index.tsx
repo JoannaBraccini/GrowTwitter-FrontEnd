@@ -24,6 +24,7 @@ import { showAlert } from "../../store/modules/alert/alertSlice";
 import { useCreateTweet } from "../../hooks/useCreateTweet";
 import { Avatar } from "../Avatar";
 import { useLogout } from "../../hooks/useLogout";
+import { Tweet } from "../../types";
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -157,9 +158,7 @@ export function Navbar() {
             aria-expanded={isMenuOpen}
             aria-label="Abrir menu da conta"
           >
-            <Avatar>
-              <img src={user.avatarUrl} alt={user.name} />
-            </Avatar>
+            <Avatar user={user} />
             <div className="account-data">
               <span className="account-name">{user.name}</span>
               <span className="account-username">@{user.username}</span>
@@ -181,11 +180,9 @@ export function Navbar() {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <TweetBox
           key="tweet-box"
-          userPhoto={user.avatarUrl}
-          userName={user.name}
+          tweetUser={user}
+          tweet={{} as Tweet}
           onTweetSubmit={handleCreateTweet}
-          initialContent=""
-          initialImageUrl=""
           mode="create"
         />
       </Modal>
