@@ -31,6 +31,7 @@ interface PostProps {
   isOwnTweet: boolean;
   userLogged: Partial<User>;
   openModal: (content: React.ReactNode) => void;
+  closeModal: () => void;
 }
 
 export function Post({
@@ -39,15 +40,14 @@ export function Post({
   isOwnTweet,
   userLogged,
   openModal,
+  closeModal,
 }: PostProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { handleLogout } = useLogout();
-  const { handleCreateTweet } = useCreateTweet();
+  const { handleCreateTweet } = useCreateTweet(closeModal);
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
 
-  const isImageUrl = (url: string) =>
-    /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
   const isLinkUrl = (url: string) => {
     try {
       new URL(url);
@@ -57,13 +57,11 @@ export function Post({
     }
   };
   const openTweetBoxModal = (
-    // initialContent: string,
-    // initialImageUrl: string,
     tweet: Tweet,
     mode: "create" | "edit" | "reply" | "retweet",
     onTweetSubmit: (
-      content: string,
-      imageUrl: string,
+      content?: string,
+      imageUrl?: string,
       parentI?: string,
       comment?: string
     ) => void
@@ -179,13 +177,12 @@ export function Post({
         ) : (
           tweet.content && <p>{tweet.content}</p>
         )}
-
         {/* Renderiza a imagem se houver uma URL de imagem */}
-        {tweet.imageUrl && isImageUrl(tweet.imageUrl) && (
+        {tweet.imageUrl && (
           <img
             src={tweet.imageUrl}
             alt="Imagem"
-            // onError={(e) => (e.currentTarget.style.display = "none")}
+            onError={(e) => (e.currentTarget.style.display = "none")}
           />
         )}
       </div>
@@ -195,12 +192,15 @@ export function Post({
           <span
             title="Responder"
             onClick={() =>
-              openTweetBoxModal(tweet, "reply", (comment, imageUrl) => {
-                handleCreateTweet(comment, imageUrl, tweet.id);
+              openTweetBoxModal(tweet, "reply", (content, imageUrl) => {
+                handleCreateTweet(content, imageUrl, tweet.id);
               })
             }
           >
-            <CommentIcon /> {tweet.replyCount}
+            <CommentIcon />
+            {tweet.replyCount && (
+              <span className="counter">{tweet.replyCount}</span>
+            )}
           </span>
           <span
             title="Repostar"

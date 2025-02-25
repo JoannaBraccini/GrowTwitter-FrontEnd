@@ -6,14 +6,15 @@ import { useAppSelector } from "../../store/hooks";
 import { Tweet, UserBase } from "../../types";
 import { UserCard } from "../UserCard";
 import { Avatar } from "../Avatar";
+import { useProfileNavigation } from "../../hooks";
 
 export interface TweetBoxProps {
   tweetUser: UserBase;
   tweet: Tweet;
   mode: "create" | "edit" | "reply" | "retweet";
   onTweetSubmit: (
-    content: string,
-    imageUrl: string,
+    content?: string,
+    imageUrl?: string,
     parentId?: string,
     comment?: string
   ) => void;
@@ -25,11 +26,12 @@ export function TweetBox({
   mode,
   onTweetSubmit,
 }: TweetBoxProps) {
-  const [content, setContent] = useState(tweet.content || "");
-  const [imageUrl, setImageUrl] = useState(tweet.imageUrl || "");
-  const [comment, setComment] = useState<string>("");
+  const [content, setContent] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [comment, setComment] = useState<string | undefined>("");
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.userLogged);
+  const { handleProfileClick } = useProfileNavigation();
 
   const openImageModal = (imageSrc: string) => {
     setExpandedImage(imageSrc);
@@ -53,21 +55,29 @@ export function TweetBox({
         {mode === "reply" && (
           <div className="reply-content">
             <UserCard user={tweetUser} tweet={tweet} />
-            <span className="content">{content}</span>
+            <div className="content">
+              <p>{tweet.content}</p>
+              <p className="tweet-user">
+                Respondendo a{" "}
+                <a href="#" onClick={() => handleProfileClick(tweetUser.id)}>
+                  @{tweetUser.username}
+                </a>
+              </p>
+            </div>
           </div>
         )}
 
         {mode !== "retweet" && (
           <div className="tweetbox-content">
             <Avatar user={user} />
-            <input
+            <textarea
               placeholder={
                 mode === "reply"
                   ? "Postar sua resposta"
                   : "O que está acontencendo?"
               }
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
             />
           </div>
         )}
@@ -86,14 +96,14 @@ export function TweetBox({
             </div>
             <div className="retweet-content">
               <img src={tweetUser.avatarUrl} alt={tweetUser.name} />
-              <span>{content}</span>
+              <span>{tweet.content}</span>
             </div>
             <div className="tweetbox-image-preview">
-              {imageUrl ? (
+              {tweet.imageUrl ? (
                 <img
-                  src={imageUrl}
+                  src={tweet.imageUrl}
                   alt="Pré-visualização da imagem"
-                  onClick={() => openImageModal(imageUrl)} // Clique para ampliar
+                  onClick={() => openImageModal(tweet.imageUrl || "")} // Clique para ampliar
                 />
               ) : (
                 <span></span>

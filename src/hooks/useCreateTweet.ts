@@ -1,15 +1,15 @@
 import { useCallback } from "react";
 import { showAlert } from "../store/modules/alert/alertSlice";
 import { CreateTweetRequest } from "../types";
-import { createTweet } from "../store/modules/tweets/tweetsActions";
+import { createTweet, getTweets } from "../store/modules/tweets/tweetsActions";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
-export function useCreateTweet() {
+export function useCreateTweet(closeModal: () => void) {
   const dispatch = useAppDispatch();
   const userLogged = useAppSelector((state) => state.userLogged.user);
 
   const handleCreateTweet = useCallback(
-    (content: string, imageUrl: string, parentId?: string) => {
+    async (content?: string, imageUrl?: string, parentId?: string) => {
       if (!userLogged) {
         dispatch(
           showAlert({
@@ -20,7 +20,7 @@ export function useCreateTweet() {
         return;
       }
 
-      if (!content.trim() && !imageUrl.trim()) {
+      if ((!content || !content.trim()) && (!imageUrl || !imageUrl.trim())) {
         dispatch(
           showAlert({
             message: "Seu tweet não pode estar vazio.",
@@ -37,9 +37,14 @@ export function useCreateTweet() {
         imageUrl,
         tweetType: parentId ? "REPLY" : "TWEET",
       };
-      dispatch(createTweet(newTweet));
+      const result = await dispatch(createTweet(newTweet));
+
+      if (createTweet.fulfilled.match(result)) {
+        dispatch(getTweets({ page: 1, take: 20 }));
+        closeModal();
+      }
     },
-    [dispatch, userLogged]
+    [dispatch, userLogged, closeModal]
   );
 
   return { handleCreateTweet };

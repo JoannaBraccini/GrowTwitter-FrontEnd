@@ -6,6 +6,7 @@ export const PostStyle = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.highlight};
   flex: 1;
   padding: 15px;
+  position: relative;
 
   .header {
     width: 100%;
@@ -78,16 +79,14 @@ export const PostStyle = styled.div`
       cursor: pointer;
 
       span {
-        width: 20px;
         height: 20px;
+        width: auto;
+      }
+      .counter {
+        font-size: 10px;
+        color: ${({ theme }) => theme.textSecondary};
       }
 
-      /* img {
-        font-size: 14px;
-        color: ${({ theme }) => theme.accent};
-        margin-right: 5px;
-        width: 100%;
-      } */
       .actions {
         display: flex;
         align-items: baseline;

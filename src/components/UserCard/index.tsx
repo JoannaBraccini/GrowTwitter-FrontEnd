@@ -9,14 +9,17 @@ interface UserCardProps {
   user: UserBase;
   tweet: Tweet;
   children?: React.ReactNode;
+  className?: string;
 }
 
-export function UserCard({ user, tweet, children }: UserCardProps) {
+export function UserCard({ user, tweet, children, className }: UserCardProps) {
   const { icon, label } = useVerificationIcon(user);
 
   return (
-    <UserCardStyle>
-      <Avatar user={user} />
+    <UserCardStyle className={className}>
+      <div className="avatar">
+        <Avatar user={user} />
+      </div>
       <h3>{user.name}</h3>
       <span className="verified">
         <img src={icon} alt={label} />

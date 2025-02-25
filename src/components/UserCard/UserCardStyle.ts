@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 export const UserCardStyle = styled.div`
+  position: relative;
   display: flex;
   align-items: flex-start;
+  display: flex;
   width: 100%;
   gap: 5px;
   h3 {

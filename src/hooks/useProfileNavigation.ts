@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../store/hooks";
 import { getUserDetails } from "../store/modules/users/usersActions";
 import { showAlert } from "../store/modules/alert/alertSlice";
-import { setUserDetails } from "../store/modules/users/userDetailsSlice";
 
 export function useProfileNavigation() {
   const navigate = useNavigate();
@@ -14,8 +13,9 @@ export function useProfileNavigation() {
     try {
       const response = await dispatch(getUserDetails(id)).unwrap();
       if (response.data) {
-        dispatch(setUserDetails(response.data));
-        navigate(`/${response.data.username}`);
+        setTimeout(() => {
+          navigate(`/${response.data?.username}`);
+        }, 1000);
       } else {
         dispatch(
           showAlert({

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const TweetBoxStyle = styled.div`
-  padding: 13px 10px 5px 15px;
+  padding: 13px 10px 5px 5px;
   background-color: ${({ theme }) => theme.backgroundColor};
   form {
     display: flex;
@@ -15,10 +15,23 @@ export const TweetBoxStyle = styled.div`
     padding: 10px;
     width: 100%;
     max-width: 452px;
+
     .content {
-      margin-top: -15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: -16px;
       font-size: small;
-      margin-left: 48px;
+      border-left: 2px solid ${({ theme }) => theme.highlight};
+      padding-left: 24px;
+      margin-left: 20px;
+
+      .tweet-user {
+        color: ${({ theme }) => theme.textSecondary};
+      }
+      span {
+        color: ${({ theme }) => theme.accent};
+      }
     }
   }
 
@@ -29,9 +42,10 @@ export const TweetBoxStyle = styled.div`
     gap: 12px;
     background-color: ${({ theme }) => theme.backgroundColor};
 
-    input {
+    textarea {
+      width: 100%;
       margin-left: 15px;
-      font-size: 18px;
+      font-size: 16px;
       overflow: auto;
       &::-webkit-scrollbar {
         width: 8px;

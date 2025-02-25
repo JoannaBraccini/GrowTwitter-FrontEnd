@@ -15,7 +15,7 @@ export const FeedStyle = styled.div`
     top: 0;
     z-index: 100;
     border-bottom: 1px solid ${({ theme }) => theme.highlight};
-    padding: 15px 20px 0 20px;
+    padding-top: 15px;
   }
 
   .feed-header h2 {

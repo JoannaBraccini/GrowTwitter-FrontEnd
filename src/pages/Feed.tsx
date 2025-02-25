@@ -67,7 +67,7 @@ export function Feed() {
           tweetUser={user}
           tweet={{} as Tweet}
           mode="create"
-          onTweetSubmit={useCreateTweet}
+          onTweetSubmit={useCreateTweet(closeModal).handleCreateTweet}
         />
         <span className="divider" />
         {filteredTweets?.map((tweet) => {
@@ -83,6 +83,7 @@ export function Feed() {
               tweet={tweet}
               userLogged={userLogged}
               openModal={openModal}
+              closeModal={closeModal}
             />
           );
         })}
