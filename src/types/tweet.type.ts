@@ -38,7 +38,7 @@ export type UpdateTweetRequest = Pick<
   Tweet,
   "id" | "userId" | "content" | "imageUrl"
 >;
-export type RetweetRequest = Pick<Retweet, "id" | "comment">;
+export type RetweetRequest = Pick<Retweet, "tweetId" | "comment">;
 
 export interface TweetSearchRequest {
   page?: number;

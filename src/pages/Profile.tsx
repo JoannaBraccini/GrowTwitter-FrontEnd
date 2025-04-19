@@ -78,8 +78,14 @@ export function Profile() {
 
   const getFilteredTweets = () => {
     switch (activeTab) {
-      case "Posts":
-        return user.tweets || [];
+      case "Posts": {
+        const retweets = tweets.filter(
+          (tweets) => tweets.parentId && tweets.tweetType !== "REPLY"
+        );
+        console.log(retweets);
+
+        return user.tweets;
+      }
       case "Respostas":
         return tweets.filter(
           (tweet) =>
@@ -180,6 +186,7 @@ export function Profile() {
                     tweet={tweet}
                     userLogged={userLogged}
                     openModal={openModal}
+                    closeModal={closeModal}
                   />
                 </div>
               ))

@@ -16,6 +16,7 @@ export const PostStyle = styled.div`
     gap: 10px;
     padding: 0;
     margin: 0;
+    border: none;
 
     .dots {
       margin-left: auto;
@@ -27,9 +28,11 @@ export const PostStyle = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    padding-left: 48px;
+    margin-top: -15px;
+    padding-left: 46px;
     padding-right: 5px;
     gap: 10px;
+    z-index: 10;
     font-size: 15px;
     img {
       object-fit: contain;

@@ -53,16 +53,15 @@ export async function likeTweetService(id: string, token: string) {
 }
 
 export async function retweetService(
-  { id, comment }: RetweetRequest,
+  { tweetId, comment }: RetweetRequest,
   token: string
 ) {
   try {
+    const headers = { Authorization: `Bearer ${token}` };
     const response = await api.post<ResponseApi<Retweet>>(
-      `/tweets/retweet/${id}`,
-      {
-        headers: { Authorization: token },
-        comment,
-      }
+      `/tweets/retweet/${tweetId}`,
+      { comment },
+      { headers }
     );
     return {
       ok: response.data.ok,

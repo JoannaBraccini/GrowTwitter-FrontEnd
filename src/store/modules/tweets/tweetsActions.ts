@@ -72,11 +72,11 @@ export const likeTweet = createAsyncThunk(
 
 export const retweetTweet = createAsyncThunk(
   "tweets/retweet",
-  async ({ id, comment }: RetweetRequest, { dispatch, getState }) => {
+  async ({ tweetId, comment }: RetweetRequest, { dispatch, getState }) => {
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
-    const response = await retweetService({ id, comment }, token);
+    const response = await retweetService({ tweetId, comment }, token);
 
     if (!response.ok) {
       dispatch(

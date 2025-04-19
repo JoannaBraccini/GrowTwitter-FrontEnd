@@ -85,8 +85,8 @@ export function Post({
     );
   };
 
-  const handleRetweet = (id: string, comment: string) => {
-    dispatch(retweetTweet({ id, comment }));
+  const handleRetweet = (tweetId: string, comment: string) => {
+    dispatch(retweetTweet({ tweetId, comment }));
   };
 
   const handleLike = () => {
@@ -177,7 +177,7 @@ export function Post({
         ) : (
           tweet.content && <p>{tweet.content}</p>
         )}
-        {/* Renderiza a imagem se houver uma URL de imagem */}
+        {/* Renderiza a imagem se houver */}
         {tweet.imageUrl && (
           <img
             src={tweet.imageUrl}
