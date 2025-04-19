@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { showAlert } from "../store/modules/alert/alertSlice";
-import { CreateTweetRequest } from "../types";
+import { CreateTweetRequest } from "../@types";
 import { createTweet, getTweets } from "../store/modules/tweets/tweetsActions";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 

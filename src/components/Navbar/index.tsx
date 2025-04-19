@@ -1,8 +1,3 @@
-import { Button } from "../Button";
-import { NavbarStyle } from "./NavbarStyle";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { ToggleButton } from "../ToggleButton";
 import {
   DotsIcon,
   ExploreFill,
@@ -15,16 +10,23 @@ import {
   NotificationIcon,
   ProfileFill,
   ProfileIcon,
-} from "../../assets/icons";
-import { Modal } from "../Modal";
-import { TweetBox } from "../TweetBox";
+} from "../../assets/Icons";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { useTheme } from "../../configs/providers/useTheme";
-import { showAlert } from "../../store/modules/alert/alertSlice";
-import { useCreateTweet } from "../../hooks/useCreateTweet";
+import { useEffect, useRef, useState } from "react";
+
 import { Avatar } from "../Avatar";
+import { Button } from "../Button";
+import { Modal } from "../Modal";
+import { NavbarStyle } from "./NavbarStyle";
+import { ToggleButton } from "../ToggleButton";
+import { Tweet } from "../../@types";
+import { TweetBox } from "../TweetBox";
+import { showAlert } from "../../store/modules/alert/alertSlice";
+import tweetIcon from "../../assets/icons/post-mobile.svg";
+import { useCreateTweet } from "../../hooks/useCreateTweet";
 import { useLogout } from "../../hooks/useLogout";
-import { Tweet } from "../../types";
+import { useTheme } from "../../configs/providers/useTheme";
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ export function Navbar() {
   const dispatch = useAppDispatch();
   const alert = useAppSelector((state) => state.alert);
   const { handleLogout } = useLogout();
-  const { handleCreateTweet } = useCreateTweet();
+  const { handleCreateTweet } = useCreateTweet(() => setIsModalOpen(false));
   const { user, token } = useAppSelector((state) => state.userLogged);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -148,7 +150,8 @@ export function Navbar() {
         className="post-tweet"
         onClick={handleModal}
       >
-        Postar
+        <img src={tweetIcon} alt="Postar" /> {/* Ícone exibido no mobile */}
+        Postar {/* Texto exibido em telas maiores */}
       </Button>
       {user && ( //mostra somente se retornado o user
         <div className="account-container" ref={menuRef}>

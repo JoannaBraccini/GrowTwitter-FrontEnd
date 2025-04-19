@@ -1,5 +1,5 @@
 import { useProfileNavigation } from "../../hooks";
-import { UserBase } from "../../types";
+import { UserBase } from "../../@types";
 import { AvatarStyle } from "./AvatarStyle";
 
 interface AvatarProps {

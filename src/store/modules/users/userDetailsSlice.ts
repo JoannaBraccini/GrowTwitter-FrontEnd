@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Follow, Tweet, User, Verified } from "../../../types";
+import { Follow, Tweet, User, Verified } from "../../../@types";
 import { getUserDetails } from "./usersActions";
 import { ResponseApi } from "../../../configs/services/api.service";
 

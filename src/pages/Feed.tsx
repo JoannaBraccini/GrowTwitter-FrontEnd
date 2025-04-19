@@ -11,7 +11,7 @@ import { Post } from "../components/Post";
 import { Tabs } from "../components/Tabs";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../hooks";
-import { Tweet } from "../types";
+import { Tweet } from "../@types";
 
 type TabOptions = "Para você" | "Seguindo";
 export function Feed() {

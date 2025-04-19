@@ -21,6 +21,11 @@ export const ModalContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 768px) {
+    max-width: 90%; /* Aumenta a largura no mobile */
+    padding: 15px; /* Reduz o padding para melhor ajuste */
+  }
 `;
 
 export const ModalHeader = styled.div`
@@ -28,8 +33,18 @@ export const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  @media (max-width: 768px) {
+    height: 0px;
+  }
+
   span {
     transform: scale(1.4);
     cursor: pointer;
+
+    @media (max-width: 768px) {
+      justify-self: flex-start;
+      align-self: flex-start;
+      margin-left: 10px;
+    }
   }
 `;

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Like, Retweet, Tweet } from "../../../types";
+import { Like, Retweet, Tweet } from "../../../@types";
 import {
   createTweet,
   deleteTweet,

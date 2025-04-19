@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { UserUpdate, User, UserSearchRequest, Follow } from "../../types";
+import { UserUpdate, User, UserSearchRequest, Follow } from "../../@types";
 import { api, ResponseApi } from "./api.service";
 
 export async function followUserService(id: string, token: string) {

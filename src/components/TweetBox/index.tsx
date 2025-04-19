@@ -3,7 +3,7 @@ import { TweetBoxStyle } from "./TweetBoxStyle";
 import linkPhoto from "../../assets/link-photo.svg";
 import { useState } from "react";
 import { useAppSelector } from "../../store/hooks";
-import { Tweet, UserBase } from "../../types";
+import { Tweet, UserBase } from "../../@types";
 import { UserCard } from "../UserCard";
 import { Avatar } from "../Avatar";
 import { useProfileNavigation } from "../../hooks";

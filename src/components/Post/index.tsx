@@ -1,29 +1,30 @@
 import {
-  RetweetIcon,
   CommentIcon,
+  DotsIcon,
   LikeIcon,
-  StatisticIcon,
+  RetweetIcon,
   SaveIcon,
   ShareIcon,
-  DotsIcon,
-} from "../../assets/icons";
-import { Tweet, User } from "../../types";
-import { useState } from "react";
-import { useAppDispatch } from "../../store/hooks";
+  StatisticIcon,
+} from "../../assets/Icons";
+import { Tweet, User } from "../../@types";
 import {
   deleteTweet,
   likeTweet,
   retweetTweet,
   updateTweet,
 } from "../../store/modules/tweets/tweetsActions";
-import { useNavigate } from "react-router-dom";
+
+import { PostStyle } from "./PostStyle";
+import { TweetBox } from "../TweetBox";
+import { UserCard } from "../UserCard";
 import { followUser } from "../../store/modules/users/usersActions";
 import { showAlert } from "../../store/modules/alert/alertSlice";
-import { TweetBox } from "../TweetBox";
+import { useAppDispatch } from "../../store/hooks";
 import { useCreateTweet } from "../../hooks";
 import { useLogout } from "../../hooks/useLogout";
-import { PostStyle } from "./PostStyle";
-import { UserCard } from "../UserCard";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface PostProps {
   tweet: Tweet;

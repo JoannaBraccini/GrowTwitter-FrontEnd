@@ -1,13 +1,18 @@
 import styled from "styled-components";
 
 export const SidebarStyle = styled.aside`
+  position: fixed;
+  top: 0;
+  right: 0;
+  flex: 0.5;
   display: flex;
   flex-direction: column;
   margin-right: 1rem;
   padding: 0 8px;
   min-width: 27vw;
-  flex: 0.5;
+  background-color: ${({ theme }) => theme.backgroundColor};
   border-left: 1px solid ${({ theme }) => theme.highlight};
+  z-index: 1000;
 
   .sidebar-input {
     display: flex;
@@ -81,5 +86,10 @@ export const SidebarStyle = styled.aside`
         }
       }
     }
+  }
+
+  /* Adicionando estilos para dispositivos móveis */
+  @media (max-width: 768px) {
+    display: none; /* Esconde a sidebar em telas menores */
   }
 `;

@@ -4,7 +4,7 @@ import {
   LoginResponse,
   SignupRequest,
   SignupResponse,
-} from "../../types/auth.type";
+} from "../../@types/auth.type";
 import { api, ResponseApi } from "./api.service";
 
 export async function signupService(user: SignupRequest) {

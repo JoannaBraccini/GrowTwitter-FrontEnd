@@ -43,4 +43,22 @@ export const ToggleButton = styled.div.withConfig({
     -webkit-backdrop-filter: blur(4px);
     border-radius: 9999px;
   }
+
+  @media (max-width: 768px) {
+    width: 48px; /* Reduz a largura do contêiner */
+
+    button {
+      width: 24px; /* Reduz o tamanho do botão */
+      height: 24px;
+      ${({ isActive }) =>
+        isActive
+          ? `transform: translateX(24px) translateY(-50%);` /* Ajusta a posição para o tamanho reduzido */
+          : `transform: translateX(0) translateY(-50%);`}
+    }
+
+    span {
+      width: 48px; /* Reduz a largura do fundo */
+      height: 18px; /* Reduz a altura do fundo */
+    }
+  }
 `;

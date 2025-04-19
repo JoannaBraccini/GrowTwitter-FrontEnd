@@ -6,6 +6,12 @@ export interface TabProps {
 
 export const TabsStyle = styled.div<TabProps>`
   display: flex;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none; /* Oculta a barra de rolagem */
+  }
+
   justify-content: space-around;
   padding-top: ${({ paddingTop }) => paddingTop ?? 0};
 
@@ -39,12 +45,7 @@ export const TabsStyle = styled.div<TabProps>`
     }
   }
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    button {
-      margin: 5px 0;
-    }
-  }
+  /* Removido o comportamento de empilhamento vertical */
 `;
 
 TabsStyle.shouldForwardProp = (prop) => prop !== "paddingTop";

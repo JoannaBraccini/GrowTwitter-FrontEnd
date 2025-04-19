@@ -1,4 +1,4 @@
-import { LoginResponse } from "../types";
+import { LoginResponse } from "../@types";
 
 export function getUser(): LoginResponse | null {
   const sessionUser = sessionStorage.getItem("user");

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Trend } from "../../../types";
+import { Trend } from "../../../@types";
 
 interface TrendsState {
   trends: Trend[];

@@ -145,7 +145,7 @@ export const TweetBoxStyle = styled.div`
   }
   .tweetbox-actions {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     gap: 8px;
     width: 100%;
@@ -155,6 +155,19 @@ export const TweetBoxStyle = styled.div`
       &:hover {
         background-color: ${({ theme }) => theme.accent};
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .image-link {
+      input {
+        display: none; /* Esconde apenas o input no mobile */
+      }
+    }
+
+    .tweetbox-actions {
+      margin-right: 0; /* Remove margens extras */
+      width: 100%; /* Garante que o botão respeite a largura disponível */
     }
   }
 

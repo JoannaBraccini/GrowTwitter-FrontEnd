@@ -1,7 +1,7 @@
-import { Post } from "../components/Post";
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
+import { Post } from "../components/Post";
+import { Tweet } from "../@types";
 import { useAppSelector } from "../store/hooks";
-import { Tweet } from "../types";
 
 export function Explore() {
   const { user } = useAppSelector((state) => state.userLogged);
@@ -33,6 +33,7 @@ export function Explore() {
                       isOwnTweet={tweetUser.id === user.id}
                       userLogged={user}
                       openModal={() => {}}
+                      closeModal={() => {}}
                     />
                   </li>
                 );

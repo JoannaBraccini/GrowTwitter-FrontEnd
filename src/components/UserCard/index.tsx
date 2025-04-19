@@ -1,6 +1,6 @@
 import React from "react";
 import { useVerificationIcon } from "../../hooks";
-import { Tweet, UserBase } from "../../types";
+import { Tweet, UserBase } from "../../@types";
 import { formatDate } from "../../utils";
 import { UserCardStyle } from "./UserCardStyle";
 import { Avatar } from "../Avatar";

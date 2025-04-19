@@ -1,5 +1,6 @@
-import { CloseIcon } from "../../assets/icons";
 import { ModalContent, ModalHeader, ModalStyle } from "./ModalStyle";
+
+import { CloseIcon } from "../../assets/Icons";
 
 interface ModalProps {
   isOpen: boolean;

@@ -1,19 +1,20 @@
+import { Follow, Tweet, User } from "../../@types";
 import { Link, useNavigate } from "react-router-dom";
-import { ExploreIcon } from "../../assets/icons";
-import { SidebarStyle } from "./SidebarStyle";
-import { Button } from "../Button";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { useEffect, useState } from "react";
 import {
   getUserDetails,
   getUsers,
 } from "../../store/modules/users/usersActions";
-import { Follow, Tweet, User } from "../../types";
-import { useVerificationIcon } from "../../hooks";
-import { showAlert } from "../../store/modules/alert/alertSlice";
-import { Trend } from "../../types/trends.type";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useEffect, useState } from "react";
+
+import { Button } from "../Button";
+import { ExploreIcon } from "../../assets/Icons";
+import { SidebarStyle } from "./SidebarStyle";
+import { Trend } from "../../@types/trends.type";
 import { getTweets } from "../../store/modules/tweets/tweetsActions";
 import { setTrends } from "../../store/modules/trends/trendsSlice";
+import { showAlert } from "../../store/modules/alert/alertSlice";
+import { useVerificationIcon } from "../../hooks";
 
 export function Sidebar() {
   const navigate = useNavigate();

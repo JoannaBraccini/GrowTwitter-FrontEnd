@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import verifiedGold from "../assets/verified-gold.svg";
 import verifiedBlue from "../assets/verified-blue.svg";
-import { Verified } from "../types";
+import { Verified } from "../@types";
 
 // Tipagem para o usuário, você pode ajustar conforme necessário
 interface User {

@@ -1,13 +1,16 @@
 import styled from "styled-components";
 
 export const NavbarStyle = styled.div`
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   flex: 0.5;
   min-width: 260px;
-  margin-left: 1rem;
+  height: 100vh;
   padding: 8px;
+  background-color: ${({ theme }) => theme.backgroundColor};
   border-right: 1px solid ${({ theme }) => theme.highlight};
+  z-index: 1000;
 
   a {
     padding-top: 12px;
@@ -26,8 +29,9 @@ export const NavbarStyle = styled.div`
   }
 
   .icons {
-    align-self: center;
-    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-right: 1rem;
   }
 
@@ -59,6 +63,24 @@ export const NavbarStyle = styled.div`
   .post-tweet {
     margin-top: 2rem;
     max-width: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      display: none; /* Esconde o ícone por padrão */
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0; /* Esconde o texto no mobile */
+      justify-content: center; /* Centraliza o conteúdo */
+      align-items: center;
+      img {
+        display: block; /* Garante que o ícone seja exibido no mobile */
+        width: 50%; /* Ajusta o tamanho do ícone */
+        height: 50%; /* Ajusta o tamanho do ícone */
+      }
+    }
   }
 
   .account-container {
@@ -146,6 +168,82 @@ export const NavbarStyle = styled.div`
           margin-right: 8px;
           height: 24px;
           max-width: 100%;
+        }
+      }
+    }
+  }
+
+  /* Adicionando estilos para dispositivos móveis */
+  @media (max-width: 768px) {
+    flex: 0.1;
+    min-width: 80px;
+    margin-left: 0;
+
+    a {
+      div {
+        justify-content: center;
+        padding: 10px 0;
+        margin: 0;
+
+        &:hover {
+          background-color: ${({ theme }) => theme.highlight};
+        }
+      }
+    }
+
+    .header {
+      gap: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .logo {
+      width: 2rem;
+    }
+
+    .icons {
+      margin: 0;
+      padding: 8px 0;
+      height: 40px;
+    }
+
+    div {
+      flex-direction: column;
+      align-items: center;
+
+      h2 {
+        display: none; /* Esconde os textos */
+      }
+    }
+
+    .post-tweet {
+      margin-top: 1rem;
+      margin-left: 6px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+
+      img {
+        display: block;
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        margin-bottom: 2px;
+      }
+    }
+
+    .account-container {
+      width: 70px;
+      height: 70px;
+
+      .account-button {
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+
+        .account-data,
+        .dots-image {
+          display: none; /* Esconde os dados da conta */
         }
       }
     }

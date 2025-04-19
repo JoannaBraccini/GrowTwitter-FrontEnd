@@ -1,5 +1,5 @@
-import { useContext } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
+import { useContext } from "react";
 
 export function HomeIcon() {
   const themeContext = useContext(ThemeContext);
@@ -9,8 +9,8 @@ export function HomeIcon() {
   return (
     <svg
       fill={fillColor}
-      width="24"
-      height="24"
+      width="34"
+      height="34"
       viewBox="0 0 512 512"
       xmlns="http://www.w3.org/2000/svg"
     >

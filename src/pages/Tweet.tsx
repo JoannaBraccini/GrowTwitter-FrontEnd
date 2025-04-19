@@ -1,9 +1,10 @@
-import { Post } from "../components/Post";
-import { DefaultLayout } from "../configs/layouts/DefaultLayout";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { showAlert } from "../store/modules/alert/alertSlice";
-import { User } from "../types";
+
+import { DefaultLayout } from "../configs/layouts/DefaultLayout";
 import { Modal } from "../components/Modal";
+import { Post } from "../components/Post";
+import { User } from "../@types";
+import { showAlert } from "../store/modules/alert/alertSlice";
 import { useModal } from "../hooks";
 
 export const TweetPage = () => {
@@ -32,6 +33,7 @@ export const TweetPage = () => {
         tweet={tweet}
         tweetUser={tweetUser()}
         userLogged={user}
+        closeModal={closeModal}
       />
       <Modal isOpen={modalOpen} onClose={closeModal}>
         {modalContent}

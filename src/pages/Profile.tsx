@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
-import { DefaultLayout } from "../configs/layouts/DefaultLayout";
-import { BackIcon, RetweetIcon } from "../assets/icons";
-import { Button } from "../components/Button";
+import { BackIcon, RetweetIcon } from "../assets/Icons";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { showAlert } from "../store/modules/alert/alertSlice";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUserDetails } from "../store/modules/users/usersActions";
-import { User } from "../types";
-import { setUserDetails } from "../store/modules/users/userDetailsSlice";
+
+import { Button } from "../components/Button";
+import { DefaultLayout } from "../configs/layouts/DefaultLayout";
+import { Modal } from "../components/Modal";
+import { Post } from "../components/Post";
+import { ProfileStyle } from "../components/Profile/ProfileStyle";
+import { Tabs } from "../components/Tabs";
+import { User } from "../@types";
 import callendar from "../assets/callendar.svg";
 import { formatDate } from "../utils";
-import { Post } from "../components/Post";
-import { Modal } from "../components/Modal";
-import { ProfileStyle } from "../components/Profile/ProfileStyle";
+import { getUserDetails } from "../store/modules/users/usersActions";
+import { setUserDetails } from "../store/modules/users/userDetailsSlice";
+import { showAlert } from "../store/modules/alert/alertSlice";
 import { useLogout } from "../hooks/useLogout";
-import { Tabs } from "../components/Tabs";
-import { useVerificationIcon } from "../hooks/useVerifyIcon";
 import { useModal } from "../hooks";
+import { useVerificationIcon } from "../hooks/useVerifyIcon";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
 

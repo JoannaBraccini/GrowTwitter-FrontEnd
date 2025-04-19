@@ -4,7 +4,7 @@ import {
   RetweetRequest,
   TweetSearchRequest,
   UpdateTweetRequest,
-} from "../../../types";
+} from "../../../@types";
 import { RootState } from "../..";
 import {
   deleteTweetService,

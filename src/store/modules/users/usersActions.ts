@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { UserSearchRequest, UserUpdate } from "../../../types";
+import { UserSearchRequest, UserUpdate } from "../../../@types";
 import {
   deleteUserService,
   followUserService,

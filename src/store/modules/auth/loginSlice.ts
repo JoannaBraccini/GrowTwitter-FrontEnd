@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LoginRequest, LoginResponse, Verified } from "../../../types";
+import { LoginRequest, LoginResponse, Verified } from "../../../@types";
 import { showAlert } from "../alert/alertSlice";
 import { loginService } from "../../../configs/services/auth.service";
 import { ResponseApi } from "../../../configs/services/api.service";

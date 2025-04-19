@@ -7,7 +7,7 @@ import {
   Like,
   RetweetRequest,
   Retweet,
-} from "../../types/tweet.type";
+} from "../../@types/tweet.type";
 import { api, ResponseApi } from "./api.service";
 
 export async function postTweetService(
