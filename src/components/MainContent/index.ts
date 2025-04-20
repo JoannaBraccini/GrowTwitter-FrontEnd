@@ -12,9 +12,9 @@ export const MainContent = styled.div`
   margin-right: 27vw; /* Adiciona espaço para a largura da Sidebar */
 
   @media (max-width: 768px) {
-    margin-left: 80px; /* Ajusta para a largura menor da Navbar em telas pequenas */
+    margin-left: 64px; /* Ajusta para a largura menor da Navbar em telas pequenas */
     margin-right: 0; /* Remove o espaço da Sidebar em telas pequenas */
-    max-width: 76vw; /* Garante que o MainContent não ultrapasse a largura da viewport */
+    max-width: 80vw; /* Garante que o MainContent não ultrapasse a largura da viewport */
   }
 
   .content-container {

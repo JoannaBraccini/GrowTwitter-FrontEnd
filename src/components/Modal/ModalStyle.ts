@@ -21,10 +21,11 @@ export const ModalContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 0; /* Garante que o modal não tenha margens externas */
 
   @media (max-width: 768px) {
-    max-width: 90%; /* Aumenta a largura no mobile */
-    padding: 15px; /* Reduz o padding para melhor ajuste */
+    max-width: 90%;
+    padding: 15px;
   }
 `;
 
@@ -33,13 +34,11 @@ export const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  @media (max-width: 768px) {
-    height: 0px;
-  }
 
   span {
     transform: scale(1.4);
     cursor: pointer;
+    margin-top: 10px;
 
     @media (max-width: 768px) {
       justify-self: flex-start;
@@ -47,4 +46,8 @@ export const ModalHeader = styled.div`
       margin-left: 10px;
     }
   }
+`;
+
+export const ModalBody = styled.div`
+  width: 100%;
 `;

@@ -23,7 +23,7 @@ import { ToggleButton } from "../ToggleButton";
 import { Tweet } from "../../@types";
 import { TweetBox } from "../TweetBox";
 import { showAlert } from "../../store/modules/alert/alertSlice";
-import tweetIcon from "../../assets/icons/post-mobile.svg";
+import tweetIcon from "../../assets/post-mobile.svg";
 import { useCreateTweet } from "../../hooks/useCreateTweet";
 import { useLogout } from "../../hooks/useLogout";
 import { useTheme } from "../../configs/providers/useTheme";
@@ -117,7 +117,7 @@ export function Navbar() {
 
   return (
     <NavbarStyle>
-      <div className="header">
+      <div className="header navbar-item">
         <div
           className="logo"
           onClick={() => (user ? navigate("/home") : navigate("/sign"))}
@@ -131,7 +131,11 @@ export function Navbar() {
       </div>
       {navItems.map(({ icon, iconActive, label, to }) => (
         <Link key={label} to={to}>
-          <div className={location.pathname === to ? "active" : ""}>
+          <div
+            className={`navbar-item ${
+              location.pathname === to ? "active" : ""
+            }`}
+          >
             <div className="icons">
               {getIcon(location.pathname, to, icon, iconActive)}
             </div>

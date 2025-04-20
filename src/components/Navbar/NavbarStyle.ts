@@ -39,19 +39,21 @@ export const NavbarStyle = styled.div`
     display: flex;
     justify-content: center;
     align-items: bottom;
-    gap: 6rem;
+    gap: 5rem;
     margin-bottom: 1rem;
   }
 
   .logo {
     margin-bottom: 10px;
+    margin-left: 1rem;
     width: 3rem;
   }
 
-  div {
+  .navbar-item {
     display: flex;
     align-items: center;
-    margin: 1rem 0;
+    padding: 0;
+    margin: 1rem 0; /* Aplica a margem apenas aos itens da navbar */
     cursor: pointer;
 
     h2 {
@@ -62,7 +64,7 @@ export const NavbarStyle = styled.div`
 
   .post-tweet {
     margin-top: 2rem;
-    max-width: 220px;
+    max-width: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,7 +87,7 @@ export const NavbarStyle = styled.div`
 
   .account-container {
     position: fixed;
-    bottom: 0;
+    bottom: 5px;
     width: 100%;
     max-width: 240px;
     border-radius: 9999px;
@@ -100,7 +102,6 @@ export const NavbarStyle = styled.div`
       align-items: center;
       padding: 10px;
       width: 100%;
-      height: 25px;
       gap: 5px;
       img {
         width: 40px;
@@ -193,16 +194,23 @@ export const NavbarStyle = styled.div`
 
     .header {
       gap: 0.5rem;
-      margin-bottom: 0.2rem;
+      margin-bottom: 2rem;
     }
 
     .logo {
       width: 2rem;
+      margin-left: 0;
+    }
+
+    .navbar-item {
+      height: 60px;
+      width: 60px;
+      border-radius: 50%;
     }
 
     .icons {
       margin: 0;
-      padding: 8px 0;
+      padding: 5px;
       height: 40px;
     }
 
@@ -232,15 +240,8 @@ export const NavbarStyle = styled.div`
     }
 
     .account-container {
-      width: 70px;
-      height: 70px;
-
+      width: 60px;
       .account-button {
-        flex-direction: column;
-        align-items: center;
-        margin: 0;
-        padding: 0;
-
         .account-data,
         .dots-image {
           display: none; /* Esconde os dados da conta */

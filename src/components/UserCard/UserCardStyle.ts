@@ -10,6 +10,9 @@ export const UserCardStyle = styled.div`
   h3 {
     font-weight: bold;
     font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .verified {
     img {
@@ -20,5 +23,17 @@ export const UserCardStyle = styled.div`
   small {
     color: ${({ theme }) => theme.textSecondary};
     line-height: 22px;
+    display: flex;
+    gap: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .username {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px; /* Ajuste conforme necessário */
+    }
   }
 `;

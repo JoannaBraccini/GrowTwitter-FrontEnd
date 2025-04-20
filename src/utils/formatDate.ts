@@ -1,6 +1,6 @@
 export const formatDate = (
   date: string | Date,
-  formatType: "long" | "short" | "relative" = "short"
+  formatType: "long" | "short" | "relative" | "shortRelative" = "short"
 ): string => {
   const dateObj =
     typeof date === "string" && !isNaN(Date.parse(date))
@@ -54,6 +54,27 @@ export const formatDate = (
     }
   };
 
+  // Função para calcular o tempo relativo curto
+  const formatShortRelativeTime = (date: string | Date): string => {
+    const now = new Date();
+    const dateObj = new Date(date);
+    const diffInMs = now.getTime() - dateObj.getTime();
+    const seconds = Math.floor(diffInMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+      return `${days}d`; // Exibe em dias se for maior que 24 horas
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else if (minutes > 0) {
+      return `${minutes}m`;
+    } else {
+      return `${seconds}s`;
+    }
+  };
+
   // Formato dd/mm/yyyy
   const day = String(dateObj.getDate()).padStart(2, "0");
   const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Meses começam de 0
@@ -82,6 +103,8 @@ export const formatDate = (
     return `${monthName} de ${year}`;
   } else if (formatType === "relative") {
     return formatRelativeTime(date); // Chama a função que calcula o tempo relativo
+  } else if (formatType === "shortRelative") {
+    return formatShortRelativeTime(date); // Chama a função para formato curto relativo
   }
 
   return ""; // Caso nenhum tipo de formato seja fornecido

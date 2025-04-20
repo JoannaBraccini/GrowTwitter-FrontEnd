@@ -1,9 +1,10 @@
-import React from "react";
-import { useVerificationIcon } from "../../hooks";
 import { Tweet, UserBase } from "../../@types";
-import { formatDate } from "../../utils";
-import { UserCardStyle } from "./UserCardStyle";
+
 import { Avatar } from "../Avatar";
+import React from "react";
+import { UserCardStyle } from "./UserCardStyle";
+import { formatDate } from "../../utils";
+import { useVerificationIcon } from "../../hooks";
 
 interface UserCardProps {
   user: UserBase;
@@ -25,8 +26,8 @@ export function UserCard({ user, tweet, children, className }: UserCardProps) {
         <img src={icon} alt={label} />
       </span>
       <small>
-        @{user.username} &middot;{" "}
-        {formatDate(tweet.updatedAt ?? tweet.createdAt, "relative")}
+        <span className="username">@{user.username}</span> &middot;{" "}
+        {formatDate(tweet.updatedAt ?? tweet.createdAt, "shortRelative")}
       </small>
       {children}
     </UserCardStyle>

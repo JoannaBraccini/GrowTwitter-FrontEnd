@@ -1,4 +1,4 @@
-import { ModalContent, ModalHeader, ModalStyle } from "./ModalStyle";
+import { ModalBody, ModalContent, ModalHeader, ModalStyle } from "./ModalStyle";
 
 import { CloseIcon } from "../../assets/Icons";
 
@@ -23,7 +23,7 @@ export function Modal({ isOpen, children, onClose }: ModalProps) {
                 <CloseIcon />
               </span>
             </ModalHeader>
-            <div>{children}</div>
+            <ModalBody>{children}</ModalBody>
           </ModalContent>
         </ModalStyle>
       ) : null}

@@ -47,6 +47,7 @@ export const TweetBoxStyle = styled.div`
       margin-left: 15px;
       font-size: 16px;
       overflow: auto;
+      white-space: nowrap;
       &::-webkit-scrollbar {
         width: 8px;
       }
@@ -150,7 +151,7 @@ export const TweetBoxStyle = styled.div`
     gap: 8px;
     width: 100%;
     .tweetbox-tweetButton {
-      margin-top: 15px;
+      margin: 15px 0 2px 0;
       background-color: ${({ theme }) => theme.backgroundColor};
       &:hover {
         background-color: ${({ theme }) => theme.accent};
@@ -165,9 +166,16 @@ export const TweetBoxStyle = styled.div`
       }
     }
 
-    .tweetbox-actions {
-      margin-right: 0; /* Remove margens extras */
-      width: 100%; /* Garante que o botão respeite a largura disponível */
+    .tweetbox-content {
+      textarea {
+        white-space: nowrap;
+        margin-left: 0; /* Remove margem esquerda no mobile */
+      }
+
+      .tweetbox-actions {
+        margin-right: 0; /* Remove margens extras */
+        width: 100%; /* Garante que o botão respeite a largura disponível */
+      }
     }
   }
 
