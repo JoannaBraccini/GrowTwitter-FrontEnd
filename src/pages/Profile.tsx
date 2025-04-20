@@ -11,6 +11,7 @@ import { ProfileStyle } from "../components/Profile/ProfileStyle";
 import { Tabs } from "../components/Tabs";
 import { User } from "../@types";
 import callendar from "../assets/callendar.svg";
+import defaultCover from "/logo_growtweet.svg";
 import { formatDate } from "../utils";
 import { getUserDetails } from "../store/modules/users/usersActions";
 import { setUserDetails } from "../store/modules/users/userDetailsSlice";
@@ -36,9 +37,6 @@ export function Profile() {
   const [activeTab, setActiveTab] = useState<TabOptions>("Posts");
 
   const { icon, label } = useVerificationIcon(user);
-
-  const defaultCover =
-    "https://media.licdn.com/dms/image/v2/D4E16AQHxso5JBwzWaQ/profile-displaybackgroundimage-shrink_350_1400/profile-displaybackgroundimage-shrink_350_1400/0/1732718244624?e=1745452800&v=beta&t=VU2WC0c6lIcYSA_qjf8zz8jdNKNKRtXPSogylskHlqY";
 
   useEffect(() => {
     if (!userLogged || !token) {
@@ -141,9 +139,17 @@ export function Profile() {
         <div className="details">
           <div className="user">
             <h2>{user.name}</h2>
-            <span className="verified">
+            <span
+              className={`verified ${
+                userLogged.id !== user.id || label !== "Obter verificação"
+                  ? "hidden"
+                  : ""
+              }`}
+            >
               <img src={icon} alt={label} />
-              {label === "Obter verificação" && label}
+              {userLogged.id === user.id &&
+                label === "Obter verificação" &&
+                label}
             </span>
           </div>
           <small>@{user.username}</small>

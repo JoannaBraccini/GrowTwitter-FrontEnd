@@ -1,13 +1,14 @@
-import { combineReducers } from "@reduxjs/toolkit";
 import { alertReducer } from "./alert/alertSlice";
-import { signupReducer } from "./auth/signupSlice";
-import { userLoggedReducer } from "./auth/loginSlice";
+import { combineReducers } from "@reduxjs/toolkit";
+import { notificationsReducer } from "./notifications/notificationsSlice";
 import { settingsReduce } from "./settings/settingsSlice";
-import { usersReducer } from "./users/usersSlice";
-import { userDetailsReducer } from "./users/userDetailsSlice";
-import { tweetsReducer } from "./tweets/tweetsSlice";
-import { tweetDetailsReducer } from "./tweets/tweetDetailsSlice";
+import { signupReducer } from "./auth/signupSlice";
 import { trendsReducer } from "./trends/trendsSlice";
+import { tweetDetailsReducer } from "./tweets/tweetDetailsSlice";
+import { tweetsReducer } from "./tweets/tweetsSlice";
+import { userDetailsReducer } from "./users/userDetailsSlice";
+import { userLoggedReducer } from "./auth/loginSlice";
+import { usersReducer } from "./users/usersSlice";
 
 export const rootReducer = combineReducers({
   alert: alertReducer,
@@ -19,4 +20,5 @@ export const rootReducer = combineReducers({
   userDetail: userDetailsReducer,
   tweetDetail: tweetDetailsReducer,
   trends: trendsReducer,
+  notifications: notificationsReducer,
 });

@@ -8,6 +8,7 @@ export const ModalStyle = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: auto; /* Permite rolagem vertical se o conteúdo exceder a altura */
 `;
 
 export const ModalContent = styled.div`
@@ -16,7 +17,9 @@ export const ModalContent = styled.div`
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   max-width: 40%;
-  max-height: 100%;
+  max-height: 90%; /* Permite que o conteúdo ocupe até 90% da altura da tela */
+  overflow-y: auto; /* Adiciona rolagem interna se o conteúdo exceder o limite */
+  flex-grow: 1; /* Permite que o conteúdo cresça dentro do modal */
   display: flex;
   flex-direction: column;
   justify-content: center;

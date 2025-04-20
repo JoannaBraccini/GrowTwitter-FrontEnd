@@ -44,29 +44,31 @@ export const PostStyle = styled.div`
 
     .menu {
       position: absolute;
-      top: 100%;
+      top: 0;
       right: 0;
-      background-color: ${({ theme }) => theme.backgroundColor};
-      border: 1px solid ${({ theme }) => theme.highlight};
-      border-radius: 5px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      width: 150px;
-      display: none; /* Inicialmente invisível */
-      flex-direction: column;
-      padding: 5px 0;
 
-      /* Estilos para os botões */
-      button {
-        padding: 8px 12px;
-        border: none;
-        background: none;
-        text-align: left;
-        cursor: pointer;
-        font-size: 14px;
-        color: ${({ theme }) => theme.textColor};
+      .menu-options {
+        padding: 5px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        background-color: ${({ theme }) => theme.backgroundColor};
+        border-radius: 5px;
+        border: 1px solid ${({ theme }) => theme.highlight};
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 
-        &:hover {
-          background-color: ${({ theme }) => theme.highlight};
+        button {
+          padding: 8px 12px;
+          border: none;
+          background: none;
+          text-align: left;
+          cursor: pointer;
+          font-size: 14px;
+          color: ${({ theme }) => theme.textColor};
+
+          &:hover {
+            background-color: ${({ theme }) => theme.highlight};
+          }
         }
       }
     }
@@ -98,6 +100,11 @@ export const PostStyle = styled.div`
         width: 20px;
         height: 20px;
         margin-bottom: 10px;
+
+        @media (max-width: 768px) {
+          margin-left: 10px;
+          gap: 5px;
+        }
       }
     }
   }

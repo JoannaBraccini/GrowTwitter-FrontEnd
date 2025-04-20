@@ -38,7 +38,7 @@ export const TweetBoxStyle = styled.div`
   .tweetbox-content {
     display: flex;
     align-items: start;
-    padding: 10px;
+    padding: 5px;
     gap: 12px;
     background-color: ${({ theme }) => theme.backgroundColor};
 
@@ -46,8 +46,11 @@ export const TweetBoxStyle = styled.div`
       width: 100%;
       margin-left: 15px;
       font-size: 16px;
-      overflow: auto;
-      white-space: nowrap;
+      min-height: 50px;
+      resize: none; /* Impede o redimensionamento manual */
+      overflow: hidden; /* Oculta barras de rolagem */
+      height: auto; /* Permite ajuste dinâmico */
+
       &::-webkit-scrollbar {
         width: 8px;
       }
@@ -57,6 +60,12 @@ export const TweetBoxStyle = styled.div`
       }
       &::-webkit-scrollbar-track {
         background-color: ${({ theme }) => theme.backgroundColor};
+      }
+
+      &.dynamic-resize {
+        resize: none; /* Impede o redimensionamento manual */
+        overflow: hidden; /* Oculta barras de rolagem */
+        height: auto; /* Permite ajuste dinâmico */
       }
     }
   }
@@ -76,6 +85,15 @@ export const TweetBoxStyle = styled.div`
       width: 100%;
       padding: 10px;
       overflow: auto;
+      resize: none; /* Impede o redimensionamento manual */
+      overflow: hidden; /* Oculta barras de rolagem */
+      height: auto; /* Permite ajuste dinâmico */
+
+      &.dynamic-resize {
+        resize: none; /* Impede o redimensionamento manual */
+        overflow: hidden; /* Oculta barras de rolagem */
+        height: auto; /* Permite ajuste dinâmico */
+      }
     }
   }
 
@@ -100,6 +118,7 @@ export const TweetBoxStyle = styled.div`
   }
 
   .tweetbox-image-preview {
+    position: relative;
     display: flex;
     margin-left: 48px;
     align-items: end;
@@ -151,7 +170,7 @@ export const TweetBoxStyle = styled.div`
     gap: 8px;
     width: 100%;
     .tweetbox-tweetButton {
-      margin: 15px 0 2px 0;
+      margin-top: 15px;
       background-color: ${({ theme }) => theme.backgroundColor};
       &:hover {
         background-color: ${({ theme }) => theme.accent};
@@ -168,14 +187,23 @@ export const TweetBoxStyle = styled.div`
 
     .tweetbox-content {
       textarea {
-        white-space: nowrap;
-        margin-left: 0; /* Remove margem esquerda no mobile */
+        white-space: normal; /* Permite quebra de linha no texto */
+        overflow: hidden; /* Oculta barras de rolagem */
+        resize: none; /* Impede o redimensionamento manual */
+        height: auto; /* Permite ajuste dinâmico */
       }
+    }
 
-      .tweetbox-actions {
-        margin-right: 0; /* Remove margens extras */
-        width: 100%; /* Garante que o botão respeite a largura disponível */
-      }
+    .tweetbox-retweet textarea {
+      white-space: normal; /* Permite quebra de linha no texto */
+      overflow: hidden; /* Oculta barras de rolagem */
+      resize: none; /* Impede o redimensionamento manual */
+      height: auto; /* Permite ajuste dinâmico */
+    }
+
+    .tweetbox-actions {
+      margin-right: 0; /* Remove margens extras */
+      width: 100%; /* Garante que o botão respeite a largura disponível */
     }
   }
 
@@ -197,5 +225,30 @@ export const TweetBoxStyle = styled.div`
     max-height: 90vh;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .remove-image-button {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+    background-color: ${({ theme }) => theme.accent};
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      transform: scale(1.5);
+    }
+
+    &:hover {
+      background-color: ${({ theme }) => theme.accentHover};
+    }
   }
 `;

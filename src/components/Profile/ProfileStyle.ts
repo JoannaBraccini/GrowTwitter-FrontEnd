@@ -55,7 +55,7 @@ export const ProfileStyle = styled.div`
       img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         object-position: right;
       }
     }
@@ -98,10 +98,13 @@ export const ProfileStyle = styled.div`
       display: flex;
       align-items: baseline;
       gap: 10px;
+      flex-wrap: wrap; // Permite quebra de linha para elementos filhos
       h2 {
         font-size: 20px;
         font-weight: bold;
+        white-space: nowrap;
       }
+
       .verified {
         display: flex;
         align-items: center;
@@ -114,6 +117,22 @@ export const ProfileStyle = styled.div`
         color: ${({ theme }) => theme.primary};
         font-weight: bold;
         cursor: pointer;
+        white-space: nowrap;
+
+        @media (max-width: 768px) {
+          font-size: 12px;
+          padding: 0 5px;
+          margin-top: -5px;
+        }
+
+        &.hidden {
+          border: none;
+          cursor: default;
+          padding: 0;
+          img {
+            width: 16px;
+          }
+        }
       }
     }
     small {
@@ -161,6 +180,10 @@ export const ProfileStyle = styled.div`
     .tweets-content {
       border-top: 1px solid ${({ theme }) => theme.highlight};
       padding: 10px 20px;
+
+      @media (max-width: 768px) {
+        padding: 0;
+      }
 
       .tweet {
         .retweet {

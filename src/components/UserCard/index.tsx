@@ -27,7 +27,9 @@ export function UserCard({ user, tweet, children, className }: UserCardProps) {
       </span>
       <small>
         <span className="username">@{user.username}</span> &middot;{" "}
-        {formatDate(tweet.updatedAt ?? tweet.createdAt, "shortRelative")}
+        {window.innerWidth <= 768
+          ? formatDate(tweet.updatedAt ?? tweet.createdAt, "shortRelative")
+          : formatDate(tweet.updatedAt ?? tweet.createdAt, "long")}
       </small>
       {children}
     </UserCardStyle>

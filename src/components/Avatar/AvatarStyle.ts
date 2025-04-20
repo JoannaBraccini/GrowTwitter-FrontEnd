@@ -14,5 +14,6 @@ export const AvatarStyle = styled.div`
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
+    cursor: pointer;
   }
 `;

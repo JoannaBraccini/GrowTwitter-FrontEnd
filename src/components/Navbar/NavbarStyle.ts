@@ -9,8 +9,7 @@ export const NavbarStyle = styled.div`
   height: 100vh;
   padding: 8px;
   background-color: ${({ theme }) => theme.backgroundColor};
-  border-right: 1px solid ${({ theme }) => theme.highlight};
-  z-index: 1000;
+  z-index: 500;
 
   a {
     padding-top: 12px;
@@ -176,9 +175,8 @@ export const NavbarStyle = styled.div`
 
   /* Adicionando estilos para dispositivos móveis */
   @media (max-width: 768px) {
-    flex: 0.1;
     min-width: 80px;
-    margin-left: 0;
+    margin-left: 5px;
 
     a {
       div {

@@ -14,6 +14,7 @@ import {
   retweetTweet,
   updateTweet,
 } from "../../store/modules/tweets/tweetsActions";
+import { useEffect, useRef, useState } from "react";
 
 import { PostStyle } from "./PostStyle";
 import { TweetBox } from "../TweetBox";
@@ -24,7 +25,6 @@ import { useAppDispatch } from "../../store/hooks";
 import { useCreateTweet } from "../../hooks";
 import { useLogout } from "../../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 interface PostProps {
   tweet: Tweet;
@@ -48,6 +48,25 @@ export function Post({
   const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet(closeModal);
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuVisible(false);
+      }
+    };
+
+    if (menuVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuVisible]);
 
   const isLinkUrl = (url: string) => {
     try {
@@ -136,16 +155,19 @@ export function Post({
     <PostStyle>
       <div className="header">
         <UserCard user={tweetUser} tweet={tweet}>
-          <span className="dots" onClick={() => setMenuVisible(true)}>
+          <span
+            className="dots"
+            onClick={() => setMenuVisible((prev) => !prev)}
+          >
             <DotsIcon />
           </span>
         </UserCard>
       </div>
       <div className="tweet-content">
         {menuVisible && tweet.id && (
-          <div className="menu">
+          <div className="menu" ref={menuRef}>
             {isOwnTweet ? (
-              <>
+              <div className="menu-options">
                 <button
                   onClick={() =>
                     openTweetBoxModal(tweet, "edit", (content, imageUrl) => {
@@ -158,7 +180,7 @@ export function Post({
                 <button onClick={() => handleDeleteTweet(tweet)}>
                   Excluir
                 </button>
-              </>
+              </div>
             ) : (
               <button onClick={handleFollow}>
                 {tweetUser.followers.some(
@@ -211,10 +233,16 @@ export function Post({
               })
             }
           >
-            <RetweetIcon /> {tweet.retweetCount}
+            <RetweetIcon />
+            {tweet.retweetCount && (
+              <span className="counter">{tweet.retweetCount}</span>
+            )}
           </span>
           <span title="Curtir" onClick={handleLike}>
-            <LikeIcon /> {tweet.likeCount}
+            <LikeIcon />
+            {tweet.likeCount && (
+              <span className="counter">{tweet.likeCount}</span>
+            )}
           </span>
           <span title="Ver" onClick={() => navigate(`/tweet/${tweet.id}`)}>
             <StatisticIcon />

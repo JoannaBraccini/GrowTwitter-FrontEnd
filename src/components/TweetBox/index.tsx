@@ -1,11 +1,13 @@
-import { Button } from "../Button";
-import { TweetBoxStyle } from "./TweetBoxStyle";
-import linkPhoto from "../../assets/link-photo.svg";
-import { useState } from "react";
-import { useAppSelector } from "../../store/hooks";
 import { Tweet, UserBase } from "../../@types";
-import { UserCard } from "../UserCard";
+import { useEffect, useRef, useState } from "react";
+
 import { Avatar } from "../Avatar";
+import { Button } from "../Button";
+import { CloseIcon } from "../../assets/Icons";
+import { TweetBoxStyle } from "./TweetBoxStyle";
+import { UserCard } from "../UserCard";
+import linkPhoto from "../../assets/link-photo.svg";
+import { useAppSelector } from "../../store/hooks";
 import { useProfileNavigation } from "../../hooks";
 
 export interface TweetBoxProps {
@@ -18,6 +20,8 @@ export interface TweetBoxProps {
     parentId?: string,
     comment?: string
   ) => void;
+  initialContent?: string;
+  initialImageUrl?: string;
 }
 
 export function TweetBox({
@@ -25,13 +29,27 @@ export function TweetBox({
   tweet,
   mode,
   onTweetSubmit,
+  initialContent = "",
+  initialImageUrl = "",
 }: TweetBoxProps) {
-  const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [content, setContent] = useState<string>(initialContent);
+  const [imageUrl, setImageUrl] = useState<string>(initialImageUrl);
   const [comment, setComment] = useState<string | undefined>("");
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.userLogged);
   const { handleProfileClick } = useProfileNavigation();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (mode === "edit") {
+      setContent(tweet.content || ""); // Preenche o conteúdo do tweet
+      setImageUrl(tweet.imageUrl || ""); // Preenche a URL da imagem do tweet
+    }
+    if (textareaRef.current && mode !== "create") {
+      textareaRef.current.style.height = "auto"; // Reseta a altura
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Ajusta para o conteúdo inicial
+    }
+  }, [mode, tweet.content, tweet.imageUrl]); // Recalcula quando o modo ou o conteúdo mudar
 
   const openImageModal = (imageSrc: string) => {
     setExpandedImage(imageSrc);
@@ -41,12 +59,27 @@ export function TweetBox({
     setExpandedImage(null);
   };
 
+  const handleInput = (
+    e: React.FormEvent<HTMLTextAreaElement>,
+    dynamicResize: boolean
+  ) => {
+    if (dynamicResize) {
+      const textarea = e.currentTarget;
+      textarea.style.height = "auto"; // Reseta a altura
+      textarea.style.height = `${textarea.scrollHeight}px`; // Ajusta para o conteúdo
+    }
+  };
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     onTweetSubmit(content, imageUrl, tweet.parentId, comment);
     setContent("");
     setImageUrl("");
     setComment("");
+  };
+
+  const handleRemoveImage = () => {
+    setImageUrl(""); // Remove a imagem ao limpar o estado
   };
 
   return (
@@ -71,14 +104,35 @@ export function TweetBox({
           <div className="tweetbox-content">
             <Avatar user={user} />
             <textarea
+              ref={textareaRef}
               placeholder={
                 mode === "reply"
                   ? "Postar sua resposta"
                   : "O que está acontencendo?"
               }
-              value={content}
+              value={mode === "edit" ? tweet.content : content}
               onChange={(e) => setContent(e.target.value)}
+              onInput={(e) => handleInput(e, mode !== "create")} // Ajusta dinamicamente apenas se não for "create"
+              className={mode !== "create" ? "dynamic-resize" : ""} // Aplica classe apenas se não for "create"
             />
+          </div>
+        )}
+
+        {imageUrl && (
+          <div className="tweetbox-image-preview">
+            <img src={imageUrl} alt="Preview" />
+            {mode === "edit" && (
+              <Button
+                title="Remover mídia"
+                type="button"
+                className="remove-image-button"
+                onClick={handleRemoveImage}
+              >
+                <span>
+                  <CloseIcon />
+                </span>
+              </Button>
+            )}
           </div>
         )}
 
@@ -90,8 +144,10 @@ export function TweetBox({
                 placeholder="Adicionar um comentário"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
+                onInput={(e) => handleInput(e, true)} // Ajusta dinamicamente
                 maxLength={140}
-                rows={3}
+                rows={2} // Começa com uma linha
+                className="dynamic-resize" // Aplica classe para ajuste dinâmico
               />
             </div>
             <div className="retweet-content">
