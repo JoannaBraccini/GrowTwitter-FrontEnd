@@ -222,7 +222,7 @@ export function Post({
           >
             <CommentIcon />
             {tweet.replyCount && (
-              <span className="counter">{tweet.replyCount}</span>
+              <span className="counter">{tweet.replyCount ?? 0}</span>
             )}
           </span>
           <span
@@ -235,13 +235,13 @@ export function Post({
           >
             <RetweetIcon />
             {tweet.retweetCount && (
-              <span className="counter">{tweet.retweetCount}</span>
+              <span className="counter">{tweet.retweetCount ?? 0}</span>
             )}
           </span>
           <span title="Curtir" onClick={handleLike}>
             <LikeIcon />
             {tweet.likeCount && (
-              <span className="counter">{tweet.likeCount}</span>
+              <span className="counter">{tweet.likeCount ?? 0}</span>
             )}
           </span>
           <span title="Ver" onClick={() => navigate(`/tweet/${tweet.id}`)}>

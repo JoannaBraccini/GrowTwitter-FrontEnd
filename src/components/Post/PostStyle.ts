@@ -88,8 +88,10 @@ export const PostStyle = styled.div`
         width: auto;
       }
       .counter {
-        font-size: 10px;
-        color: ${({ theme }) => theme.textSecondary};
+        display: inline-block;
+        margin-left: 4px;
+        font-size: 0.9rem;
+        color: ${({ theme }) => theme.textColor};
       }
 
       .actions {

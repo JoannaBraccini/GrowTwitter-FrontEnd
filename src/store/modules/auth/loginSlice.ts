@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LoginRequest, LoginResponse, Verified } from "../../../@types";
-import { showAlert } from "../alert/alertSlice";
-import { loginService } from "../../../configs/services/auth.service";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import { ResponseApi } from "../../../configs/services/api.service";
+import { loginService } from "../../../configs/services/auth.service";
+import { showAlert } from "../alert/alertSlice";
 
 export const loginAsyncThunk = createAsyncThunk(
   "auth/login",

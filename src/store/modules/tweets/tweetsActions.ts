@@ -1,11 +1,9 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   CreateTweetRequest,
   RetweetRequest,
   TweetSearchRequest,
   UpdateTweetRequest,
 } from "../../../@types";
-import { RootState } from "../..";
 import {
   deleteTweetService,
   getFeedService,
@@ -16,6 +14,9 @@ import {
   retweetService,
   updateTweetService,
 } from "../../../configs/services/tweet.service";
+
+import { RootState } from "../..";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { showAlert } from "../alert/alertSlice";
 
 // ######################################
@@ -74,7 +75,18 @@ export const retweetTweet = createAsyncThunk(
   "tweets/retweet",
   async ({ tweetId, comment }: RetweetRequest, { dispatch, getState }) => {
     const { userLogged } = getState() as RootState;
+    console.log("Estado do usuário no Redux:", userLogged); // Adicione este log
     const { token } = userLogged;
+
+    if (!tweetId) {
+      dispatch(
+        showAlert({
+          message: "Tweet ID is required",
+          type: "error",
+        })
+      );
+      throw new Error("Tweet ID is required");
+    }
 
     const response = await retweetService({ tweetId, comment }, token);
 

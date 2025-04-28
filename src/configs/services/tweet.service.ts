@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import {
-  Tweet,
   CreateTweetRequest,
-  UpdateTweetRequest,
-  TweetSearchRequest,
   Like,
-  RetweetRequest,
   Retweet,
+  RetweetRequest,
+  Tweet,
+  TweetSearchRequest,
+  UpdateTweetRequest,
 } from "../../@types/tweet.type";
-import { api, ResponseApi } from "./api.service";
+import { ResponseApi, api } from "./api.service";
 
 export async function postTweetService(
   token: string,
@@ -36,9 +37,11 @@ export async function postTweetService(
 
 export async function likeTweetService(id: string, token: string) {
   try {
+    const headers = { Authorization: `Bearer ${token}` };
     const response = await api.post<ResponseApi<Like>>(`/tweets/like/${id}`, {
-      headers: { Authorization: token },
+      headers,
     });
+    console.log("Token enviado:", token); // Adicione este log para verificar o token
     return {
       ok: response.data.ok,
       message: response.data.message,
@@ -57,6 +60,7 @@ export async function retweetService(
   token: string
 ) {
   try {
+    console.log("Token enviado para o serviço:", token); // Adicione este log
     const headers = { Authorization: `Bearer ${token}` };
     const response = await api.post<ResponseApi<Retweet>>(
       `/tweets/retweet/${tweetId}`,
@@ -70,8 +74,8 @@ export async function retweetService(
     };
   } catch (error: any) {
     return {
-      ok: error.response.data.ok,
-      message: error.response.data.message,
+      ok: error.response?.data?.ok || false,
+      message: error.response?.data?.message || "An unexpected error occurred",
     };
   }
 }

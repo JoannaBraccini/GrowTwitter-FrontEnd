@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Like, Retweet, Tweet } from "../../../@types";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   createTweet,
   deleteTweet,
@@ -9,14 +9,15 @@ import {
   retweetTweet,
   updateTweet,
 } from "./tweetsActions";
+
 import { ResponseApi } from "../../../configs/services/api.service";
 
 interface InitialState {
   ok: boolean;
   message: string;
   loading: boolean;
-  tweets: Tweet[];
-  feed: Tweet[];
+  tweets: Tweet[]; // Para a aba "Para Você"
+  feed: Tweet[]; // Para a aba "Seguindo"
 }
 
 const initialState: InitialState = {
@@ -133,7 +134,7 @@ const tweetsSlice = createSlice({
           state.message = action.payload.message;
 
           if (state.ok && action.payload.data) {
-            state.tweets = action.payload.data;
+            state.tweets = action.payload.data; // Atualiza tweets para "Para Você"
           }
         }
       )
@@ -155,7 +156,7 @@ const tweetsSlice = createSlice({
           state.message = action.payload.message;
 
           if (state.ok && action.payload.data) {
-            state.feed = action.payload.data;
+            state.feed = action.payload.data; // Atualiza feed para "Seguindo"
           }
         }
       )

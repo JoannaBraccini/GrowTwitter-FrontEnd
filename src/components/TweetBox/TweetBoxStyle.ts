@@ -103,7 +103,7 @@ export const TweetBoxStyle = styled.div`
     margin-left: 48px;
     gap: 12px;
     padding: 10px;
-    width: fit-content;
+    width: 100%;
     max-width: 452px;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
