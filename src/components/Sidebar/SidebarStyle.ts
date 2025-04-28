@@ -88,8 +88,12 @@ export const SidebarStyle = styled.aside`
     }
   }
 
-  /* Adicionando estilos para dispositivos móveis */
-  @media (max-width: 768px) {
+  /* Adicionando estilos para dispositivos menores */
+  @media (max-width: 1080px) {
+    width: 15vw;
+  }
+
+  @media (max-width: 920px) {
     display: none; /* Esconde a sidebar em telas menores */
   }
 `;

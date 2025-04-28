@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import {
   LoginRequest,
   LoginResponse,
   SignupRequest,
   SignupResponse,
 } from "../../@types/auth.type";
-import { api, ResponseApi } from "./api.service";
+import { ResponseApi, api } from "./api.service";
 
 export async function signupService(user: SignupRequest) {
   try {
@@ -20,9 +21,10 @@ export async function signupService(user: SignupRequest) {
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao criar conta",
     };
   }
 }
@@ -38,9 +40,10 @@ export async function loginService(user: Omit<LoginRequest, "remember">) {
     };
     // }
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao fazer login",
     };
   }
 }

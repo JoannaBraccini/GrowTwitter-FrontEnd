@@ -151,6 +151,10 @@ export function Post({
     setMenuVisible(false);
   };
 
+  function handleTweetClick(id: string, username: string): void {
+    navigate(`/${username}/status/${id}`);
+  }
+
   return (
     <PostStyle>
       <div className="header">
@@ -163,7 +167,10 @@ export function Post({
           </span>
         </UserCard>
       </div>
-      <div className="tweet-content">
+      <div
+        className="tweet-content"
+        onClick={() => handleTweetClick(tweet.id, tweetUser.username)}
+      >
         {menuVisible && tweet.id && (
           <div className="menu" ref={menuRef}>
             {isOwnTweet ? (

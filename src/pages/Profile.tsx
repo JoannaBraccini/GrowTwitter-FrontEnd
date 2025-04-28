@@ -81,8 +81,6 @@ export function Profile() {
         const retweets = tweets.filter(
           (tweets) => tweets.parentId && tweets.tweetType !== "REPLY"
         );
-        console.log(retweets);
-
         return user.tweets;
       }
       case "Respostas":

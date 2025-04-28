@@ -1,17 +1,18 @@
-import { DefaultLayout } from "../configs/layouts/DefaultLayout";
-import { TweetBox } from "../components/TweetBox";
-import { FeedStyle } from "../components/Feed/FeedStyle";
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getTweets } from "../store/modules/tweets/tweetsActions";
 import { getUserDetails, getUsers } from "../store/modules/users/usersActions";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useEffect, useState } from "react";
+
+import { DefaultLayout } from "../configs/layouts/DefaultLayout";
+import { FeedStyle } from "../components/Feed/FeedStyle";
 import { Modal } from "../components/Modal";
-import { useCreateTweet } from "../hooks/useCreateTweet";
 import { Post } from "../components/Post";
 import { Tabs } from "../components/Tabs";
-import { useNavigate } from "react-router-dom";
-import { useModal } from "../hooks";
 import { Tweet } from "../@types";
+import { TweetBox } from "../components/TweetBox";
+import { getTweets } from "../store/modules/tweets/tweetsActions";
+import { useCreateTweet } from "../hooks/useCreateTweet";
+import { useModal } from "../hooks";
+import { useNavigate } from "react-router-dom";
 
 type TabOptions = "Para você" | "Seguindo";
 export function Feed() {

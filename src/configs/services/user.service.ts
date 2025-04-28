@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { UserUpdate, User, UserSearchRequest, Follow } from "../../@types";
-import { api, ResponseApi } from "./api.service";
+import { Follow, User, UserSearchRequest, UserUpdate } from "../../@types";
+import { ResponseApi, api } from "./api.service";
 
 export async function followUserService(id: string, token: string) {
   try {
@@ -16,9 +16,10 @@ export async function followUserService(id: string, token: string) {
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao seguir usuário",
     };
   }
 }
@@ -45,9 +46,10 @@ export async function getUsersService(
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao buscar usuários",
     };
   }
 }
@@ -64,9 +66,10 @@ export async function getUserDetailsService(id: string, token: string) {
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao buscar detalhes do usuário",
     };
   }
 }
@@ -88,9 +91,10 @@ export async function updateUserService(
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao atualizar usuário",
     };
   }
 }
@@ -107,9 +111,10 @@ export async function deleteUserService(token: string, id: string) {
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao deletar conta",
     };
   }
 }

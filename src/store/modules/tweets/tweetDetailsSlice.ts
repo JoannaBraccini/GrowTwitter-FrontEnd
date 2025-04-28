@@ -72,16 +72,16 @@ const tweetDetailsSlice = createSlice({
   name: "tweetDetails",
   initialState,
   reducers: {
-    setTweetDetails(state, action: PayloadAction<Tweet>) {
-      return {
-        ...state,
-        ...action.payload,
-      };
-    },
-    // Reset
-    resetTweetDetails() {
-      return initialState;
-    },
+    // setTweetDetails(state, action: PayloadAction<Tweet>) {
+    //   return {
+    //     ...state,
+    //     ...action.payload,
+    //   };
+    // },
+    // // Reset
+    // resetTweetDetails() {
+    //   return initialState;
+    // },
   },
   extraReducers(builder) {
     builder
@@ -110,10 +110,10 @@ const tweetDetailsSlice = createSlice({
       .addCase(getTweetDetails.rejected, (state, action) => {
         state.loading = false;
         state.ok = false;
-        state.message = action.error.message || "Erro ao buscar dados do Tweet";
+        state.message = action.error.message || "Erro";
       });
   },
 });
 
-export const { resetTweetDetails, setTweetDetails } = tweetDetailsSlice.actions;
+// export const { resetTweetDetails, setTweetDetails } = tweetDetailsSlice.actions;
 export const tweetDetailsReducer = tweetDetailsSlice.reducer;

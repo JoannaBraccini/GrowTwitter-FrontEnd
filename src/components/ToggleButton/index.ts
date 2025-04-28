@@ -11,7 +11,7 @@ export const ToggleButton = styled.div.withConfig({
     width: 32px;
     height: 32px;
     background: #e4e4e4 ${({ theme }) => theme.toggle} no-repeat center;
-    border: 0;
+    border: 1px outset ${({ theme }) => theme.accent};
     border-radius: 50%;
     cursor: pointer;
 
@@ -29,7 +29,7 @@ export const ToggleButton = styled.div.withConfig({
         : `transform: translateX(0) translateY(-50%);`} /* Posição inicial */
 
     &:hover {
-      outline: 2px solid ${({ theme }) => theme.accent};
+      outline: 1px solid ${({ theme }) => theme.accent};
     }
   }
 
@@ -48,11 +48,11 @@ export const ToggleButton = styled.div.withConfig({
     width: 48px; /* Reduz a largura do contêiner */
 
     button {
-      width: 24px; /* Reduz o tamanho do botão */
-      height: 24px;
+      width: 30px; /* Reduz o tamanho do botão */
+      height: 30px;
       ${({ isActive }) =>
         isActive
-          ? `transform: translateX(24px) translateY(-50%);` /* Ajusta a posição para o tamanho reduzido */
+          ? `transform: translateX(18px) translateY(-50%);` /* Ajusta a posição para o tamanho reduzido */
           : `transform: translateX(0) translateY(-50%);`}
     }
 

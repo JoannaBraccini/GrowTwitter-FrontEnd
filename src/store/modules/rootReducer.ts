@@ -12,9 +12,9 @@ import { usersReducer } from "./users/usersSlice";
 
 export const rootReducer = combineReducers({
   alert: alertReducer,
-  settings: settingsReduce,
-  userSignup: signupReducer,
   userLogged: userLoggedReducer,
+  userSignup: signupReducer,
+  settings: settingsReduce,
   usersList: usersReducer,
   tweetsList: tweetsReducer,
   userDetail: userDetailsReducer,

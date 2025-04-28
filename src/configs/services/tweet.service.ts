@@ -28,9 +28,10 @@ export async function postTweetService(
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao criar tweet",
     };
   }
 }
@@ -38,19 +39,21 @@ export async function postTweetService(
 export async function likeTweetService(id: string, token: string) {
   try {
     const headers = { Authorization: `Bearer ${token}` };
-    const response = await api.post<ResponseApi<Like>>(`/tweets/like/${id}`, {
-      headers,
-    });
-    console.log("Token enviado:", token); // Adicione este log para verificar o token
+    const response = await api.post<ResponseApi<Like>>(
+      `/tweets/like/${id}`,
+      {}, // Corpo vazio, exigência do axios
+      { headers }
+    );
     return {
       ok: response.data.ok,
       message: response.data.message,
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao curtir tweet",
     };
   }
 }
@@ -60,7 +63,6 @@ export async function retweetService(
   token: string
 ) {
   try {
-    console.log("Token enviado para o serviço:", token); // Adicione este log
     const headers = { Authorization: `Bearer ${token}` };
     const response = await api.post<ResponseApi<Retweet>>(
       `/tweets/retweet/${tweetId}`,
@@ -73,9 +75,10 @@ export async function retweetService(
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response?.data?.ok || false,
-      message: error.response?.data?.message || "An unexpected error occurred",
+      message: "Erro ao retweetar",
     };
   }
 }
@@ -96,9 +99,10 @@ export async function getTweetsService(
     });
     const tweetsData = response.data.data;
     if (!tweetsData) {
+      console.log("Sem dados de tweets na resposta:", response.data);
       return {
         ok: response.data.ok,
-        message: response.data.message,
+        message: "Nenhum tweet encontrado",
         data: [],
       };
     }
@@ -109,9 +113,10 @@ export async function getTweetsService(
       data: tweetsData,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao buscar dados do tweet",
     };
   }
 }
@@ -131,9 +136,11 @@ export async function getFeedService(
     });
     const tweetsData = response.data.data;
     if (!tweetsData) {
+      console.log("Sem dados de tweets na resposta do feed:", response.data);
+
       return {
         ok: response.data.ok,
-        message: response.data.message,
+        message: "Sem dados de tweets na resposta do feed",
         data: [],
       };
     }
@@ -144,9 +151,10 @@ export async function getFeedService(
       data: tweetsData,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao buscar dados do feed",
     };
   }
 }
@@ -170,9 +178,11 @@ export async function getTweetDetailsService(data: {
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
+
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao buscar dados do tweet",
     };
   }
 }
@@ -187,7 +197,7 @@ export async function updateTweetService(
       dataBody,
       {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -198,9 +208,10 @@ export async function updateTweetService(
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao atualizar tweet",
     };
   }
 }
@@ -208,7 +219,7 @@ export async function updateTweetService(
 export async function deleteTweetService(token: string, id: string) {
   try {
     const response = await api.delete<ResponseApi<Tweet>>(`/tweets/${id}`, {
-      headers: { Authorization: token },
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     return {
@@ -217,9 +228,10 @@ export async function deleteTweetService(token: string, id: string) {
       data: response.data.data,
     };
   } catch (error: any) {
+    console.log("Error:", error.response.data);
     return {
       ok: error.response.data.ok,
-      message: error.response.data.message,
+      message: "Erro ao deletar tweet",
     };
   }
 }

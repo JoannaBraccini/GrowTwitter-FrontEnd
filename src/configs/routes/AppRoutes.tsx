@@ -14,7 +14,6 @@ const router = createBrowserRouter([
   { path: "/feed", element: <Feed /> },
   { path: "/home", element: <Feed /> },
   { path: "/notifications", element: <Notifications /> },
-  { path: "/tweet/:id", element: <TweetPage /> },
   {
     path: "/explore",
     element: <Explore />,
@@ -25,11 +24,11 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: "/profile/:username", element: <Profile /> },
   {
     path: "/:username",
     element: <Profile />,
   },
+  { path: "/:username/status/:id", element: <TweetPage /> },
   { path: "*", element: <Error /> },
 ]);
 
