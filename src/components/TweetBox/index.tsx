@@ -13,7 +13,7 @@ import { useProfileNavigation } from "../../hooks";
 export interface TweetBoxProps {
   tweetUser: UserBase;
   tweet: Tweet;
-  mode: "create" | "edit" | "reply" | "retweet";
+  mode: "create" | "edit" | "reply" | "reply-box" | "retweet";
   onTweetSubmit: (
     content?: string,
     imageUrl?: string,
@@ -106,7 +106,7 @@ export function TweetBox({
             <textarea
               ref={textareaRef}
               placeholder={
-                mode === "reply"
+                mode === "reply" || mode === "reply-box"
                   ? "Postar sua resposta"
                   : "O que está acontencendo?"
               }
@@ -169,22 +169,24 @@ export function TweetBox({
         )}
 
         <div className="tweetbox-links">
-          {mode !== "retweet" && mode !== "reply" && (
-            <div className="image-link">
-              <img src={linkPhoto} title="Mídia" />
-              <input
-                type="text"
-                placeholder="Adicionar uma URL de imagem"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)} // Atualiza a URL da imagem
-              />
-            </div>
-          )}
+          {mode === "create" ||
+            (mode === "edit" && (
+              <div className="image-link">
+                <img src={linkPhoto} title="Mídia" />
+                <input
+                  type="text"
+                  placeholder="Adicionar uma URL de imagem"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)} // Atualiza a URL da imagem
+                />
+              </div>
+            ))}
           <div className="tweetbox-actions">
             <Button size="small" className="tweetbox-tweetButton" type="submit">
               {mode === "create" && "Postar"}
               {mode === "edit" && "Salvar"}
               {mode === "reply" && "Responder"}
+              {mode === "reply-box" && "Responder"}
               {mode === "retweet" && "Compartilhar"}
             </Button>
           </div>

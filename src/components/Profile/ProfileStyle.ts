@@ -78,6 +78,17 @@ export const ProfileStyle = styled.div`
         object-position: center;
       }
     }
+    @media (max-width: 768px) {
+      .cover {
+        height: 130px;
+      }
+      .avatar {
+        top: 68%;
+        width: 100px;
+        height: 100px;
+        margin-left: 10px;
+      }
+    }
     button {
       position: absolute;
       right: 0;

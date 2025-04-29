@@ -10,21 +10,16 @@ export interface Tweet {
   createdAt: string;
   updatedAt?: string;
 
-  likeCount?: number;
-  replyCount?: number;
-  retweetCount?: number;
-
   likes: Like[];
   retweets: Retweet[];
   replies: Tweet[];
 }
 
-export type Like = Pick<Tweet, "id" | "userId" | "createdAt" | "likeCount"> & {
+export type Like = Pick<Tweet, "id" | "userId" | "createdAt"> & {
   tweetId: string;
 };
 
-export type Retweet = Omit<Like, "likeCount"> & {
-  retweetCount?: number;
+export type Retweet = Like & {
   comment?: string;
 };
 

@@ -56,19 +56,18 @@ export const PostStyle = styled.div`
         border-radius: 5px;
         border: 1px solid ${({ theme }) => theme.highlight};
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      button {
+        padding: 8px 12px;
+        border: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+        font-size: 14px;
+        color: ${({ theme }) => theme.textColor};
 
-        button {
-          padding: 8px 12px;
-          border: none;
-          background: none;
-          text-align: left;
-          cursor: pointer;
-          font-size: 14px;
-          color: ${({ theme }) => theme.textColor};
-
-          &:hover {
-            background-color: ${({ theme }) => theme.highlight};
-          }
+        &:hover {
+          background-color: ${({ theme }) => theme.highlight};
         }
       }
     }
@@ -81,17 +80,33 @@ export const PostStyle = styled.div`
       justify-content: space-between;
       align-items: center;
       gap: 15px;
-      cursor: pointer;
 
       span {
+        color: #626161;
         height: 20px;
         width: auto;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px; /* Espaço entre o ícone e o contador */
+
+        &:hover {
+          color: rgb(83, 200, 255); /* Cor padrão no hover */
+        }
+
+        &.green:hover {
+          color: rgb(0, 255, 0); /* Cor verde no hover */
+        }
+
+        &.red:hover {
+          color: rgb(255, 0, 0); /* Cor vermelha no hover */
+        }
       }
+
       .counter {
-        display: inline-block;
-        margin-left: 4px;
-        font-size: 0.9rem;
-        color: ${({ theme }) => theme.textColor};
+        font-size: 0.8rem;
+        color: inherit; /* Herda a cor do pai no hover */
+        margin-top: 5px;
       }
 
       .actions {

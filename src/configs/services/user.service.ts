@@ -8,8 +8,11 @@ export async function followUserService(id: string, token: string) {
     const headers = { Authorization: `Bearer ${token}` };
     const response = await api.post<ResponseApi<Follow>>(
       `/users/follow/${id}`,
+      {},
       { headers }
     );
+    console.log("Response:", response.data);
+
     return {
       ok: response.data.ok,
       message: response.data.message,

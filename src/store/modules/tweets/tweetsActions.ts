@@ -75,7 +75,6 @@ export const retweetTweet = createAsyncThunk(
   "tweets/retweet",
   async ({ tweetId, comment }: RetweetRequest, { dispatch, getState }) => {
     const { userLogged } = getState() as RootState;
-    console.log("Estado do usuário no Redux:", userLogged); // Adicione este log
     const { token } = userLogged;
 
     if (!tweetId) {
@@ -133,7 +132,6 @@ export const getFeed = createAsyncThunk(
   async (query: TweetSearchRequest, { dispatch, getState }) => {
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
-
     const response = await getFeedService(query, token);
 
     if (!response.ok) {
@@ -167,6 +165,17 @@ export const getTweetDetails = createAsyncThunk(
       return response;
     }
     return response;
+  }
+);
+
+// Novo thunk para buscar tweets e feed juntos
+export const fetchTweetsAndFeed = createAsyncThunk(
+  "tweets/fetchTweetsAndFeed",
+  async (_, { dispatch }) => {
+    await Promise.all([
+      dispatch(getFeed({ page: 1, take: 20 })),
+      dispatch(getTweets({ page: 1, take: 20 })),
+    ]);
   }
 );
 

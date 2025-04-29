@@ -189,13 +189,16 @@ export function Post({
                 </button>
               </div>
             ) : (
-              <button onClick={handleFollow}>
-                {tweetUser.followers.some(
-                  (user) => user.followerId === userLogged.id
-                )
-                  ? "Deixar de seguir"
-                  : "Seguir"}
-              </button>
+              <div className="menu-options">
+                <button onClick={handleFollow}>
+                  {Array.isArray(tweetUser.followers) &&
+                  tweetUser.followers.some(
+                    (user) => user.followerId === userLogged.id
+                  )
+                    ? "Deixar de seguir"
+                    : "Seguir"}
+                </button>
+              </div>
             )}
           </div>
         )}
@@ -220,6 +223,7 @@ export function Post({
       <div className="tweet-footer">
         <div className="icons">
           <span
+            className="icon"
             title="Responder"
             onClick={() =>
               openTweetBoxModal(tweet, "reply", (content, imageUrl) => {
@@ -228,11 +232,10 @@ export function Post({
             }
           >
             <CommentIcon />
-            {tweet.replyCount && (
-              <span className="counter">{tweet.replyCount ?? 0}</span>
-            )}
+            <span className="counter">{tweet.replies.length || 0}</span>
           </span>
           <span
+            className="icon green"
             title="Repostar"
             onClick={() =>
               openTweetBoxModal(tweet, "retweet", (comment) => {
@@ -241,25 +244,25 @@ export function Post({
             }
           >
             <RetweetIcon />
-            {tweet.retweetCount && (
-              <span className="counter">{tweet.retweetCount ?? 0}</span>
-            )}
+            <span className="counter">{tweet.retweets.length || 0}</span>
           </span>
-          <span title="Curtir" onClick={handleLike}>
+          <span className="icon red" title="Curtir" onClick={handleLike}>
             <LikeIcon />
-            {tweet.likeCount && (
-              <span className="counter">{tweet.likeCount ?? 0}</span>
-            )}
+            <span className="counter">{tweet.likes.length || 0}</span>
           </span>
-          <span title="Ver" onClick={() => navigate(`/tweet/${tweet.id}`)}>
+          <span
+            className="icon"
+            title="Ver"
+            onClick={() => navigate(`/tweet/${tweet.id}`)}
+          >
             <StatisticIcon />
           </span>
           <div className="actions">
-            <span title="Salvar Tweet">
+            <span className="icon" title="Salvar Tweet">
               {/* dispatch(addSaved(tweet)) */}
               <SaveIcon />
             </span>
-            <span title="Compartilhar">
+            <span className="icon" title="Compartilhar">
               {/* handleExternalShare(tweet)) */}
               <ShareIcon />
             </span>

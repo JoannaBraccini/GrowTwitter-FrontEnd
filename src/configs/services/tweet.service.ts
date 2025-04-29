@@ -144,16 +144,15 @@ export async function getFeedService(
         data: [],
       };
     }
-    // Adiciona username e name dos usuários diretamente na resposta
     return {
       ok: response.data.ok,
       message: response.data.message,
       data: tweetsData,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Erro ao chamar getFeedService:", error.response?.data); // Adicione este log
     return {
-      ok: error.response.data.ok,
+      ok: error.response?.data?.ok || false,
       message: "Erro ao buscar dados do feed",
     };
   }

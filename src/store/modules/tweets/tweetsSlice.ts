@@ -75,7 +75,6 @@ const tweetsSlice = createSlice({
               // Garante uma atualização imutável do tweet
               state.tweets[likedTweetIndex] = {
                 ...state.tweets[likedTweetIndex],
-                likeCount: action.payload.data.likeCount,
               };
             }
           }
@@ -106,7 +105,6 @@ const tweetsSlice = createSlice({
             if (retweetIndex !== -1) {
               state.tweets[retweetIndex] = {
                 ...state.tweets[retweetIndex],
-                retweetCount: action.payload.data.retweetCount,
                 retweets: [
                   ...state.tweets[retweetIndex].retweets,
                   action.payload.data,

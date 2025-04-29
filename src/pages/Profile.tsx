@@ -78,24 +78,28 @@ export function Profile() {
   const getFilteredTweets = () => {
     switch (activeTab) {
       case "Posts": {
-        const retweets = tweets.filter(
+        const userTweets = user.tweets.filter(
+          (tweet) => tweet.tweetType === "TWEET" && !tweet.parentId
+        );
+        const retweets = user.tweets.filter(
           (tweets) => tweets.parentId && tweets.tweetType !== "REPLY"
         );
-        return user.tweets;
+        return [...userTweets, ...retweets];
       }
       case "Respostas":
-        return tweets.filter(
+        return user.tweets.filter(
           (tweet) =>
-            tweet.parentId &&
+            tweet.parentId && // Certifica-se de que é uma reply
             tweet.tweetType === "REPLY" &&
-            tweet.userId === user.id
+            tweet.userId === user.id // Verifica se pertence ao usuário
         );
       case "Mídia":
         return user.tweets.filter((tweet) => tweet.imageUrl) || [];
       case "Curtidas":
         return tweets.filter(
           (tweet) =>
-            tweet.likes && tweet.likes.some((like) => like.userId === user.id)
+            Array.isArray(tweet.likes) &&
+            tweet.likes.some((like) => like.userId === user.id)
         );
       default:
         return [];
@@ -175,7 +179,7 @@ export function Profile() {
             activeTab={activeTab}
             onTabChange={(tab) => setActiveTab(tab as TabOptions)}
             paddingTop="10px"
-          ></Tabs>
+          />
           <div className="tweets-content">
             {filteredTweets.length > 0 ? (
               filteredTweets.map((tweet) => (

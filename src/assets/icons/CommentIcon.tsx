@@ -1,12 +1,12 @@
 export function CommentIcon() {
   return (
     <svg
-      fill="#626161"
+      fill="currentColor"
       width="23"
       height="23"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
-      stroke="#626161"
+      stroke="currentColor"
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g

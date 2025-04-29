@@ -4,15 +4,21 @@ import { DefaultLayout } from "../configs/layouts/DefaultLayout";
 import { Modal } from "../components/Modal";
 import { Post } from "../components/Post";
 import { User } from "../@types";
-import { getTweetDetails } from "../store/modules/tweets/tweetsActions";
-import { showAlert } from "../store/modules/alert/alertSlice";
+import {
+  createTweet,
+  getTweetDetails,
+} from "../store/modules/tweets/tweetsActions";
 import { useEffect } from "react";
 import { useModal } from "../hooks";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { TweetBox } from "../components/TweetBox";
+import { TweetPageStyle } from "../components/TweetPage";
+import { BackIcon } from "../assets/Icons";
 
 export const TweetPage = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { tweet } = useAppSelector((state) => state.tweetDetail);
   const { users } = useAppSelector((state) => state.usersList);
   const { user } = useAppSelector((state) => state.userLogged);
@@ -24,45 +30,71 @@ export const TweetPage = () => {
     }
   }, [dispatch, id]);
 
-  const tweetUser = users.find((user) => user.id === tweet.userId);
+  const tweetUser =
+    users.find((user) => user.id === tweet.userId) || ({} as User);
 
-  useEffect(() => {
-    if (!tweetUser) {
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  const handleReply = (content: string) => {
+    if (content.trim() !== "") {
       dispatch(
-        showAlert({ message: "Erro ao buscar dados do tweet", type: "error" })
+        createTweet({
+          content,
+          parentId: tweet.id,
+          tweetType: "REPLY",
+          userId: user.id,
+        })
       );
+      return;
     }
-  }, [tweetUser, dispatch]);
+  };
 
   return (
     <DefaultLayout>
-      <h1 style={{ marginLeft: 50 }}>Post</h1>
-      <Post
-        key={tweet.id}
-        isOwnTweet={tweet.userId === user.id}
-        openModal={openModal}
-        tweet={tweet}
-        tweetUser={tweetUser || ({} as User)}
-        userLogged={user}
-        closeModal={closeModal}
-      />
-      {tweet.replies &&
-        tweet.replies.length > 0 &&
-        tweet.replies.map((reply) => {
-          const replyUser = users.find((user) => user.id === reply.userId);
-          return (
-            <Post
-              key={reply.id}
-              isOwnTweet={reply.userId === user.id}
-              openModal={openModal}
-              tweet={reply}
-              tweetUser={replyUser || ({} as User)}
-              userLogged={user}
-              closeModal={closeModal}
-            />
-          );
-        })}
-
+      <TweetPageStyle>
+        <div className="page-header">
+          <button onClick={handleBack}>
+            <BackIcon />
+          </button>
+          <h2 className="title">Post</h2>
+        </div>
+        <div className="content">
+          <Post
+            key={tweet.id}
+            isOwnTweet={tweet.userId === user.id}
+            openModal={openModal}
+            tweet={tweet}
+            tweetUser={tweetUser || ({} as User)}
+            userLogged={user}
+            closeModal={closeModal}
+          />
+          <TweetBox
+            mode="reply-box"
+            tweet={tweet}
+            tweetUser={tweetUser}
+            initialContent=""
+            onTweetSubmit={(content) => content && handleReply(content)}
+          />
+          {tweet.replies &&
+            tweet.replies.length > 0 &&
+            tweet.replies.map((reply) => {
+              const replyUser = users.find((user) => user.id === reply.userId);
+              return (
+                <Post
+                  key={reply.id}
+                  isOwnTweet={reply.userId === user.id}
+                  openModal={openModal}
+                  tweet={reply}
+                  tweetUser={replyUser || ({} as User)}
+                  userLogged={user}
+                  closeModal={closeModal}
+                />
+              );
+            })}
+        </div>
+      </TweetPageStyle>
       <Modal isOpen={modalOpen} onClose={closeModal}>
         {modalContent}
       </Modal>

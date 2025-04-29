@@ -9,10 +9,11 @@ import { Post } from "../components/Post";
 import { Tabs } from "../components/Tabs";
 import { Tweet } from "../@types";
 import { TweetBox } from "../components/TweetBox";
-import { getTweets } from "../store/modules/tweets/tweetsActions";
+import { showAlert } from "../store/modules/alert/alertSlice";
 import { useCreateTweet } from "../hooks/useCreateTweet";
 import { useModal } from "../hooks";
 import { useNavigate } from "react-router-dom";
+import { fetchTweetsAndFeed } from "../store/modules/tweets/tweetsActions";
 
 type TabOptions = "Para você" | "Seguindo";
 export function Feed() {
@@ -23,6 +24,7 @@ export function Feed() {
   );
   const { user } = useAppSelector((state) => state.userDetail);
   const { tweets } = useAppSelector((state) => state.tweetsList);
+  const { feed } = useAppSelector((state) => state.tweetsList);
   const { users } = useAppSelector((state) => state.usersList);
   const { modalOpen, modalContent, openModal, closeModal } = useModal();
   const [activeTab, setActiveTab] = useState<TabOptions>("Para você");
@@ -30,28 +32,16 @@ export function Feed() {
   // Buscar tweets
   useEffect(() => {
     if (userLogged && token) {
-      if (!user || user.id !== userLogged.id) {
-        dispatch(getUserDetails(userLogged.id));
-      }
-      if (!users) dispatch(getUsers({}));
-      if (!tweets) dispatch(getTweets({ page: 1, take: 20 }));
+      dispatch(getUserDetails(userLogged.id));
+      dispatch(getUsers({}));
+      dispatch(fetchTweetsAndFeed()); // Busca tweets e feed sempre que o componente carregar
     } else {
+      dispatch(
+        showAlert({ message: "Você precisa estar logado", type: "error" })
+      );
       navigate("/sign");
     }
-  }, [dispatch, navigate, token, tweets, user, userLogged, users]);
-
-  // Filtrar tweets dependendo da aba
-  const filteredTweets =
-    activeTab === "Para você"
-      ? tweets.filter((tweet) => tweet.tweetType !== "REPLY")
-      : tweets
-          .filter((tweet) => tweet.tweetType !== "REPLY")
-          .filter((tweet) =>
-            user?.following?.some(
-              (follow) =>
-                follow.id === tweet.userId || tweet.userId === userLogged.id
-            )
-          );
+  }, [dispatch, navigate, token, userLogged]); // Dependências mínimas para garantir a execução no carregamento
 
   return (
     <DefaultLayout>
@@ -71,23 +61,30 @@ export function Feed() {
           onTweetSubmit={useCreateTweet(closeModal).handleCreateTweet}
         />
         <span className="divider" />
-        {filteredTweets?.map((tweet) => {
-          const tweetUser = users.find((user) => user.id === tweet.userId);
-          const isOwnTweet = tweet.userId === userLogged.id;
-          if (!tweetUser) return null; // Se não encontrar o usuário, não renderiza o tweet
+        {(activeTab === "Para você"
+          ? tweets.filter((tweet) => tweet.tweetType !== "REPLY") // Exibe todos os tweets que não são respostas
+          : feed.filter(
+              (tweet) =>
+                tweet.tweetType !== "REPLY" && tweet.userId !== userLogged.id
+            )
+        ) // Exibe tweets do feed que não são respostas
+          .map((tweet) => {
+            const tweetUser = users.find((user) => user.id === tweet.userId);
+            const isOwnTweet = tweet.userId === userLogged.id;
+            if (!tweetUser) return null; // Se não encontrar o usuário, não renderiza o tweet
 
-          return (
-            <Post
-              key={tweet.id}
-              tweetUser={tweetUser}
-              isOwnTweet={isOwnTweet}
-              tweet={tweet}
-              userLogged={userLogged}
-              openModal={openModal}
-              closeModal={closeModal}
-            />
-          );
-        })}
+            return (
+              <Post
+                key={tweet.id}
+                tweetUser={tweetUser}
+                isOwnTweet={isOwnTweet}
+                tweet={tweet}
+                userLogged={userLogged}
+                openModal={openModal}
+                closeModal={closeModal}
+              />
+            );
+          })}
       </FeedStyle>
       <Modal isOpen={modalOpen} onClose={closeModal}>
         {modalContent}
