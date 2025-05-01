@@ -17,17 +17,11 @@ export const loginAsyncThunk = createAsyncThunk(
 
     const response = await loginService(body);
     if (!response.ok) {
+      console.log("Erro no login", response.message);
       dispatch(
         showAlert({
-          message: response.message,
+          message: "Erro no login",
           type: "error",
-        })
-      );
-    } else {
-      dispatch(
-        showAlert({
-          message: response.message,
-          type: "success",
         })
       );
     }

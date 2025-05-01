@@ -248,7 +248,7 @@ export function Sign() {
             Entrar
           </Button>
           <p className="mobile">
-            Não possiu conta? {""}
+            Não possui conta? {""}
             <a type="button" onClick={() => toggle(false)}>
               Cadastre-se
             </a>

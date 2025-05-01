@@ -1,9 +1,5 @@
 import { Follow, Tweet, User } from "../../@types";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  getUserDetails,
-  getUsers,
-} from "../../store/modules/users/usersActions";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useState } from "react";
 
@@ -11,9 +7,7 @@ import { Button } from "../Button";
 import { ExploreIcon } from "../../assets/Icons";
 import { SidebarStyle } from "./SidebarStyle";
 import { Trend } from "../../@types/trends.type";
-import { getTweets } from "../../store/modules/tweets/tweetsActions";
 import { setTrends } from "../../store/modules/trends/trendsSlice";
-import { showAlert } from "../../store/modules/alert/alertSlice";
 import { useVerificationIcon } from "../../hooks";
 
 export function Sidebar() {
@@ -23,47 +17,27 @@ export function Sidebar() {
   const { users } = useAppSelector((state) => state.usersList);
   const { tweets } = useAppSelector((state) => state.tweetsList);
   const { trends } = useAppSelector((state) => state.trends);
+  const { user: userDetails } = useAppSelector((state) => state.userDetail);
   const [follow, setFollow] = useState<User[]>([]);
   const { icon, label } = useVerificationIcon(user);
-  const [userDetails, setUserDetails] = useState<User>();
-
-  // Dispara a ação getUsers e getTweets ao carregar o componente
-  useEffect(() => {
-    dispatch(getUsers({}));
-    dispatch(getTweets({ page: 1, take: 100 }));
-  }, [dispatch]);
 
   useEffect(() => {
-    if (user.id && !userDetails) {
-      // Verifica se o userDetails já foi carregado
-      const fetchUserDetails = async () => {
-        try {
-          const data = await dispatch(getUserDetails(user.id)).unwrap();
-          setUserDetails(data.data);
-        } catch {
-          dispatch(
-            showAlert({
-              message: "Erro ao carregar os detalhes do usuário:",
-              type: "error",
-            })
-          );
-        }
-      };
-      fetchUserDetails();
-    }
-  }, [dispatch, user.id, userDetails]); // Adicionando dependência de user.id
+    // Removido o dispatch de getUsers, pois já é tratado no Navbar
+  }, [dispatch, users.length]);
 
-  // Filtrar os usuários que não estão sendo seguidos
   useEffect(() => {
-    if (userDetails) {
-      const followList = users.filter((userItem) => {
-        return !userDetails.following.some(
+    // Removido o dispatch de getUserDetails, pois já é tratado no Navbar
+    const followList = users.filter((userItem) => {
+      return (
+        userDetails &&
+        Array.isArray(userDetails.following) &&
+        !userDetails.following.some(
           (follow: Follow) => follow.id === userItem.id
-        );
-      });
-      setFollow(followList);
-    }
-  }, [userDetails, users]); // Depende apenas de userDetails e users
+        )
+      );
+    });
+    setFollow(followList);
+  }, [userDetails, users]);
 
   // Calcular tendências com base nos tweets
   useEffect(() => {

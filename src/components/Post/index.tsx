@@ -76,6 +76,7 @@ export function Post({
       return false;
     }
   };
+
   const openTweetBoxModal = (
     tweet: Tweet,
     mode: "create" | "edit" | "reply" | "retweet",
@@ -115,9 +116,13 @@ export function Post({
     }
   };
 
+  const handleReply = (content: string, imageUrl?: string) => {
+    handleCreateTweet(content, imageUrl, tweet.id);
+  };
+
   const handleFollow = () => {
-    if (tweetUser && tweetUser?.id !== userLogged.id) {
-      dispatch(followUser(tweetUser?.id));
+    if (tweetUser) {
+      dispatch(followUser(tweetUser.id));
     }
   };
 
@@ -223,19 +228,29 @@ export function Post({
       <div className="tweet-footer">
         <div className="icons">
           <span
-            className="icon"
+            className={`icon ${
+              Array.isArray(tweet.replies) &&
+              tweet.replies.some((reply) => reply.userId === userLogged.id)
+                ? "replied"
+                : ""
+            }`}
             title="Responder"
             onClick={() =>
               openTweetBoxModal(tweet, "reply", (content, imageUrl) => {
-                handleCreateTweet(content, imageUrl, tweet.id);
+                handleReply(content ?? "", imageUrl);
               })
             }
           >
             <CommentIcon />
-            <span className="counter">{tweet.replies.length || 0}</span>
+            <span className="counter">{tweet.replies.length || null}</span>
           </span>
           <span
-            className="icon green"
+            className={`icon green ${
+              Array.isArray(tweet.retweets) &&
+              tweet.retweets.some((retweet) => retweet.userId === userLogged.id)
+                ? "retweeted"
+                : ""
+            }`}
             title="Repostar"
             onClick={() =>
               openTweetBoxModal(tweet, "retweet", (comment) => {
@@ -244,11 +259,20 @@ export function Post({
             }
           >
             <RetweetIcon />
-            <span className="counter">{tweet.retweets.length || 0}</span>
+            <span className="counter">{tweet.retweets.length || null}</span>
           </span>
-          <span className="icon red" title="Curtir" onClick={handleLike}>
+          <span
+            className={`icon red ${
+              Array.isArray(tweet.likes) &&
+              tweet.likes.some((like) => like.userId === userLogged.id)
+                ? "liked"
+                : ""
+            }`}
+            title="Curtir"
+            onClick={handleLike}
+          >
             <LikeIcon />
-            <span className="counter">{tweet.likes.length || 0}</span>
+            <span className="counter">{tweet.likes.length || null}</span>
           </span>
           <span
             className="icon"
@@ -259,11 +283,9 @@ export function Post({
           </span>
           <div className="actions">
             <span className="icon" title="Salvar Tweet">
-              {/* dispatch(addSaved(tweet)) */}
               <SaveIcon />
             </span>
             <span className="icon" title="Compartilhar">
-              {/* handleExternalShare(tweet)) */}
               <ShareIcon />
             </span>
           </div>

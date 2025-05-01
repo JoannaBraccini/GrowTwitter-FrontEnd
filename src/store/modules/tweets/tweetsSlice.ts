@@ -72,9 +72,18 @@ const tweetsSlice = createSlice({
             );
 
             if (likedTweetIndex !== -1) {
-              // Garante uma atualização imutável do tweet
+              const tweet = state.tweets[likedTweetIndex];
+              const likeExists = tweet.likes.some(
+                (like) => like.id === action.payload.data?.id
+              );
+
               state.tweets[likedTweetIndex] = {
-                ...state.tweets[likedTweetIndex],
+                ...tweet,
+                likes: likeExists
+                  ? tweet.likes.filter(
+                      (like) => like.id !== action.payload.data?.id
+                    ) // Remove o like
+                  : [...tweet.likes, action.payload.data], // Add o like
               };
             }
           }

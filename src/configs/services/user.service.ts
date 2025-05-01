@@ -11,36 +11,29 @@ export async function followUserService(id: string, token: string) {
       {},
       { headers }
     );
-    console.log("Response:", response.data);
-
     return {
       ok: response.data.ok,
       message: response.data.message,
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao seguir usuário",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao seguir usuário",
     };
   }
 }
 
 export async function getUsersService(
   { name, username, email }: UserSearchRequest = {},
-  token?: string
+  token: string
 ) {
   try {
-    //Define o headers para busca pública ou autenticada
     const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
     const response = await api.get<ResponseApi<User[]>>("/users", {
       headers,
-      params: {
-        name,
-        username,
-        email,
-      },
+      params: { name, username, email },
     });
 
     return {
@@ -49,17 +42,17 @@ export async function getUsersService(
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao buscar usuários",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao buscar usuários",
     };
   }
 }
 
 export async function getUserDetailsService(id: string, token: string) {
   try {
-    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+    const headers = { Authorization: `Bearer ${token}` };
     const response = await api.get<ResponseApi<User>>(`/users/${id}`, {
       headers,
     });
@@ -69,10 +62,11 @@ export async function getUserDetailsService(id: string, token: string) {
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao buscar detalhes do usuário",
+      ok: false,
+      message:
+        error.response?.data?.message || "Erro ao buscar detalhes do usuário",
     };
   }
 }
@@ -83,21 +77,18 @@ export async function updateUserService(
 ) {
   try {
     const response = await api.put<ResponseApi<User>>(`/users/${id}`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
-
     return {
       ok: response.data.ok,
       message: response.data.message,
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao atualizar usuário",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao atualizar usuário",
     };
   }
 }
@@ -107,17 +98,16 @@ export async function deleteUserService(token: string, id: string) {
     const response = await api.delete<ResponseApi<User>>(`/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
     return {
       ok: response.data.ok,
       message: response.data.message,
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao deletar conta",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao deletar conta",
     };
   }
 }

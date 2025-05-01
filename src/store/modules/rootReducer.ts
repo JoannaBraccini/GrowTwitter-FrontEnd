@@ -9,6 +9,7 @@ import { tweetsReducer } from "./tweets/tweetsSlice";
 import { userDetailsReducer } from "./users/userDetailsSlice";
 import { userLoggedReducer } from "./auth/loginSlice";
 import { usersReducer } from "./users/usersSlice";
+import { validateTokenReducer } from "./auth/validateTokenSlice";
 
 export const rootReducer = combineReducers({
   alert: alertReducer,
@@ -21,4 +22,5 @@ export const rootReducer = combineReducers({
   tweetDetail: tweetDetailsReducer,
   trends: trendsReducer,
   notifications: notificationsReducer,
+  validateToken: validateTokenReducer,
 });

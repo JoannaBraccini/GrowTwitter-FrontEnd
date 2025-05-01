@@ -17,9 +17,11 @@ export const signupAsyncThunk = createAsyncThunk(
     });
 
     if (!response.ok) {
+      console.log("Erro no registro", response.message);
+
       dispatch(
         showAlert({
-          message: response.message,
+          message: "Erro no registro",
           type: "error",
         })
       );
@@ -27,7 +29,7 @@ export const signupAsyncThunk = createAsyncThunk(
 
     dispatch(
       showAlert({
-        message: response.message,
+        message: "Registro realizado com sucesso",
         type: "success",
       })
     );

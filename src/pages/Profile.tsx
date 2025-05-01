@@ -78,28 +78,34 @@ export function Profile() {
   const getFilteredTweets = () => {
     switch (activeTab) {
       case "Posts": {
-        const userTweets = user.tweets.filter(
-          (tweet) => tweet.tweetType === "TWEET" && !tweet.parentId
-        );
-        const retweets = user.tweets.filter(
-          (tweets) => tweets.parentId && tweets.tweetType !== "REPLY"
-        );
+        const userTweets =
+          user?.tweets?.filter(
+            (tweet) => tweet.tweetType === "TWEET" && !tweet.parentId
+          ) || [];
+        const retweets =
+          user?.tweets?.filter(
+            (tweets) => tweets.parentId && tweets.tweetType !== "REPLY"
+          ) || [];
         return [...userTweets, ...retweets];
       }
       case "Respostas":
-        return user.tweets.filter(
-          (tweet) =>
-            tweet.parentId && // Certifica-se de que é uma reply
-            tweet.tweetType === "REPLY" &&
-            tweet.userId === user.id // Verifica se pertence ao usuário
+        return (
+          user?.tweets?.filter(
+            (tweet) =>
+              tweet.parentId && // Certifica-se de que é uma reply
+              tweet.tweetType === "REPLY" &&
+              tweet.userId === user.id // Verifica se pertence ao usuário
+          ) || []
         );
       case "Mídia":
-        return user.tweets.filter((tweet) => tweet.imageUrl) || [];
+        return user?.tweets?.filter((tweet) => tweet.imageUrl) || [];
       case "Curtidas":
-        return tweets.filter(
-          (tweet) =>
-            Array.isArray(tweet.likes) &&
-            tweet.likes.some((like) => like.userId === user.id)
+        return (
+          tweets.filter(
+            (tweet) =>
+              Array.isArray(tweet.likes) &&
+              tweet.likes.some((like) => like.userId === user?.id)
+          ) || []
         );
       default:
         return [];
@@ -123,8 +129,8 @@ export function Profile() {
             <BackIcon />
           </div>
           <div className="data">
-            <h2>{user.name}</h2>
-            <span>{user?.tweets?.length} posts</span>
+            <h2>{user?.name || "Usuário"}</h2>
+            <span>{user?.tweets?.length || 0} posts</span>
           </div>
         </div>
         <div className="banner">
@@ -132,7 +138,10 @@ export function Profile() {
             <img src={defaultCover} />
           </div>
           <div className="avatar">
-            <img src={user.avatarUrl} alt={user.name} />
+            <img
+              src={user?.avatarUrl || defaultCover}
+              alt={user?.name || "Avatar"}
+            />
           </div>
           <Button ghost size="small" onClick={() => handleEdit}>
             Editar perfil
@@ -140,25 +149,26 @@ export function Profile() {
         </div>
         <div className="details">
           <div className="user">
-            <h2>{user.name}</h2>
+            <h2>{user?.name || "Usuário"}</h2>
             <span
               className={`verified ${
-                userLogged.id !== user.id || label !== "Obter verificação"
+                userLogged?.id !== user?.id || label !== "Obter verificação"
                   ? "hidden"
                   : ""
               }`}
             >
               <img src={icon} alt={label} />
-              {userLogged.id === user.id &&
+              {userLogged?.id === user?.id &&
                 label === "Obter verificação" &&
                 label}
             </span>
           </div>
-          <small>@{user.username}</small>
-          <div className="bio">{user.bio}</div>
+          <small>@{user?.username || "username"}</small>
+          <div className="bio">{user?.bio || "Sem biografia"}</div>
           <span className="callendar">
             <img src={callendar} />
-            Ingressou em {formatDate(user.createdAt, "long")}
+            Ingressou em{" "}
+            {user?.createdAt ? formatDate(user.createdAt, "long") : "N/A"}
           </span>
         </div>
         <div className="follows">

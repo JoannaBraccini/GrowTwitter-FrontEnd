@@ -9,11 +9,11 @@ import { Post } from "../components/Post";
 import { Tabs } from "../components/Tabs";
 import { Tweet } from "../@types";
 import { TweetBox } from "../components/TweetBox";
+import { fetchTweetsAndFeed } from "../store/modules/tweets/tweetsActions";
 import { showAlert } from "../store/modules/alert/alertSlice";
 import { useCreateTweet } from "../hooks/useCreateTweet";
 import { useModal } from "../hooks";
 import { useNavigate } from "react-router-dom";
-import { fetchTweetsAndFeed } from "../store/modules/tweets/tweetsActions";
 
 type TabOptions = "Para você" | "Seguindo";
 export function Feed() {
@@ -31,16 +31,30 @@ export function Feed() {
 
   // Buscar tweets
   useEffect(() => {
-    if (userLogged && token) {
-      dispatch(getUserDetails(userLogged.id));
-      dispatch(getUsers({}));
-      dispatch(fetchTweetsAndFeed()); // Busca tweets e feed sempre que o componente carregar
-    } else {
-      dispatch(
-        showAlert({ message: "Você precisa estar logado", type: "error" })
-      );
-      navigate("/sign");
-    }
+    const fetchTweets = async () => {
+      try {
+        if (userLogged && token) {
+          await Promise.all([
+            dispatch(getUserDetails(userLogged.id)).unwrap(),
+            dispatch(getUsers({})).unwrap(),
+            dispatch(fetchTweetsAndFeed()).unwrap(), // Busca tweets e feed simultaneamente
+          ]);
+        } else {
+          dispatch(
+            showAlert({ message: "Você precisa estar logado", type: "error" })
+          );
+          navigate("/sign");
+        }
+      } catch (error) {
+        console.error("Erro ao buscar tweets:", error);
+      }
+    };
+
+    fetchTweets();
+
+    return () => {
+      // Limpeza de efeitos colaterais, se necessário
+    };
   }, [dispatch, navigate, token, userLogged]); // Dependências mínimas para garantir a execução no carregamento
 
   return (

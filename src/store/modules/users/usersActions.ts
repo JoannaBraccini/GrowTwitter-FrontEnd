@@ -1,4 +1,3 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UserSearchRequest, UserUpdate } from "../../../@types";
 import {
   deleteUserService,
@@ -7,8 +6,20 @@ import {
   getUsersService,
   updateUserService,
 } from "../../../configs/services/user.service";
-import { showAlert } from "../alert/alertSlice";
+
 import { RootState } from "../..";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { showAlert } from "../alert/alertSlice";
+import { validateToken } from "../auth/validateTokenSlice";
+
+// Função utilitária para validar o token
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function validateTokenOrThrow(dispatch: any, token: string) {
+  const isValid = await dispatch(validateToken(token)).unwrap();
+  if (!isValid) {
+    throw new Error("Token inválido ou expirado");
+  }
+}
 
 // ######################################
 // #               POST                 #
@@ -19,16 +30,22 @@ export const followUser = createAsyncThunk(
   async (id: string, { dispatch, getState }) => {
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
+
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await followUserService(id, token);
 
     if (!response.ok) {
+      console.log(response.message);
+
       dispatch(
         showAlert({
-          message: response.message,
+          message: "Erro ao seguir usuário",
           type: "error",
         })
       );
     }
+
     return response;
   }
 );
@@ -39,13 +56,19 @@ export const followUser = createAsyncThunk(
 
 export const getUsers = createAsyncThunk(
   "users/findMany",
-  async (query: UserSearchRequest, { dispatch }) => {
-    const response = await getUsersService({ ...query });
+  async (query: UserSearchRequest, { dispatch, getState }) => {
+    const { userLogged } = getState() as RootState;
+    const { token } = userLogged;
+
+    await validateTokenOrThrow(dispatch, token);
+
+    const response = await getUsersService({ ...query }, token);
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
-          message: response.message,
+          message: "Erro ao buscar usuários",
           type: "error",
         })
       );
@@ -60,24 +83,19 @@ export const getUserDetails = createAsyncThunk(
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await getUserDetailsService(id, token);
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
           type: "error",
-          message: response.message,
+          message: "Erro ao buscar detalhes do usuário",
         })
       );
-      return response;
     }
-
-    // dispatch(
-    //   showAlert({
-    //     type: "success",
-    //     message: response.message,
-    //   })
-    // );
 
     return response;
   }
@@ -93,26 +111,20 @@ export const updateUser = createAsyncThunk(
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await updateUserService(token, { id, ...data });
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
           type: "error",
-          message: response.message,
+          message: "Erro ao atualizar usuário",
         })
       );
       return response;
     }
-
-    dispatch(
-      showAlert({
-        type: "success",
-        message: response.message,
-      })
-    );
-
-    return response;
   }
 );
 
@@ -126,26 +138,19 @@ export const deleteUser = createAsyncThunk(
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await deleteUserService(token, id);
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
           type: "error",
-          message: response.message,
+          message: "Erro ao deletar usuário",
         })
       );
-
       return response;
     }
-
-    dispatch(
-      showAlert({
-        type: "success",
-        message: response.message,
-      })
-    );
-
-    return response;
   }
 );

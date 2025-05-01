@@ -27,12 +27,12 @@ import tweetIcon from "../../assets/post-mobile.svg";
 import { useCreateTweet } from "../../hooks/useCreateTweet";
 import { useLogout } from "../../hooks/useLogout";
 import { useTheme } from "../../configs/providers/useTheme";
+import { validateToken } from "../../store/modules/auth/validateTokenSlice";
 
 export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const alert = useAppSelector((state) => state.alert);
   const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet(() => setIsModalOpen(false));
   const { user, token } = useAppSelector((state) => state.userLogged);
@@ -98,22 +98,33 @@ export function Navbar() {
   }, [isMenuOpen]);
 
   useEffect(() => {
-    if (!user || !token) {
-      dispatch(
-        showAlert({ message: "Faça login para acessar", type: "warning" })
-      );
-      handleLogout();
-    }
-  }, [dispatch, handleLogout, navigate, token, user]);
+    const validateUserToken = async () => {
+      try {
+        const isValid = await dispatch(validateToken(token)).unwrap();
+        if (!isValid) {
+          dispatch(
+            showAlert({
+              message: "Token inválido ou expirado. Faça login novamente.",
+              type: "error",
+            })
+          );
+          handleLogout();
+        }
+      } catch {
+        dispatch(
+          showAlert({
+            message: "Erro ao validar o token. Faça login novamente.",
+            type: "error",
+          })
+        );
+        handleLogout();
+      }
+    };
 
-  useEffect(() => {
-    if (
-      alert.type === "error" &&
-      alert.message === "Unauthorized: Invalid or expired token"
-    ) {
-      handleLogout();
+    if (token) {
+      validateUserToken();
     }
-  }, [alert, handleLogout, navigate]);
+  }, [dispatch, handleLogout, token]);
 
   return (
     <NavbarStyle>

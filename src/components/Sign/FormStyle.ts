@@ -6,7 +6,7 @@ export const FormStyle = styled.form`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 0 50px;
+  padding: 0 32px;
   height: 100%;
   text-align: center;
   @media (max-width: 768px) {
@@ -26,7 +26,7 @@ export const FormStyle = styled.form`
     padding: 12px 15px;
     width: 100%;
     @media (max-width: 768px) {
-      border-radius: 0.5rem;
+      border-radius: 16px;
     }
     &:focus {
       outline: 2px double ${({ theme }) => theme.accent};
@@ -87,5 +87,40 @@ export const FormStyle = styled.form`
     color: #333;
     font-size: 14px;
     text-decoration: none;
+  }
+
+  .mobile {
+    display: none;
+  }
+
+  p {
+    font-family: var(--OpenSans);
+    font-size: 14px;
+    font-weight: 200;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+  }
+
+  h1 {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    span,
+    p.mobile {
+      margin: 10px 0;
+      color: #0077cc; /* Cor melhorada para visibilidade */
+    }
+
+    a {
+      color: #0066af;
+      font-weight: 400;
+    }
+
+    .mobile {
+      display: block;
+    }
   }
 `;

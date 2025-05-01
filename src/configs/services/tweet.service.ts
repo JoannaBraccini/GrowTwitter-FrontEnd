@@ -17,9 +17,7 @@ export async function postTweetService(
 ) {
   try {
     const response = await api.post<ResponseApi<Tweet>>("/tweets", dataBody, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     return {
@@ -28,10 +26,10 @@ export async function postTweetService(
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao criar tweet",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao criar tweet",
     };
   }
 }
@@ -41,19 +39,23 @@ export async function likeTweetService(id: string, token: string) {
     const headers = { Authorization: `Bearer ${token}` };
     const response = await api.post<ResponseApi<Like>>(
       `/tweets/like/${id}`,
-      {}, // Corpo vazio, exigência do axios
+      {},
       { headers }
     );
+
+    console.log("response.data.data", response.data.data);
+
     return {
       ok: response.data.ok,
       message: response.data.message,
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao curtir tweet",
+      ok: false,
+      message:
+        error.response?.data?.message || "Erro ao curtir/descurtir tweet",
     };
   }
 }
@@ -75,10 +77,10 @@ export async function retweetService(
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response?.data?.ok || false,
-      message: "Erro ao retweetar",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao retweetar",
     };
   }
 }
@@ -106,17 +108,16 @@ export async function getTweetsService(
         data: [],
       };
     }
-    // Adiciona username e name dos usuários diretamente na resposta
     return {
       ok: response.data.ok,
       message: response.data.message,
       data: tweetsData,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao buscar dados do tweet",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao buscar dados do tweet",
     };
   }
 }
@@ -150,10 +151,10 @@ export async function getFeedService(
       data: tweetsData,
     };
   } catch (error: any) {
-    console.log("Erro ao chamar getFeedService:", error.response?.data); // Adicione este log
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response?.data?.ok || false,
-      message: "Erro ao buscar dados do feed",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao buscar dados do feed",
     };
   }
 }
@@ -177,11 +178,10 @@ export async function getTweetDetailsService(data: {
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
-
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao buscar dados do tweet",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao buscar dados do tweet",
     };
   }
 }
@@ -207,10 +207,10 @@ export async function updateTweetService(
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao atualizar tweet",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao atualizar tweet",
     };
   }
 }
@@ -227,10 +227,10 @@ export async function deleteTweetService(token: string, id: string) {
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
+    console.log("Error:", error.response?.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao deletar tweet",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao deletar tweet",
     };
   }
 }

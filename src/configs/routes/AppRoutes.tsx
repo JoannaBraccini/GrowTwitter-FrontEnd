@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     element: <Profile />,
   },
   { path: "/:username/status/:id", element: <TweetPage /> },
-  { path: "*", element: <Error /> },
+  { path: "*", element: <Error /> }, // Fallback para rotas inválidas
 ]);
 
 export function AppRoutes() {

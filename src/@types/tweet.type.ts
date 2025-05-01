@@ -15,8 +15,11 @@ export interface Tweet {
   replies: Tweet[];
 }
 
-export type Like = Pick<Tweet, "id" | "userId" | "createdAt"> & {
+export type Like = {
+  id: string;
   tweetId: string;
+  userId: string;
+  createdAt: string;
 };
 
 export type Retweet = Like & {

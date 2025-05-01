@@ -1,5 +1,5 @@
-import { useLoading } from "../../hooks";
 import { LoaderStyle } from "./LoaderStyle";
+import { useLoading } from "../../hooks";
 
 export interface LoaderProps {
   isLoading: boolean;
@@ -9,6 +9,7 @@ export interface LoaderProps {
 export function Loader() {
   const { loading, loaderMessage } = useLoading();
 
+  // Evita renderizações desnecessárias
   if (!loading) return null;
 
   return (

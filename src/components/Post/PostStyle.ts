@@ -103,6 +103,18 @@ export const PostStyle = styled.div`
         }
       }
 
+      span.liked {
+        color: rgb(255, 0, 0); /* Cor vermelha quando curtido */
+      }
+
+      span.retweeted {
+        color: rgb(0, 255, 0); /* Cor verde quando retweetado */
+      }
+
+      span.replied {
+        color: rgb(83, 200, 255); /* Cor azul quando respondido */
+      }
+
       .counter {
         font-size: 0.8rem;
         color: inherit; /* Herda a cor do pai no hover */

@@ -125,20 +125,6 @@ export const SignStyle = styled.div.withConfig({
     display: none;
   }
 
-  p {
-    font-family: var(--OpenSans);
-    font-size: 14px;
-    font-weight: 200;
-    line-height: 20px;
-    letter-spacing: 0.5px;
-    margin: 20px 0 30px;
-  }
-
-  h1 {
-    font-weight: bold;
-    margin: 10px 0;
-  }
-
   @media screen and (max-width: 768px) {
     width: 95vw;
     height: 80vh;
@@ -177,15 +163,6 @@ export const SignStyle = styled.div.withConfig({
       border-radius: 1rem;
       transform: translateX(0%);
       z-index: 999;
-    }
-
-    span {
-      margin: 10px 0;
-    }
-
-    a {
-      color: #0066af;
-      font-weight: 400;
     }
 
     .mobile {

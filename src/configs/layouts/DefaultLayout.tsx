@@ -20,8 +20,8 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
         <div className="content-container">{children}</div>
       </MainContent>
       <Sidebar />
-      <Loader />
       {open && <AlertToast />}
+      <Loader /> {/* Certifique-se de que o Loader está sempre no final */}
     </div>
   );
 }

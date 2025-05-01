@@ -18,6 +18,16 @@ import {
 import { RootState } from "../..";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { showAlert } from "../alert/alertSlice";
+import { validateToken } from "../auth/validateTokenSlice";
+
+// Função utilitária para validar o token
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function validateTokenOrThrow(dispatch: any, token: string) {
+  const isValid = await dispatch(validateToken(token)).unwrap();
+  if (!isValid) {
+    throw new Error("Token inválido ou expirado");
+  }
+}
 
 // ######################################
 // #               POST                 #
@@ -28,25 +38,10 @@ export const createTweet = createAsyncThunk(
   async (data: CreateTweetRequest, { getState, dispatch }) => {
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
-    const response = await postTweetService(token, data);
-    if (!response.ok) {
-      dispatch(
-        showAlert({
-          message: response.message,
-          type: "error",
-        })
-      );
 
-      return response;
-    }
+    await validateTokenOrThrow(dispatch, token);
 
-    dispatch(
-      showAlert({
-        message: response.message,
-        type: "success",
-      })
-    );
-    return response;
+    return await postTweetService(token, data);
   }
 );
 
@@ -56,12 +51,15 @@ export const likeTweet = createAsyncThunk(
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await likeTweetService(id, token);
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
-          message: response.message,
+          message: "Erro ao curtir tweet",
           type: "error",
         })
       );
@@ -77,10 +75,12 @@ export const retweetTweet = createAsyncThunk(
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
+    await validateTokenOrThrow(dispatch, token);
+
     if (!tweetId) {
       dispatch(
         showAlert({
-          message: "Tweet ID is required",
+          message: "Tweet ID é obrigatório",
           type: "error",
         })
       );
@@ -90,9 +90,11 @@ export const retweetTweet = createAsyncThunk(
     const response = await retweetService({ tweetId, comment }, token);
 
     if (!response.ok) {
+      console.log(response.message);
+
       dispatch(
         showAlert({
-          message: response.message,
+          message: "Erro ao retweetar",
           type: "error",
         })
       );
@@ -112,12 +114,15 @@ export const getTweets = createAsyncThunk(
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await getTweetsService(query, token);
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
-          message: response.message,
+          message: "Erro ao buscar tweets",
           type: "error",
         })
       );
@@ -132,12 +137,16 @@ export const getFeed = createAsyncThunk(
   async (query: TweetSearchRequest, { dispatch, getState }) => {
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
+
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await getFeedService(query, token);
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
-          message: response.message,
+          message: "Erro ao buscar feed",
           type: "error",
         })
       );
@@ -153,13 +162,16 @@ export const getTweetDetails = createAsyncThunk(
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await getTweetDetailsService({ id, token });
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
           type: "error",
-          message: response.message,
+          message: "Erro ao buscar detalhes do tweet",
         })
       );
       return response;
@@ -189,26 +201,20 @@ export const updateTweet = createAsyncThunk(
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await updateTweetService(token, { id, ...data });
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
           type: "error",
-          message: response.message,
+          message: "Erro ao atualizar tweet",
         })
       );
       return response;
     }
-
-    dispatch(
-      showAlert({
-        type: "success",
-        message: response.message,
-      })
-    );
-
-    return response;
   }
 );
 
@@ -222,26 +228,20 @@ export const deleteTweet = createAsyncThunk(
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
+    await validateTokenOrThrow(dispatch, token);
+
     const response = await deleteTweetService(token, id);
 
     if (!response.ok) {
+      console.log(response.message);
       dispatch(
         showAlert({
           type: "error",
-          message: response.message,
+          message: "Erro ao deletar tweet",
         })
       );
 
       return response;
     }
-
-    dispatch(
-      showAlert({
-        type: "success",
-        message: response.message,
-      })
-    );
-
-    return response;
   }
 );
