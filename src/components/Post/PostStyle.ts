@@ -137,4 +137,14 @@ export const PostStyle = styled.div`
       }
     }
   }
+
+  .like-button.liked {
+    color: red;
+  }
+
+  .icon.like-button {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Ajuste para garantir espaçamento consistente entre o ícone e o contador */
+  }
 `;

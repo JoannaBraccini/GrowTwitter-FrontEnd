@@ -27,6 +27,9 @@ const initialState: InitialState = {
       following: [],
       tweets: [],
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      likes: [],
+      retweets: [],
     },
   ],
 };
@@ -109,21 +112,23 @@ const usersSlice = createSlice({
       })
       .addCase(
         updateUser.fulfilled,
-        (state, action: PayloadAction<ResponseApi<User>>) => {
+        (state, action: PayloadAction<ResponseApi<User> | undefined>) => {
           state.loading = false;
-          state.ok = action.payload.ok;
-          state.message = action.payload.message;
 
-          if (state.ok && action.payload.data) {
-            const index = state.users.findIndex(
-              (user) => user.id === action.payload.data?.id
-            );
+          if (action.payload) {
+            state.ok = action.payload.ok;
+            state.message = action.payload.message;
+            if (state.ok && action.payload.data) {
+              const index = state.users.findIndex(
+                (user) => user.id === action.payload?.data?.id
+              );
 
-            if (index !== -1) {
-              state.users[index] = {
-                ...state.users[index],
-                ...action.payload.data,
-              };
+              if (index !== -1) {
+                state.users[index] = {
+                  ...state.users[index],
+                  ...action.payload.data,
+                };
+              }
             }
           }
         }
@@ -141,17 +146,19 @@ const usersSlice = createSlice({
       })
       .addCase(
         deleteUser.fulfilled,
-        (state, action: PayloadAction<ResponseApi<User>>) => {
+        (state, action: PayloadAction<ResponseApi<User> | undefined>) => {
           state.loading = false;
-          state.ok = action.payload.ok;
-          state.message = action.payload.message;
+          if (action.payload) {
+            state.ok = action.payload.ok;
+            state.message = action.payload.message;
 
-          if (state.ok && action.payload.data) {
-            const index = state.users.findIndex(
-              (user) => user.id === action.payload.data?.id
-            );
-            if (index !== -1) {
-              state.users.splice(index, 1);
+            if (state.ok && action.payload.data) {
+              const index = state.users.findIndex(
+                (user) => user.id === action.payload?.data?.id
+              );
+              if (index !== -1) {
+                state.users.splice(index, 1);
+              }
             }
           }
         }

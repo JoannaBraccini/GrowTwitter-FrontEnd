@@ -2,6 +2,7 @@ import axios from "axios";
 
 export interface ResponseApi<T> {
   ok: boolean;
+  code?: number;
   message: string;
   data?: T;
 }

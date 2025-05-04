@@ -9,17 +9,9 @@ import {
 
 import { RootState } from "../..";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { handle403 } from "../utils/errorHandlers";
 import { showAlert } from "../alert/alertSlice";
-import { validateToken } from "../auth/validateTokenSlice";
-
-// Função utilitária para validar o token
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function validateTokenOrThrow(dispatch: any, token: string) {
-  const isValid = await dispatch(validateToken(token)).unwrap();
-  if (!isValid) {
-    throw new Error("Token inválido ou expirado");
-  }
-}
+import { validateTokenOrThrow } from "../utils/authUtils";
 
 // ######################################
 // #               POST                 #
@@ -34,8 +26,9 @@ export const followUser = createAsyncThunk(
     await validateTokenOrThrow(dispatch, token);
 
     const response = await followUserService(id, token);
+    const handled = await handle403(response, dispatch);
 
-    if (!response.ok) {
+    if (!response.ok && !handled) {
       console.log(response.message);
 
       dispatch(
@@ -114,8 +107,9 @@ export const updateUser = createAsyncThunk(
     await validateTokenOrThrow(dispatch, token);
 
     const response = await updateUserService(token, { id, ...data });
+    const handled = await handle403(response, dispatch);
 
-    if (!response.ok) {
+    if (!response.ok && !handled) {
       console.log(response.message);
       dispatch(
         showAlert({
@@ -141,8 +135,9 @@ export const deleteUser = createAsyncThunk(
     await validateTokenOrThrow(dispatch, token);
 
     const response = await deleteUserService(token, id);
+    const handled = await handle403(response, dispatch);
 
-    if (!response.ok) {
+    if (!response.ok && !handled) {
       console.log(response.message);
       dispatch(
         showAlert({

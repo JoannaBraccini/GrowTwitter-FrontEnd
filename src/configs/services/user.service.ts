@@ -6,7 +6,7 @@ import { ResponseApi, api } from "./api.service";
 export async function followUserService(id: string, token: string) {
   try {
     const headers = { Authorization: `Bearer ${token}` };
-    const response = await api.post<ResponseApi<Follow>>(
+    const response = await api.patch<ResponseApi<Follow>>(
       `/users/follow/${id}`,
       {},
       { headers }

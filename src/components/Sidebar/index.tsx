@@ -21,12 +21,9 @@ export function Sidebar() {
   const [follow, setFollow] = useState<User[]>([]);
   const { icon, label } = useVerificationIcon(user);
 
-  useEffect(() => {
-    // Removido o dispatch de getUsers, pois já é tratado no Navbar
-  }, [dispatch, users.length]);
+  useEffect(() => {}, [dispatch, users.length]);
 
   useEffect(() => {
-    // Removido o dispatch de getUserDetails, pois já é tratado no Navbar
     const followList = users.filter((userItem) => {
       return (
         userDetails &&

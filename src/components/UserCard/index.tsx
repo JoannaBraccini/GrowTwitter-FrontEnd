@@ -3,7 +3,7 @@ import { Tweet, UserBase } from "../../@types";
 import { Avatar } from "../Avatar";
 import React from "react";
 import { UserCardStyle } from "./UserCardStyle";
-import { formatDate } from "../../utils";
+import { formatDate } from "../../utils/formatDate";
 import { useVerificationIcon } from "../../hooks";
 
 interface UserCardProps {

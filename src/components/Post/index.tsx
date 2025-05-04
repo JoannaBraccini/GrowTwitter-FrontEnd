@@ -14,6 +14,7 @@ import {
   retweetTweet,
   updateTweet,
 } from "../../store/modules/tweets/tweetsActions";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useRef, useState } from "react";
 
 import { PostStyle } from "./PostStyle";
@@ -21,7 +22,6 @@ import { TweetBox } from "../TweetBox";
 import { UserCard } from "../UserCard";
 import { followUser } from "../../store/modules/users/usersActions";
 import { showAlert } from "../../store/modules/alert/alertSlice";
-import { useAppDispatch } from "../../store/hooks";
 import { useCreateTweet } from "../../hooks";
 import { useLogout } from "../../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
@@ -45,6 +45,8 @@ export function Post({
 }: PostProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const tweets = useAppSelector((state) => state.tweetsList.tweets); // Obtém tweets atualizados do Redux
+  const updatedTweet = tweets.find((t) => t.id === tweet.id) || tweet; // Garante que o tweet esteja atualizado
   const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet(closeModal);
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
@@ -108,11 +110,27 @@ export function Post({
 
   const handleRetweet = (tweetId: string, comment: string) => {
     dispatch(retweetTweet({ tweetId, comment }));
+    setMenuVisible(false);
   };
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (!isOwnTweet) {
-      dispatch(likeTweet(tweet.id));
+      const result = await dispatch(likeTweet(tweet.id)).unwrap();
+      if (!result.ok) {
+        dispatch(
+          showAlert({
+            message: result.message,
+            type: "error",
+          })
+        );
+      }
+    } else {
+      dispatch(
+        showAlert({
+          message: "Você não pode curtir seu próprio tweet",
+          type: "warning",
+        })
+      );
     }
   };
 
@@ -151,7 +169,9 @@ export function Post({
 
   const handleDeleteTweet = (tweet: Tweet) => {
     if (isOwnTweet) {
-      dispatch(deleteTweet(tweet.id));
+      if (tweet.tweetType === "REPLY" || tweet.tweetType === "TWEET") {
+        dispatch(deleteTweet(tweet.id));
+      } else dispatch(retweetTweet({ tweetId: tweet.id }));
     } else logoutUnauthorized();
     setMenuVisible(false);
   };
@@ -228,6 +248,7 @@ export function Post({
       <div className="tweet-footer">
         <div className="icons">
           <span
+            key={`reply-${tweet.replies?.length}`} // Força rerenderização ao mudar o contador
             className={`icon ${
               Array.isArray(tweet.replies) &&
               tweet.replies.some((reply) => reply.userId === userLogged.id)
@@ -242,12 +263,15 @@ export function Post({
             }
           >
             <CommentIcon />
-            <span className="counter">{tweet.replies.length || null}</span>
+            <span className="counter">{tweet.replies?.length || null}</span>
           </span>
           <span
+            key={`retweet-${tweet.retweets?.length}`} // Força rerenderização ao mudar o contador
             className={`icon green ${
               Array.isArray(tweet.retweets) &&
-              tweet.retweets.some((retweet) => retweet.userId === userLogged.id)
+              tweet.retweets.some(
+                (retweet) => retweet.user?.username === userLogged.username
+              )
                 ? "retweeted"
                 : ""
             }`}
@@ -259,25 +283,28 @@ export function Post({
             }
           >
             <RetweetIcon />
-            <span className="counter">{tweet.retweets.length || null}</span>
+            <span className="counter">{tweet.retweets?.length || null}</span>
           </span>
           <span
-            className={`icon red ${
-              Array.isArray(tweet.likes) &&
-              tweet.likes.some((like) => like.userId === userLogged.id)
+            key={`like-${updatedTweet.likes?.length}`} // Usa o tweet atualizado
+            className={`icon red like-button ${
+              updatedTweet.likes.some((like) => like.userId === userLogged.id)
                 ? "liked"
                 : ""
             }`}
-            title="Curtir"
             onClick={handleLike}
           >
             <LikeIcon />
-            <span className="counter">{tweet.likes.length || null}</span>
+            <span className="counter">
+              {updatedTweet.likes?.length || null}
+            </span>
           </span>
           <span
             className="icon"
             title="Ver"
-            onClick={() => navigate(`/tweet/${tweet.id}`)}
+            onClick={() =>
+              navigate(`/${tweetUser.username}/status/${tweet.id}`)
+            }
           >
             <StatisticIcon />
           </span>

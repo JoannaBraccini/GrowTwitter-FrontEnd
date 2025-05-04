@@ -12,13 +12,13 @@ import { Tabs } from "../components/Tabs";
 import { User } from "../@types";
 import callendar from "../assets/callendar.svg";
 import defaultCover from "/logo_growtweet.svg";
-import { formatDate } from "../utils";
 import { getUserDetails } from "../store/modules/users/usersActions";
 import { setUserDetails } from "../store/modules/users/userDetailsSlice";
 import { showAlert } from "../store/modules/alert/alertSlice";
 import { useLogout } from "../hooks/useLogout";
 import { useModal } from "../hooks";
 import { useVerificationIcon } from "../hooks/useVerifyIcon";
+import { formatDate } from "../utils/formatDate";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
 
@@ -82,10 +82,9 @@ export function Profile() {
           user?.tweets?.filter(
             (tweet) => tweet.tweetType === "TWEET" && !tweet.parentId
           ) || [];
-        const retweets =
-          user?.tweets?.filter(
-            (tweets) => tweets.parentId && tweets.tweetType !== "REPLY"
-          ) || [];
+        const retweets = tweets.filter(
+          (tweet) => tweet.retweets.length && tweet.userId === userLogged.id
+        );
         return [...userTweets, ...retweets];
       }
       case "Respostas":
@@ -194,7 +193,7 @@ export function Profile() {
             {filteredTweets.length > 0 ? (
               filteredTweets.map((tweet) => (
                 <div className="tweet" key={tweet.id}>
-                  {activeTab === "Posts" && tweet.retweets?.length === 1 && (
+                  {activeTab === "Posts" && tweet.retweets?.length > 0 && (
                     <span className="retweet">
                       <RetweetIcon /> 'Você repostou'
                     </span>

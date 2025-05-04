@@ -28,6 +28,19 @@ const initialState: InitialState = {
   feed: [],
 };
 
+/**
+ * Função para buscar o tweet-pai de um retweet.
+ * @param tweets Lista de tweets disponíveis no estado.
+ * @param retweet Retweet que contém o ID do tweet-pai.
+ * @returns O tweet-pai, se encontrado, ou undefined.
+ */
+export const findParentTweet = (
+  tweets: Tweet[],
+  retweet: Retweet
+): Tweet | undefined => {
+  return tweets.find((tweet) => tweet.id === retweet.tweetId);
+};
+
 const tweetsSlice = createSlice({
   name: "tweets",
   initialState,
@@ -74,16 +87,17 @@ const tweetsSlice = createSlice({
             if (likedTweetIndex !== -1) {
               const tweet = state.tweets[likedTweetIndex];
               const likeExists = tweet.likes.some(
-                (like) => like.id === action.payload.data?.id
+                (like) => like.userId === action.payload.data?.userId
               );
 
+              // Atualiza o estado com base na resposta do backend
               state.tweets[likedTweetIndex] = {
                 ...tweet,
                 likes: likeExists
                   ? tweet.likes.filter(
-                      (like) => like.id !== action.payload.data?.id
+                      (like) => like.userId !== action.payload.data?.userId
                     ) // Remove o like
-                  : [...tweet.likes, action.payload.data], // Add o like
+                  : [...tweet.likes, action.payload.data], // Adiciona o like
               };
             }
           }
@@ -179,22 +193,28 @@ const tweetsSlice = createSlice({
       })
       .addCase(
         updateTweet.fulfilled,
-        (state, action: PayloadAction<ResponseApi<Tweet>>) => {
+        (state, action: PayloadAction<ResponseApi<Tweet> | undefined>) => {
           state.loading = false;
-          state.ok = action.payload.ok;
-          state.message = action.payload.message;
 
-          if (state.ok && action.payload.data) {
-            const index = state.tweets.findIndex(
-              (tweet) => tweet.id === action.payload.data?.id
-            );
+          if (action.payload) {
+            state.ok = action.payload.ok;
+            state.message = action.payload.message;
 
-            if (index !== -1) {
-              state.tweets[index] = {
-                ...state.tweets[index],
-                ...action.payload.data,
-              };
+            if (state.ok && action.payload.data) {
+              const index = state.tweets.findIndex(
+                (tweet) => tweet.id === action.payload?.data?.id
+              );
+
+              if (index !== -1) {
+                state.tweets[index] = {
+                  ...state.tweets[index],
+                  ...action.payload.data,
+                };
+              }
             }
+          } else {
+            state.ok = false;
+            state.message = "Erro ao atualizar conteúdo do Tweet";
           }
         }
       )
@@ -211,19 +231,25 @@ const tweetsSlice = createSlice({
       })
       .addCase(
         deleteTweet.fulfilled,
-        (state, action: PayloadAction<ResponseApi<Tweet>>) => {
+        (state, action: PayloadAction<ResponseApi<Tweet> | undefined>) => {
           state.loading = false;
-          state.ok = action.payload.ok;
-          state.message = action.payload.message;
 
-          if (state.ok && action.payload.data) {
-            const index = state.tweets.findIndex(
-              (tweet) => tweet.id === action.payload.data?.id
-            );
+          if (action.payload) {
+            state.ok = action.payload.ok;
+            state.message = action.payload.message;
 
-            if (index !== -1) {
-              state.tweets.splice(index, 1);
+            if (state.ok && action.payload.data) {
+              const index = state.tweets.findIndex(
+                (tweet) => tweet.id === action.payload?.data?.id
+              );
+
+              if (index !== -1) {
+                state.tweets.splice(index, 1);
+              }
             }
+          } else {
+            state.ok = false;
+            state.message = "Erro ao deletar Tweet";
           }
         }
       )

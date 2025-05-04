@@ -19,6 +19,10 @@ export type Like = {
   id: string;
   tweetId: string;
   userId: string;
+  user: {
+    name: string;
+    username: string;
+  };
   createdAt: string;
 };
 
@@ -36,7 +40,10 @@ export type UpdateTweetRequest = Pick<
   Tweet,
   "id" | "userId" | "content" | "imageUrl"
 >;
-export type RetweetRequest = Pick<Retweet, "tweetId" | "comment">;
+export type RetweetRequest = {
+  tweetId: string;
+  comment?: string;
+};
 
 export interface TweetSearchRequest {
   page?: number;

@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Follow, Tweet, User, Verified } from "../../../@types";
-import { getUserDetails } from "./usersActions";
+import { Follow, Like, Retweet, Tweet, User, Verified } from "../../../@types";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
 import { ResponseApi } from "../../../configs/services/api.service";
+import { getUserDetails } from "./usersActions";
 
 interface InitialState {
   ok: boolean;
@@ -12,13 +13,16 @@ interface InitialState {
     name: string;
     email: string;
     username: string;
-    avatarUrl: string;
-    bio: string;
+    avatarUrl?: string;
+    bio?: string;
     verified: Verified;
     createdAt: string;
+    updatedAt: string;
     followers: Follow[];
     following: Follow[];
     tweets: Tweet[];
+    likes: Like[];
+    retweets: Retweet[];
   };
 }
 
@@ -32,12 +36,15 @@ const initialState: InitialState = {
     email: "",
     username: "",
     avatarUrl: "",
-    verified: "NONE",
     bio: "",
+    verified: "NONE",
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     followers: [],
     following: [],
     tweets: [],
+    likes: [],
+    retweets: [],
   },
 };
 
@@ -71,19 +78,18 @@ const userDetailsSlice = createSlice({
           if (action.payload.ok && action.payload.data) {
             const userData = action.payload.data;
             const createdAt = new Date(userData.createdAt);
+            const updatedAt = new Date(userData.updatedAt);
 
-            // Verifique se a data é válida
-            if (!isNaN(createdAt.getTime())) {
-              state.user = {
-                ...userData,
-                createdAt: createdAt.toISOString(),
-              };
-            } else {
-              state.user = {
-                ...userData,
-                createdAt: new Date().toISOString(), // Usa a data atual se for inválido
-              };
-            }
+            // Verifique se as datas são válidas
+            state.user = {
+              ...userData,
+              createdAt: !isNaN(createdAt.getTime())
+                ? createdAt.toISOString()
+                : new Date().toISOString(),
+              updatedAt: !isNaN(updatedAt.getTime())
+                ? updatedAt.toISOString()
+                : new Date().toISOString(),
+            };
           }
         }
       )
@@ -95,5 +101,6 @@ const userDetailsSlice = createSlice({
       });
   },
 });
+
 export const { resetUserDetails, setUserDetails } = userDetailsSlice.actions;
 export const userDetailsReducer = userDetailsSlice.reducer;

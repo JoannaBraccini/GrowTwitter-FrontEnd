@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface ToastStyleProps {
-  type: "success" | "error" | "warning";
+  type: "success" | "error" | "warning" | "info";
 }
 
 export const ToastStyle = styled.section<ToastStyleProps>`
@@ -9,7 +9,13 @@ export const ToastStyle = styled.section<ToastStyleProps>`
   top: 20px;
   right: 20px;
   background-color: ${({ type }) =>
-    type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#ff9800"};
+    type === "success"
+      ? "#4caf50"
+      : type === "error"
+      ? "#f44336"
+      : type === "warning"
+      ? "#ff9800"
+      : "#2196f3"};
   color: #fff;
   padding: 16px;
   border-radius: 8px;

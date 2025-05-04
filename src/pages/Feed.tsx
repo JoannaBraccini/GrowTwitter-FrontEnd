@@ -37,7 +37,7 @@ export function Feed() {
           await Promise.all([
             dispatch(getUserDetails(userLogged.id)).unwrap(),
             dispatch(getUsers({})).unwrap(),
-            dispatch(fetchTweetsAndFeed()).unwrap(), // Busca tweets e feed simultaneamente
+            dispatch(fetchTweetsAndFeed()).unwrap(),
           ]);
         } else {
           dispatch(
@@ -55,7 +55,7 @@ export function Feed() {
     return () => {
       // Limpeza de efeitos colaterais, se necessário
     };
-  }, [dispatch, navigate, token, userLogged]); // Dependências mínimas para garantir a execução no carregamento
+  }, [dispatch, navigate, token, userLogged]);
 
   return (
     <DefaultLayout>
@@ -84,14 +84,13 @@ export function Feed() {
         ) // Exibe tweets do feed que não são respostas
           .map((tweet) => {
             const tweetUser = users.find((user) => user.id === tweet.userId);
-            const isOwnTweet = tweet.userId === userLogged.id;
             if (!tweetUser) return null; // Se não encontrar o usuário, não renderiza o tweet
 
             return (
               <Post
-                key={tweet.id}
+                key={tweet.id} // Certifique-se de que `tweet.id` é único
                 tweetUser={tweetUser}
-                isOwnTweet={isOwnTweet}
+                isOwnTweet={tweet.userId === userLogged.id}
                 tweet={tweet}
                 userLogged={userLogged}
                 openModal={openModal}

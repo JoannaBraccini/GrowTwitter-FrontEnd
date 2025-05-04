@@ -17,17 +17,9 @@ import {
 
 import { RootState } from "../..";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { handle403 } from "../utils/errorHandlers";
 import { showAlert } from "../alert/alertSlice";
-import { validateToken } from "../auth/validateTokenSlice";
-
-// Função utilitária para validar o token
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function validateTokenOrThrow(dispatch: any, token: string) {
-  const isValid = await dispatch(validateToken(token)).unwrap();
-  if (!isValid) {
-    throw new Error("Token inválido ou expirado");
-  }
-}
+import { validateTokenOrThrow } from "../utils/authUtils";
 
 // ######################################
 // #               POST                 #
@@ -41,7 +33,20 @@ export const createTweet = createAsyncThunk(
 
     await validateTokenOrThrow(dispatch, token);
 
-    return await postTweetService(token, data);
+    const response = await postTweetService(token, data);
+    const handled = await handle403(response, dispatch);
+
+    if (!response.ok && !handled) {
+      console.log(response.message);
+      dispatch(
+        showAlert({
+          message: "Erro ao criar tweet",
+          type: "error",
+        })
+      );
+    }
+
+    return response;
   }
 );
 
@@ -54,8 +59,9 @@ export const likeTweet = createAsyncThunk(
     await validateTokenOrThrow(dispatch, token);
 
     const response = await likeTweetService(id, token);
+    const handled = await handle403(response, dispatch);
 
-    if (!response.ok) {
+    if (!response.ok && !handled) {
       console.log(response.message);
       dispatch(
         showAlert({
@@ -71,27 +77,19 @@ export const likeTweet = createAsyncThunk(
 
 export const retweetTweet = createAsyncThunk(
   "tweets/retweet",
-  async ({ tweetId, comment }: RetweetRequest, { dispatch, getState }) => {
+  async (data: RetweetRequest, { dispatch, getState }) => {
+    const { tweetId, comment } = data;
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
     await validateTokenOrThrow(dispatch, token);
 
-    if (!tweetId) {
-      dispatch(
-        showAlert({
-          message: "Tweet ID é obrigatório",
-          type: "error",
-        })
-      );
-      throw new Error("Tweet ID is required");
-    }
-
     const response = await retweetService({ tweetId, comment }, token);
 
-    if (!response.ok) {
-      console.log(response.message);
+    const handled = await handle403(response, dispatch); // Reutiliza a função exportada
 
+    if (!response.ok && !handled) {
+      console.error(response.message);
       dispatch(
         showAlert({
           message: "Erro ao retweetar",
@@ -205,7 +203,10 @@ export const updateTweet = createAsyncThunk(
 
     const response = await updateTweetService(token, { id, ...data });
 
-    if (!response.ok) {
+    const handled = await handle403(response, dispatch); // Verifica se o erro foi tratado
+
+    if (!response.ok && !handled) {
+      // Continua no if mesmo que o handle403 tenha sido chamado
       console.log(response.message);
       dispatch(
         showAlert({
@@ -213,8 +214,9 @@ export const updateTweet = createAsyncThunk(
           message: "Erro ao atualizar tweet",
         })
       );
-      return response;
     }
+
+    return response;
   }
 );
 
@@ -232,7 +234,9 @@ export const deleteTweet = createAsyncThunk(
 
     const response = await deleteTweetService(token, id);
 
-    if (!response.ok) {
+    const handled = await handle403(response, dispatch);
+
+    if (!response.ok && !handled) {
       console.log(response.message);
       dispatch(
         showAlert({

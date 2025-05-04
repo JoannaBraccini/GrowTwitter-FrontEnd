@@ -42,16 +42,15 @@ const initialState: InitialState = {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
 
-    likeCount: undefined,
-    replyCount: undefined,
-    retweetCount: undefined,
-
     likes: [
       {
         id: "",
         tweetId: "",
         userId: "",
-        likeCount: undefined,
+        user: {
+          name: "",
+          username: "",
+        },
         createdAt: new Date().toISOString(),
       },
     ],
@@ -60,7 +59,10 @@ const initialState: InitialState = {
         id: "",
         tweetId: "",
         userId: "",
-        retweetCount: undefined,
+        user: {
+          name: "",
+          username: "",
+        },
         createdAt: new Date().toISOString(),
       },
     ],
@@ -71,18 +73,7 @@ const initialState: InitialState = {
 const tweetDetailsSlice = createSlice({
   name: "tweetDetails",
   initialState,
-  reducers: {
-    // setTweetDetails(state, action: PayloadAction<Tweet>) {
-    //   return {
-    //     ...state,
-    //     ...action.payload,
-    //   };
-    // },
-    // // Reset
-    // resetTweetDetails() {
-    //   return initialState;
-    // },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(getTweetDetails.pending, (state) => {

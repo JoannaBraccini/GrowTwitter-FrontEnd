@@ -38,7 +38,6 @@ export async function loginService(user: Omit<LoginRequest, "remember">) {
       message: response.data.message,
       data: response.data.data,
     };
-    // }
   } catch (error: any) {
     console.log("Error:", error.response.data);
     return {
