@@ -17,6 +17,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useRef, useState } from "react";
 
+import { Dialog } from "../Dialog";
+import { DialogPopupContent } from "../Dialog/DialogStyle";
 import { PostStyle } from "./PostStyle";
 import { TweetBox } from "../TweetBox";
 import { UserCard } from "../UserCard";
@@ -25,6 +27,7 @@ import { showAlert } from "../../store/modules/alert/alertSlice";
 import { useCreateTweet } from "../../hooks";
 import { useLogout } from "../../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../Button";
 
 interface PostProps {
   tweet: Tweet;
@@ -45,11 +48,14 @@ export function Post({
 }: PostProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const tweets = useAppSelector((state) => state.tweetsList.tweets); // Obtém tweets atualizados do Redux
-  const updatedTweet = tweets.find((t) => t.id === tweet.id) || tweet; // Garante que o tweet esteja atualizado
+  const tweets = useAppSelector((state) => state.tweetsList.tweets);
+  const updatedTweet = tweets.find((t) => t.id === tweet.id) || tweet;
   const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet(closeModal);
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
+  const [retweetPopupVisible, setRetweetPopupVisible] =
+    useState<boolean>(false); // Controla a visibilidade do popup de retweet
+  const [isVisible, setIsVisible] = useState<boolean>(true); // Controla a atualização do componente
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -109,8 +115,23 @@ export function Post({
   };
 
   const handleRetweet = (tweetId: string, comment: string) => {
-    dispatch(retweetTweet({ tweetId, comment }));
-    setMenuVisible(false);
+    dispatch(retweetTweet({ tweetId, comment })).then((response) => {
+      const payload = response.payload as { message: string };
+      if (payload.message === "Retweet removed successfully") {
+        setIsVisible(false); // Oculta o componente se o retweet for removido
+      }
+    });
+    setRetweetPopupVisible(false);
+  };
+
+  const handleDirectRetweet = (tweetId: string) => {
+    dispatch(retweetTweet({ tweetId, comment: "" })).then((response) => {
+      const payload = response.payload as { message: string };
+      if (payload.message === "Retweet removed successfully") {
+        setIsVisible(false); // Oculta o componente se o retweet for removido
+      }
+    });
+    setRetweetPopupVisible(false);
   };
 
   const handleLike = async () => {
@@ -170,15 +191,57 @@ export function Post({
   const handleDeleteTweet = (tweet: Tweet) => {
     if (isOwnTweet) {
       if (tweet.tweetType === "REPLY" || tweet.tweetType === "TWEET") {
-        dispatch(deleteTweet(tweet.id));
-      } else dispatch(retweetTweet({ tweetId: tweet.id }));
-    } else logoutUnauthorized();
+        dispatch(deleteTweet(tweet.id)).then(() => {
+          setIsVisible(false); // Oculta o componente após a exclusão
+        });
+      } else if (tweet.tweetType === "RETWEET") {
+        // Apenas chama o retweet para remover o retweet existente
+        dispatch(retweetTweet({ tweetId: tweet.id, comment: "" })).then(() => {
+          setIsVisible(false); // Oculta o componente após a exclusão do retweet
+        });
+      }
+    } else {
+      logoutUnauthorized();
+    }
     setMenuVisible(false);
   };
 
   function handleTweetClick(id: string, username: string): void {
     navigate(`/${username}/status/${id}`);
   }
+
+  const renderRetweetDialog = () => (
+    <Dialog
+      isOpen={retweetPopupVisible}
+      onClose={() => setRetweetPopupVisible(false)}
+      usePortal={true}
+      showHeader={false}
+    >
+      <DialogPopupContent>
+        <Button
+          onClick={(event) => {
+            event.stopPropagation();
+            handleDirectRetweet(tweet.id);
+          }}
+        >
+          Repostar
+        </Button>
+        <Button
+          onClick={(event) => {
+            event.stopPropagation();
+            openTweetBoxModal(tweet, "retweet", (comment) => {
+              handleRetweet(tweet.id, comment ?? "");
+            });
+            setRetweetPopupVisible(false);
+          }}
+        >
+          Comentar
+        </Button>
+      </DialogPopupContent>
+    </Dialog>
+  );
+
+  if (!isVisible) return null; // Não renderiza o componente se ele não estiver visível
 
   return (
     <PostStyle>
@@ -209,7 +272,12 @@ export function Post({
                 >
                   Editar
                 </button>
-                <button onClick={() => handleDeleteTweet(tweet)}>
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleDeleteTweet(tweet);
+                  }}
+                >
                   Excluir
                 </button>
               </div>
@@ -217,7 +285,7 @@ export function Post({
               <div className="menu-options">
                 <button onClick={handleFollow}>
                   {Array.isArray(tweetUser.followers) &&
-                  tweetUser.followers.some(
+                  tweetUser.followers?.some(
                     (user) => user.followerId === userLogged.id
                   )
                     ? "Deixar de seguir"
@@ -248,10 +316,10 @@ export function Post({
       <div className="tweet-footer">
         <div className="icons">
           <span
-            key={`reply-${tweet.replies?.length}`} // Força rerenderização ao mudar o contador
+            key={`reply-${tweet.id}-${tweet.replies?.length}`} // Adiciona o ID do tweet para garantir unicidade
             className={`icon ${
               Array.isArray(tweet.replies) &&
-              tweet.replies.some((reply) => reply.userId === userLogged.id)
+              tweet.replies?.some((reply) => reply.userId === userLogged.id)
                 ? "replied"
                 : ""
             }`}
@@ -266,29 +334,26 @@ export function Post({
             <span className="counter">{tweet.replies?.length || null}</span>
           </span>
           <span
-            key={`retweet-${tweet.retweets?.length}`} // Força rerenderização ao mudar o contador
+            key={`retweet-${tweet.id}-${tweet.retweets?.length}`} // Adiciona o ID do tweet para garantir unicidade
             className={`icon green ${
               Array.isArray(tweet.retweets) &&
-              tweet.retweets.some(
+              tweet.retweets?.some(
                 (retweet) => retweet.user?.username === userLogged.username
               )
                 ? "retweeted"
                 : ""
             }`}
             title="Repostar"
-            onClick={() =>
-              openTweetBoxModal(tweet, "retweet", (comment) => {
-                handleRetweet(tweet.id, comment ?? "");
-              })
-            }
+            onClick={() => setRetweetPopupVisible(true)}
           >
             <RetweetIcon />
             <span className="counter">{tweet.retweets?.length || null}</span>
           </span>
+          {retweetPopupVisible && renderRetweetDialog()}
           <span
-            key={`like-${updatedTweet.likes?.length}`} // Usa o tweet atualizado
+            key={`like-${tweet.id}-${updatedTweet.likes?.length}`} // Adiciona o ID do tweet para garantir unicidade
             className={`icon red like-button ${
-              updatedTweet.likes.some((like) => like.userId === userLogged.id)
+              updatedTweet.likes?.some((like) => like.userId === userLogged.id)
                 ? "liked"
                 : ""
             }`}

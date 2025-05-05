@@ -1,26 +1,31 @@
 import { BackIcon, RetweetIcon } from "../assets/Icons";
+import { Retweet, Tweet, User } from "../@types";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Button } from "../components/Button";
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
-import { Modal } from "../components/Modal";
 import { Post } from "../components/Post";
 import { ProfileStyle } from "../components/Profile/ProfileStyle";
 import { Tabs } from "../components/Tabs";
-import { User } from "../@types";
+import { Dialog } from "../components/Dialog";
 import callendar from "../assets/callendar.svg";
 import defaultCover from "/logo_growtweet.svg";
+import { formatDate } from "../utils/formatDate";
 import { getUserDetails } from "../store/modules/users/usersActions";
 import { setUserDetails } from "../store/modules/users/userDetailsSlice";
 import { showAlert } from "../store/modules/alert/alertSlice";
 import { useLogout } from "../hooks/useLogout";
 import { useModal } from "../hooks";
 import { useVerificationIcon } from "../hooks/useVerifyIcon";
-import { formatDate } from "../utils/formatDate";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
+
+// Type guard para verificar se o objeto é do tipo Tweet
+function isTweet(obj: Tweet | Retweet): obj is Tweet {
+  return "tweetType" in obj; // Verifica se a propriedade tweetType existe
+}
 
 export function Profile() {
   const { username } = useParams();
@@ -78,33 +83,20 @@ export function Profile() {
   const getFilteredTweets = () => {
     switch (activeTab) {
       case "Posts": {
-        const userTweets =
-          user?.tweets?.filter(
-            (tweet) => tweet.tweetType === "TWEET" && !tweet.parentId
-          ) || [];
-        const retweets = tweets.filter(
-          (tweet) => tweet.retweets.length && tweet.userId === userLogged.id
+        const userTweets = tweets?.filter(
+          (tweet) => tweet.userId === user.id && tweet.tweetType !== "REPLY"
         );
-        return [...userTweets, ...retweets];
+        return [...userTweets, ...user.retweets];
       }
       case "Respostas":
-        return (
-          user?.tweets?.filter(
-            (tweet) =>
-              tweet.parentId && // Certifica-se de que é uma reply
-              tweet.tweetType === "REPLY" &&
-              tweet.userId === user.id // Verifica se pertence ao usuário
-          ) || []
+        return tweets?.filter(
+          (tweet) => tweet.tweetType === "REPLY" && tweet.userId === user.id
         );
       case "Mídia":
-        return user?.tweets?.filter((tweet) => tweet.imageUrl) || [];
+        return tweets?.filter((tweet) => tweet.imageUrl);
       case "Curtidas":
-        return (
-          tweets.filter(
-            (tweet) =>
-              Array.isArray(tweet.likes) &&
-              tweet.likes.some((like) => like.userId === user?.id)
-          ) || []
+        return tweets?.filter((tweet) =>
+          tweet.likes.some((like) => like.userId === user.id)
         );
       default:
         return [];
@@ -191,32 +183,65 @@ export function Profile() {
           />
           <div className="tweets-content">
             {filteredTweets.length > 0 ? (
-              filteredTweets.map((tweet) => (
-                <div className="tweet" key={tweet.id}>
-                  {activeTab === "Posts" && tweet.retweets?.length > 0 && (
-                    <span className="retweet">
-                      <RetweetIcon /> 'Você repostou'
-                    </span>
-                  )}
-                  <Post
-                    tweetUser={user}
-                    isOwnTweet={true}
-                    tweet={tweet}
-                    userLogged={userLogged}
-                    openModal={openModal}
-                    closeModal={closeModal}
-                  />
-                </div>
-              ))
+              filteredTweets.map((tweet) => {
+                if (isTweet(tweet)) {
+                  // Caso seja um Tweet
+                  return (
+                    <div className="tweet" key={tweet.id}>
+                      {activeTab === "Posts" && (
+                        <Post
+                          tweetUser={user}
+                          isOwnTweet={true}
+                          tweet={tweet}
+                          userLogged={userLogged}
+                          openModal={openModal}
+                          closeModal={closeModal}
+                        />
+                      )}
+                    </div>
+                  );
+                } else {
+                  // Caso seja um Retweet
+                  const parentTweet = tweets.find(
+                    (t) => t.id === tweet.tweetId
+                  ); // Busca o tweet pai
+                  return (
+                    <div className="tweet" key={tweet.id}>
+                      {activeTab === "Posts" && (
+                        <>
+                          <span className="retweet">
+                            <RetweetIcon /> 'Você repostou'
+                          </span>
+                          {parentTweet && (
+                            <Post
+                              tweetUser={user}
+                              isOwnTweet={true}
+                              tweet={parentTweet} // Passa o tweet pai
+                              userLogged={userLogged}
+                              openModal={openModal}
+                              closeModal={closeModal}
+                            />
+                          )}
+                        </>
+                      )}
+                    </div>
+                  );
+                }
+              })
             ) : (
               <p className="empty-message">{emptyMessages[activeTab]}</p>
             )}
           </div>
         </div>
       </ProfileStyle>
-      <Modal isOpen={modalOpen} onClose={closeModal}>
+      <Dialog
+        isOpen={modalOpen}
+        onClose={closeModal}
+        usePortal={true}
+        showHeader={true}
+      >
         {modalContent}
-      </Modal>
+      </Dialog>
     </DefaultLayout>
   );
 }

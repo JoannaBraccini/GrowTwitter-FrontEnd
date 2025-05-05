@@ -3,8 +3,8 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect, useState } from "react";
 
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
+import { Dialog } from "../components/Dialog";
 import { FeedStyle } from "../components/Feed/FeedStyle";
-import { Modal } from "../components/Modal";
 import { Post } from "../components/Post";
 import { Tabs } from "../components/Tabs";
 import { Tweet } from "../@types";
@@ -88,7 +88,7 @@ export function Feed() {
 
             return (
               <Post
-                key={tweet.id} // Certifique-se de que `tweet.id` é único
+                key={tweet.id}
                 tweetUser={tweetUser}
                 isOwnTweet={tweet.userId === userLogged.id}
                 tweet={tweet}
@@ -99,9 +99,14 @@ export function Feed() {
             );
           })}
       </FeedStyle>
-      <Modal isOpen={modalOpen} onClose={closeModal}>
+      <Dialog
+        isOpen={modalOpen}
+        onClose={closeModal}
+        usePortal={true}
+        showHeader={true}
+      >
         {modalContent}
-      </Modal>
+      </Dialog>
     </DefaultLayout>
   );
 }

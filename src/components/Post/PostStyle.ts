@@ -6,6 +6,7 @@ export const PostStyle = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.highlight};
   flex: 1;
   padding: 15px;
+  padding-left: 8px;
   position: relative;
 
   .header {

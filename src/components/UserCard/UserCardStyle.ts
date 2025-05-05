@@ -6,7 +6,7 @@ export const UserCardStyle = styled.div`
   align-items: flex-start;
   display: flex;
   width: 100%;
-  gap: 5px;
+  gap: 8px;
   h3 {
     font-weight: bold;
     font-size: 16px;

@@ -79,12 +79,15 @@ export const retweetTweet = createAsyncThunk(
   "tweets/retweet",
   async (data: RetweetRequest, { dispatch, getState }) => {
     const { tweetId, comment } = data;
+    console.log("tweetId", tweetId);
+
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
     await validateTokenOrThrow(dispatch, token);
 
     const response = await retweetService({ tweetId, comment }, token);
+    console.log("response", response);
 
     const handled = await handle403(response, dispatch); // Reutiliza a função exportada
 

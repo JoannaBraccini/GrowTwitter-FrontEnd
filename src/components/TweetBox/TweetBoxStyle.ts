@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const TweetBoxStyle = styled.div`
   padding: 13px 10px 5px 5px;
   background-color: ${({ theme }) => theme.backgroundColor};
-  border-bottom: 1px solid ${({ theme }) => theme.highlight};
 
   form {
     display: flex;
@@ -46,7 +45,6 @@ export const TweetBoxStyle = styled.div`
 
     textarea {
       width: 100%;
-      margin-left: 15px;
       font-size: 16px;
       min-height: 50px;
       resize: none; /* Impede o redimensionamento manual */
@@ -250,7 +248,7 @@ export const TweetBoxStyle = styled.div`
     }
 
     &:hover {
-      background-color: ${({ theme }) => theme.accentHover};
+      background-color: ${({ theme }) => theme.accent};
     }
   }
 `;

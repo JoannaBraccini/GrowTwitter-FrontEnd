@@ -17,7 +17,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { Avatar } from "../Avatar";
 import { Button } from "../Button";
-import { Modal } from "../Modal";
 import { NavbarStyle } from "./NavbarStyle";
 import { ToggleButton } from "../ToggleButton";
 import { Tweet } from "../../@types";
@@ -28,6 +27,7 @@ import { useCreateTweet } from "../../hooks/useCreateTweet";
 import { useLogout } from "../../hooks/useLogout";
 import { useTheme } from "../../configs/providers/useTheme";
 import { validateToken } from "../../store/modules/auth/validateTokenSlice";
+import { Dialog } from "../Dialog";
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -195,7 +195,12 @@ export function Navbar() {
           )}
         </div>
       )}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Dialog
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        usePortal={true}
+        showHeader={true}
+      >
         <TweetBox
           key="tweet-box"
           tweetUser={user}
@@ -203,7 +208,7 @@ export function Navbar() {
           onTweetSubmit={handleCreateTweet}
           mode="create"
         />
-      </Modal>
+      </Dialog>
     </NavbarStyle>
   );
 }

@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
-import { Modal } from "../components/Modal";
 import { Post } from "../components/Post";
 import { User } from "../@types";
 import {
@@ -14,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { TweetBox } from "../components/TweetBox";
 import { TweetPageStyle } from "../components/TweetPage";
 import { BackIcon } from "../assets/Icons";
+import { Dialog } from "../components/Dialog";
 
 export const TweetPage = () => {
   const { id } = useParams();
@@ -95,9 +95,14 @@ export const TweetPage = () => {
             })}
         </div>
       </TweetPageStyle>
-      <Modal isOpen={modalOpen} onClose={closeModal}>
+      <Dialog
+        isOpen={modalOpen}
+        onClose={closeModal}
+        usePortal={true}
+        showHeader={true}
+      >
         {modalContent}
-      </Modal>
+      </Dialog>
     </DefaultLayout>
   );
 };

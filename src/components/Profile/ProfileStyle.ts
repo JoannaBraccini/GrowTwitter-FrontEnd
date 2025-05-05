@@ -125,7 +125,7 @@ export const ProfileStyle = styled.div`
         height: 25px;
         padding: 0 10px;
         border: 1px solid ${({ theme }) => theme.highlight};
-        color: ${({ theme }) => theme.primary};
+        color: ${({ theme }) => theme.accent};
         font-weight: bold;
         cursor: pointer;
         white-space: nowrap;
