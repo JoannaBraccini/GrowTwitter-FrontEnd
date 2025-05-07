@@ -12,11 +12,11 @@ import {
   deleteTweet,
   likeTweet,
   retweetTweet,
-  updateTweet,
 } from "../../store/modules/tweets/tweetsActions";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useRef, useState } from "react";
 
+import { Button } from "../Button";
 import { Dialog } from "../Dialog";
 import { DialogPopupContent } from "../Dialog/DialogStyle";
 import { PostStyle } from "./PostStyle";
@@ -27,7 +27,7 @@ import { showAlert } from "../../store/modules/alert/alertSlice";
 import { useCreateTweet } from "../../hooks";
 import { useLogout } from "../../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../Button";
+import { useUpdateTweet } from "../../hooks/useEditTweet";
 
 interface PostProps {
   tweet: Tweet;
@@ -52,6 +52,7 @@ export function Post({
   const updatedTweet = tweets.find((t) => t.id === tweet.id) || tweet;
   const { handleLogout } = useLogout();
   const { handleCreateTweet } = useCreateTweet(closeModal);
+  const { handleUpdateTweet } = useUpdateTweet(closeModal);
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
   const [retweetPopupVisible, setRetweetPopupVisible] =
     useState<boolean>(false); // Controla a visibilidade do popup de retweet
@@ -171,12 +172,7 @@ export function Post({
     imageUrl?: string
   ) => {
     if (isOwnTweet) {
-      const updatedTweet: Tweet = {
-        ...tweet,
-        content: content ?? tweet.content,
-        imageUrl: imageUrl ?? tweet.imageUrl,
-      };
-      dispatch(updateTweet(updatedTweet));
+      handleUpdateTweet(tweet.id, content, imageUrl);
     } else {
       logoutUnauthorized();
     }
@@ -254,11 +250,6 @@ export function Post({
             <DotsIcon />
           </span>
         </UserCard>
-      </div>
-      <div
-        className="tweet-content"
-        onClick={() => handleTweetClick(tweet.id, tweetUser.username)}
-      >
         {menuVisible && tweet.id && (
           <div className="menu" ref={menuRef}>
             {isOwnTweet ? (
@@ -295,6 +286,11 @@ export function Post({
             )}
           </div>
         )}
+      </div>
+      <div
+        className="tweet-content"
+        onClick={() => handleTweetClick(tweet.id, tweetUser.username)}
+      >
         {/* Verifica se há um link e renderiza */}
         {tweet.content && isLinkUrl(tweet.content) ? (
           <a href={tweet.content} target="_blank" rel="noopener noreferrer">

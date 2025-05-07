@@ -6,8 +6,9 @@ export const NavbarStyle = styled.div`
   left: 0;
   flex: 0.5;
   min-width: 260px;
-  height: 100vh;
+  height: 100dvh;
   padding: 8px;
+  gap: 8px;
   background-color: ${({ theme }) => theme.backgroundColor};
   z-index: 500;
 
@@ -52,7 +53,7 @@ export const NavbarStyle = styled.div`
     display: flex;
     align-items: center;
     padding: 0;
-    margin: 1rem 0; /* Aplica a margem apenas aos itens da navbar */
+    margin: 1rem 0;
     cursor: pointer;
 
     h2 {
@@ -62,7 +63,7 @@ export const NavbarStyle = styled.div`
   }
 
   .post-tweet {
-    margin-top: 2rem;
+    margin: 2rem 12px;
     max-width: 250px;
     display: flex;
     justify-content: center;
@@ -176,7 +177,6 @@ export const NavbarStyle = styled.div`
   /* Adicionando estilos para dispositivos móveis */
   @media (max-width: 768px) {
     min-width: 80px;
-    margin-left: 5px;
 
     a {
       div {

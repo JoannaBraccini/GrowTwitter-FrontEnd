@@ -31,7 +31,7 @@ export const ErrorStyle = styled.div`
     position: relative;
     margin: 0 auto;
     width: 85%;
-    height: 100vh;
+    height: 100dvh;
     padding-bottom: 25vh;
     display: flex;
     flex-direction: row;

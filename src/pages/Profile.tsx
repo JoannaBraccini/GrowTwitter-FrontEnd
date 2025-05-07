@@ -1,5 +1,5 @@
-import { BackIcon, RetweetIcon } from "../assets/Icons";
-import { Retweet, Tweet, User } from "../@types";
+import { BackIcon } from "../assets/Icons";
+import { Tweet, User } from "../@types";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,11 +21,6 @@ import { useModal } from "../hooks";
 import { useVerificationIcon } from "../hooks/useVerifyIcon";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
-
-// Type guard para verificar se o objeto é do tipo Tweet
-function isTweet(obj: Tweet | Retweet): obj is Tweet {
-  return "tweetType" in obj; // Verifica se a propriedade tweetType existe
-}
 
 export function Profile() {
   const { username } = useParams();
@@ -81,22 +76,54 @@ export function Profile() {
   }
 
   const getFilteredTweets = () => {
+    console.log("Tweets:", tweets);
+    console.log("User:", user);
+
+    // Garantir que retweets seja um array vazio se não estiver definido
+    const userRetweets = user?.retweets;
+    console.log("User Retweets:", userRetweets);
+
     switch (activeTab) {
       case "Posts": {
         const userTweets = tweets?.filter(
-          (tweet) => tweet.userId === user.id && tweet.tweetType !== "REPLY"
+          (tweet) => tweet.userId === user?.id && tweet.tweetType !== "REPLY"
         );
-        return [...userTweets, ...user.retweets];
+
+        const retweets = userRetweets
+          .map((retweet) => {
+            const originalTweet = tweets?.find((t) => t.id === retweet.tweetId);
+            return originalTweet
+              ? { ...originalTweet, id: retweet.id } // Substituir o id pelo id do retweet
+              : undefined;
+          })
+          .filter((retweet): retweet is Tweet => retweet !== undefined);
+
+        return [...userTweets, ...retweets];
       }
       case "Respostas":
+        console.log(
+          tweets?.filter((tweet) => tweet.tweetType === "REPLY" && tweet.userId)
+        );
         return tweets?.filter(
-          (tweet) => tweet.tweetType === "REPLY" && tweet.userId === user.id
+          (tweet) => tweet.tweetType === "REPLY" && tweet.userId === user?.id
         );
       case "Mídia":
-        return tweets?.filter((tweet) => tweet.imageUrl);
+        console.log(
+          tweets?.filter((tweet) => tweet.imageUrl && tweet.userId === user?.id)
+        );
+
+        return tweets?.filter(
+          (tweet) => tweet.imageUrl && tweet.userId === user?.id
+        );
       case "Curtidas":
+        console.log(
+          tweets?.filter((tweet) =>
+            tweet.likes.some((like) => like.userId === user?.id)
+          )
+        );
+
         return tweets?.filter((tweet) =>
-          tweet.likes.some((like) => like.userId === user.id)
+          tweet.likes.some((like) => like.userId === user?.id)
         );
       default:
         return [];
@@ -183,51 +210,18 @@ export function Profile() {
           />
           <div className="tweets-content">
             {filteredTweets.length > 0 ? (
-              filteredTweets.map((tweet) => {
-                if (isTweet(tweet)) {
-                  // Caso seja um Tweet
-                  return (
-                    <div className="tweet" key={tweet.id}>
-                      {activeTab === "Posts" && (
-                        <Post
-                          tweetUser={user}
-                          isOwnTweet={true}
-                          tweet={tweet}
-                          userLogged={userLogged}
-                          openModal={openModal}
-                          closeModal={closeModal}
-                        />
-                      )}
-                    </div>
-                  );
-                } else {
-                  // Caso seja um Retweet
-                  const parentTweet = tweets.find(
-                    (t) => t.id === tweet.tweetId
-                  ); // Busca o tweet pai
-                  return (
-                    <div className="tweet" key={tweet.id}>
-                      {activeTab === "Posts" && (
-                        <>
-                          <span className="retweet">
-                            <RetweetIcon /> 'Você repostou'
-                          </span>
-                          {parentTweet && (
-                            <Post
-                              tweetUser={user}
-                              isOwnTweet={true}
-                              tweet={parentTweet} // Passa o tweet pai
-                              userLogged={userLogged}
-                              openModal={openModal}
-                              closeModal={closeModal}
-                            />
-                          )}
-                        </>
-                      )}
-                    </div>
-                  );
-                }
-              })
+              filteredTweets.map((tweet) => (
+                <div className="tweet" key={tweet.id}>
+                  <Post
+                    tweetUser={users.find((u) => u.id === tweet.userId) || user}
+                    isOwnTweet={tweet.userId === userLogged?.id}
+                    tweet={tweet}
+                    userLogged={userLogged}
+                    openModal={openModal}
+                    closeModal={closeModal}
+                  />
+                </div>
+              ))
             ) : (
               <p className="empty-message">{emptyMessages[activeTab]}</p>
             )}

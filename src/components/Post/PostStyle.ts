@@ -10,6 +10,7 @@ export const PostStyle = styled.div`
   position: relative;
 
   .header {
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -23,28 +24,10 @@ export const PostStyle = styled.div`
       margin-left: auto;
       cursor: pointer;
     }
-  }
-
-  .tweet-content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    margin-top: -15px;
-    padding-left: 46px;
-    padding-right: 5px;
-    gap: 10px;
-    z-index: 10;
-    font-size: 15px;
-    img {
-      object-fit: contain;
-      border: 1px solid ${({ theme }) => theme.highlight};
-      border-radius: 20px;
-      width: 100%;
-      height: auto;
-    }
 
     .menu {
       position: absolute;
+      background-color: ${({ theme }) => theme.backgroundColor};
       top: 0;
       right: 0;
 
@@ -71,6 +54,24 @@ export const PostStyle = styled.div`
           background-color: ${({ theme }) => theme.highlight};
         }
       }
+    }
+  }
+
+  .tweet-content {
+    display: flex;
+    flex-direction: column;
+    margin-top: -15px;
+    padding-left: 46px;
+    padding-right: 5px;
+    gap: 10px;
+    z-index: 10;
+    font-size: 15px;
+    img {
+      object-fit: contain;
+      border: 1px solid ${({ theme }) => theme.highlight};
+      border-radius: 20px;
+      width: 100%;
+      height: auto;
     }
   }
   .tweet-footer {

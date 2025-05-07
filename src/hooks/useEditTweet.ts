@@ -1,16 +1,16 @@
-import { createTweet, getTweets } from "../store/modules/tweets/tweetsActions";
+import { getTweets, updateTweet } from "../store/modules/tweets/tweetsActions";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
-import { CreateTweetRequest } from "../@types";
+import { UpdateTweetRequest } from "../@types";
 import { showAlert } from "../store/modules/alert/alertSlice";
 import { useCallback } from "react";
 
-export function useCreateTweet(closeModal: () => void) {
+export function useUpdateTweet(closeModal: () => void) {
   const dispatch = useAppDispatch();
   const userLogged = useAppSelector((state) => state.userLogged.user);
 
-  const handleCreateTweet = useCallback(
-    async (content?: string, imageUrl?: string, parentId?: string) => {
+  const handleUpdateTweet = useCallback(
+    async (id: string, content?: string, imageUrl?: string) => {
       if (!userLogged) {
         dispatch(
           showAlert({
@@ -31,15 +31,14 @@ export function useCreateTweet(closeModal: () => void) {
         return;
       }
 
-      const newTweet: CreateTweetRequest = {
-        parentId,
+      const tweet: UpdateTweetRequest = {
+        id,
         content,
         imageUrl,
-        tweetType: parentId ? "REPLY" : "TWEET",
       };
-      const result = await dispatch(createTweet(newTweet));
+      const result = await dispatch(updateTweet(tweet));
 
-      if (createTweet.fulfilled.match(result)) {
+      if (updateTweet.fulfilled.match(result)) {
         dispatch(getTweets({ page: 1, take: 20 }));
         closeModal();
       }
@@ -47,5 +46,5 @@ export function useCreateTweet(closeModal: () => void) {
     [dispatch, userLogged, closeModal]
   );
 
-  return { handleCreateTweet };
+  return { handleUpdateTweet };
 }

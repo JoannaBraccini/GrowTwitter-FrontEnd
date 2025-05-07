@@ -13,7 +13,7 @@ import { useProfileNavigation } from "../../hooks";
 export interface TweetBoxProps {
   tweetUser: UserBase;
   tweet: Tweet;
-  mode: "create" | "edit" | "reply" | "reply-box" | "retweet";
+  mode: "create" | "edit" | "reply" | "retweet";
   onTweetSubmit: (
     content?: string,
     imageUrl?: string,
@@ -49,7 +49,7 @@ export function TweetBox({
       textareaRef.current.style.height = "auto"; // Reseta a altura
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Ajusta para o conteúdo inicial
     }
-  }, [mode, tweet.content, tweet.imageUrl]); // Recalcula quando o modo ou o conteúdo mudar
+  }, [mode, tweet]); // Recalcula quando o modo ou o tweet mudar
 
   const openImageModal = (imageSrc: string) => {
     setExpandedImage(imageSrc);
@@ -106,11 +106,13 @@ export function TweetBox({
             <textarea
               ref={textareaRef}
               placeholder={
-                mode === "reply" || mode === "reply-box"
+                mode === "reply"
                   ? "Postar sua resposta"
+                  : mode === "edit"
+                  ? ""
                   : "O que está acontencendo?"
               }
-              value={mode === "edit" ? tweet.content : content}
+              value={content} // Preenche com o conteúdo original no modo "edit"
               onChange={(e) => setContent(e.target.value)}
               onInput={(e) => handleInput(e, mode !== "create")} // Ajusta dinamicamente apenas se não for "create"
               className={mode !== "create" ? "dynamic-resize" : ""} // Aplica classe apenas se não for "create"
@@ -186,7 +188,6 @@ export function TweetBox({
               {mode === "create" && "Postar"}
               {mode === "edit" && "Salvar"}
               {mode === "reply" && "Responder"}
-              {mode === "reply-box" && "Responder"}
               {mode === "retweet" && "Compartilhar"}
             </Button>
           </div>

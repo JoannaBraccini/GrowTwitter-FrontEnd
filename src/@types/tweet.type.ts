@@ -33,13 +33,10 @@ export type Retweet = Like & {
 // Para tweet e comentário
 export type CreateTweetRequest = Pick<
   Tweet,
-  "parentId" | "content" | "imageUrl" | "userId" | "tweetType"
+  "parentId" | "content" | "imageUrl" | "tweetType"
 >;
 
-export type UpdateTweetRequest = Pick<
-  Tweet,
-  "id" | "userId" | "content" | "imageUrl"
->;
+export type UpdateTweetRequest = Pick<Tweet, "id" | "content" | "imageUrl">;
 export type RetweetRequest = {
   tweetId: string;
   comment?: string;

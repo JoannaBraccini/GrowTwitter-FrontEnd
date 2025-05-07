@@ -1,19 +1,19 @@
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-
-import { DefaultLayout } from "../configs/layouts/DefaultLayout";
-import { Post } from "../components/Post";
-import { User } from "../@types";
 import {
   createTweet,
   getTweetDetails,
 } from "../store/modules/tweets/tweetsActions";
-import { useEffect } from "react";
-import { useModal } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useNavigate, useParams } from "react-router-dom";
+
+import { BackIcon } from "../assets/Icons";
+import { DefaultLayout } from "../configs/layouts/DefaultLayout";
+import { Dialog } from "../components/Dialog";
+import { Post } from "../components/Post";
 import { TweetBox } from "../components/TweetBox";
 import { TweetPageStyle } from "../components/TweetPage";
-import { BackIcon } from "../assets/Icons";
-import { Dialog } from "../components/Dialog";
+import { User } from "../@types";
+import { useEffect } from "react";
+import { useModal } from "../hooks";
 
 export const TweetPage = () => {
   const { id } = useParams();
@@ -71,7 +71,7 @@ export const TweetPage = () => {
             closeModal={closeModal}
           />
           <TweetBox
-            mode="reply-box"
+            mode="reply"
             tweet={tweet}
             tweetUser={tweetUser}
             initialContent=""
