@@ -79,7 +79,6 @@ export const retweetTweet = createAsyncThunk(
   "tweets/retweet",
   async (data: RetweetRequest, { dispatch, getState }) => {
     const { tweetId, comment } = data;
-    console.log("tweetId", tweetId);
 
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;

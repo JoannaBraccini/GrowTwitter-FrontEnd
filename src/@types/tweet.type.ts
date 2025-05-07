@@ -19,10 +19,6 @@ export type Like = {
   id: string;
   tweetId: string;
   userId: string;
-  user: {
-    name: string;
-    username: string;
-  };
   createdAt: string;
 };
 

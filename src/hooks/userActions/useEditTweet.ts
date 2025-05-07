@@ -1,9 +1,12 @@
-import { getTweets, updateTweet } from "../store/modules/tweets/tweetsActions";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import {
+  getTweets,
+  updateTweet,
+} from "../../store/modules/tweets/tweetsActions";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-import { UpdateTweetRequest } from "../@types";
-import { showAlert } from "../store/modules/alert/alertSlice";
+import { UpdateTweetRequest } from "../../@types";
 import { useCallback } from "react";
+import { validateTweet } from "../../utils/validateTweet";
 
 export function useUpdateTweet(closeModal: () => void) {
   const dispatch = useAppDispatch();
@@ -11,23 +14,7 @@ export function useUpdateTweet(closeModal: () => void) {
 
   const handleUpdateTweet = useCallback(
     async (id: string, content?: string, imageUrl?: string) => {
-      if (!userLogged) {
-        dispatch(
-          showAlert({
-            message: "Faça login para acessar esta função",
-            type: "warning",
-          })
-        );
-        return;
-      }
-
-      if ((!content || !content.trim()) && (!imageUrl || !imageUrl.trim())) {
-        dispatch(
-          showAlert({
-            message: "Seu tweet não pode estar vazio.",
-            type: "warning",
-          })
-        );
+      if (!validateTweet(dispatch, userLogged, content, imageUrl)) {
         return;
       }
 

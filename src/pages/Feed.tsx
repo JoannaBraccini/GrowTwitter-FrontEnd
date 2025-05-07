@@ -1,5 +1,6 @@
 import { getUserDetails, getUsers } from "../store/modules/users/usersActions";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useCreateTweet, useModal } from "../hooks";
 import { useEffect, useState } from "react";
 
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
@@ -11,8 +12,6 @@ import { Tweet } from "../@types";
 import { TweetBox } from "../components/TweetBox";
 import { fetchTweetsAndFeed } from "../store/modules/tweets/tweetsActions";
 import { showAlert } from "../store/modules/alert/alertSlice";
-import { useCreateTweet } from "../hooks/useCreateTweet";
-import { useModal } from "../hooks";
 import { useNavigate } from "react-router-dom";
 
 type TabOptions = "Para você" | "Seguindo";
