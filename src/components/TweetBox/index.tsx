@@ -171,18 +171,17 @@ export function TweetBox({
         )}
 
         <div className="tweetbox-links">
-          {mode === "create" ||
-            (mode === "edit" && (
-              <div className="image-link">
-                <img src={linkPhoto} title="Mídia" />
-                <input
-                  type="text"
-                  placeholder="Adicionar uma URL de imagem"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)} // Atualiza a URL da imagem
-                />
-              </div>
-            ))}
+          {(mode === "create" || mode === "edit") && (
+            <div className="image-link">
+              <img src={linkPhoto} title="Mídia" />
+              <input
+                type="text"
+                placeholder="Adicionar uma URL de imagem"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)} // Atualiza a URL da imagem
+              />
+            </div>
+          )}
           <div className="tweetbox-actions">
             <Button size="small" className="tweetbox-tweetButton" type="submit">
               {mode === "create" && "Postar"}

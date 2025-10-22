@@ -42,30 +42,8 @@ const initialState: InitialState = {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
 
-    likes: [
-      {
-        id: "",
-        tweetId: "",
-        userId: "",
-        user: {
-          name: "",
-          username: "",
-        },
-        createdAt: new Date().toISOString(),
-      },
-    ],
-    retweets: [
-      {
-        id: "",
-        tweetId: "",
-        userId: "",
-        user: {
-          name: "",
-          username: "",
-        },
-        createdAt: new Date().toISOString(),
-      },
-    ],
+    likes: [],
+    retweets: [],
     replies: [],
   },
 };

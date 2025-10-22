@@ -19,6 +19,7 @@ export function useCreateTweet(closeModal: () => void) {
       }
 
       const newTweet: CreateTweetRequest = {
+        userId: userLogged.id,
         parentId,
         content,
         imageUrl,

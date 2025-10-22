@@ -24,7 +24,7 @@ export const TabsStyle = styled.div<TabProps>`
     padding-bottom: 15px;
 
     &:hover {
-      color: ${({ theme }) => theme.primary};
+      color: ${({ theme }) => theme.accent};
     }
 
     &.active {

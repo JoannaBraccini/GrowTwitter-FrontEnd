@@ -1,15 +1,15 @@
-import { BackIcon } from "../assets/Icons";
 import { Tweet, User } from "../@types";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { BackIcon } from "../assets/Icons";
 import { Button } from "../components/Button";
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
+import { Dialog } from "../components/Dialog";
 import { Post } from "../components/Post";
 import { ProfileStyle } from "../components/Profile/ProfileStyle";
 import { Tabs } from "../components/Tabs";
-import { Dialog } from "../components/Dialog";
 import callendar from "../assets/callendar.svg";
 import defaultCover from "/logo_growtweet.svg";
 import { formatDate } from "../utils/formatDate";
@@ -76,32 +76,37 @@ export function Profile() {
   }
 
   const getFilteredTweets = () => {
-    console.log("Tweets:", tweets);
-    console.log("User:", user);
-
-    // Garantir que retweets seja um array vazio se não estiver definido
-    const userRetweets = user?.retweets;
-    console.log("User Retweets:", userRetweets);
+    const userRetweets = tweets?.filter(
+      (tweet) =>
+        tweet.userId === user?.id &&
+        tweet.tweetType !== "REPLY" &&
+        tweet.parentId
+    );
 
     switch (activeTab) {
       case "Posts": {
         const userTweets = tweets?.filter(
           (tweet) => tweet.userId === user?.id && tweet.tweetType !== "REPLY"
         );
+        console.log("userTweets", userTweets);
 
         const retweets = userRetweets
           .map((retweet) => {
-            const originalTweet = tweets?.find((t) => t.id === retweet.tweetId);
+            const originalTweet = tweets?.find(
+              (t) => t.id === retweet.parentId
+            );
             return originalTweet
               ? { ...originalTweet, id: retweet.id } // Substituir o id pelo id do retweet
               : undefined;
           })
           .filter((retweet): retweet is Tweet => retweet !== undefined);
+        console.log("retweets", retweets);
 
         return [...userTweets, ...retweets];
       }
       case "Respostas":
         console.log(
+          "replies",
           tweets?.filter((tweet) => tweet.tweetType === "REPLY" && tweet.userId)
         );
         return tweets?.filter(
@@ -109,6 +114,7 @@ export function Profile() {
         );
       case "Mídia":
         console.log(
+          "midia",
           tweets?.filter((tweet) => tweet.imageUrl && tweet.userId === user?.id)
         );
 
@@ -117,6 +123,7 @@ export function Profile() {
         );
       case "Curtidas":
         console.log(
+          "likes",
           tweets?.filter((tweet) =>
             tweet.likes.some((like) => like.userId === user?.id)
           )
