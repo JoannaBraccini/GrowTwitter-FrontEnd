@@ -11,11 +11,21 @@ export const MainContent = styled.div`
   margin-left: 210px; /* Adiciona espaço para a largura da Navbar */
   margin-right: 27vw; /* Adiciona espaço para a largura da Sidebar */
   border-left: 1px solid ${({ theme }) => theme.highlight};
+  border-right: 1px solid ${({ theme }) => theme.highlight};
+
+  @media (max-width: 1024px) {
+    min-width: auto;
+    max-width: 100%;
+  }
 
   @media (max-width: 768px) {
-    margin-left: 76px; /* Ajusta para a largura menor da Navbar em telas pequenas */
-    margin-right: 0; /* Remove o espaço da Sidebar em telas pequenas */
-    max-width: 78vw; /* Garante que o MainContent não ultrapasse a largura da viewport */
+    margin-left: 60px;
+    margin-right: 0;
+    min-width: auto;
+    max-width: calc(100vw - 60px);
+    width: calc(100vw - 60px);
+    border-right: none; /* Remove borda direita no mobile */
+    flex: 1;
   }
 
   .content-container {
@@ -24,5 +34,10 @@ export const MainContent = styled.div`
     flex-direction: column;
     gap: 20px;
     min-width: 50vw;
+
+    @media (max-width: 768px) {
+      min-width: auto;
+      padding: 0;
+    }
   }
 `;

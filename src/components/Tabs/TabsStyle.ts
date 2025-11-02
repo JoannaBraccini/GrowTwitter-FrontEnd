@@ -14,6 +14,7 @@ export const TabsStyle = styled.div<TabProps>`
 
   justify-content: space-around;
   padding-top: ${({ paddingTop }) => paddingTop ?? 0};
+  border-bottom: 1px solid ${({ theme }) => theme.highlight};
 
   button {
     background: none;

@@ -6,21 +6,22 @@ export const FeedStyle = styled.div`
   overflow-y: scroll;
   flex: 1;
 
-  .divider {
-    border-bottom: 8px inset ${({ theme }) => theme.highlight};
-  }
-
   .feed-header {
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid ${({ theme }) => theme.highlight};
-    padding-top: 15px;
+    background-color: ${({ theme }) => theme.backgroundColor};
   }
 
   .feed-header h2 {
+    display: none; /* Oculto no desktop e tablet */
     font-size: 20px;
     font-weight: 800;
+
+    @media (max-width: 600px) {
+      display: block;
+      padding: 12px 16px 28px;
+    }
   }
 
   -webkit-scrollbar {

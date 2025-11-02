@@ -7,11 +7,10 @@ export const SidebarStyle = styled.aside`
   flex: 0.5;
   display: flex;
   flex-direction: column;
-  margin-right: 1rem;
+  margin-right: 2rem;
   padding: 0 8px;
   min-width: 27vw;
   background-color: ${({ theme }) => theme.backgroundColor};
-  border-left: 1px solid ${({ theme }) => theme.highlight};
   z-index: 1000;
 
   .sidebar-input {

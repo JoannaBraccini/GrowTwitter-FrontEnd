@@ -176,13 +176,15 @@ export const NavbarStyle = styled.div`
 
   /* Adicionando estilos para dispositivos móveis */
   @media (max-width: 768px) {
-    min-width: 80px;
+    min-width: 60px;
+    max-width: 60px;
+    padding: 20px 0; /* Padding vertical para não cortar o logo */
 
     a {
       div {
         justify-content: center;
-        padding: 10px 0;
-        margin: 0;
+        padding: 12px 0;
+        margin: 12px 0; /* Aumenta espaçamento vertical entre itens */
 
         &:hover {
           background-color: ${({ theme }) => theme.highlight};
@@ -191,8 +193,11 @@ export const NavbarStyle = styled.div`
     }
 
     .header {
-      gap: 0.5rem;
-      margin-bottom: 2rem;
+      gap: 0rem;
+      margin-bottom: 4rem; /* Aumenta espaço abaixo do header */
+      flex-direction: column;
+      align-items: center;
+      padding: 0 5px 1rem 5px; /* Adiciona padding inferior */
     }
 
     .logo {
@@ -201,15 +206,17 @@ export const NavbarStyle = styled.div`
     }
 
     .navbar-item {
-      height: 60px;
-      width: 60px;
+      height: 50px;
+      width: 50px;
       border-radius: 50%;
+      margin: 8px 0;
     }
 
     .icons {
       margin: 0;
-      padding: 5px;
-      height: 40px;
+      padding: 0;
+      height: 28px;
+      width: 28px;
     }
 
     div {
@@ -223,10 +230,13 @@ export const NavbarStyle = styled.div`
 
     .post-tweet {
       margin-top: 1rem;
-      margin-left: 6px;
+      margin-left: 0;
       width: 50px;
       height: 50px;
       border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       img {
         display: block;
