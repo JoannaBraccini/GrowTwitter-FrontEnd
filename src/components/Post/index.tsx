@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useCreateTweet, useUpdateTweet } from "../../hooks";
 import { useEffect, useRef, useState } from "react";
 
+import { Avatar } from "../Avatar";
 import { Button } from "../Button";
 import { Dialog } from "../Dialog";
 import { DialogPopupContent } from "../Dialog/DialogStyle";
@@ -24,6 +25,7 @@ import { PostStyle } from "./PostStyle";
 import { TweetBox } from "../TweetBox";
 import { UserCard } from "../UserCard";
 import { followUser } from "../../store/modules/users/usersActions";
+import { formatDate } from "../../utils/formatDate";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 import { useLogout } from "../../hooks/useLogout";
 import { useNavigate } from "react-router-dom";
@@ -36,6 +38,7 @@ interface PostProps {
   userLogged: Partial<User>;
   openModal: (content: React.ReactNode) => void;
   closeModal: () => void;
+  className?: string;
 }
 
 export function Post({
@@ -45,6 +48,7 @@ export function Post({
   userLogged,
   openModal,
   closeModal,
+  className,
 }: PostProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -125,14 +129,10 @@ export function Post({
 
   const handleLike = async () => {
     if (!isOwnTweet) {
-      const result = await dispatch(likeTweet(tweet.id)).unwrap();
-      if (!result.ok) {
-        dispatch(
-          showAlert({
-            message: result.message,
-            type: "error",
-          })
-        );
+      try {
+        await dispatch(likeTweet(tweet.id));
+      } catch (error) {
+        console.error("Erro ao curtir:", error);
       }
     } else {
       dispatch(
@@ -226,142 +226,159 @@ export function Post({
   );
 
   return (
-    <PostStyle>
-      <div className="header">
-        <UserCard user={tweetUser} tweet={tweet}>
+    <PostStyle className={className}>
+      <div className="avatar-column">
+        <Avatar user={tweetUser} />
+      </div>
+      <div className="content-column">
+        <div className="header">
+          <UserCard user={tweetUser} tweet={tweet} hideAvatar={true}>
+            <span className="date">
+              &middot;{" "}
+              {window.innerWidth <= 768
+                ? formatDate(
+                    tweet.updatedAt ?? tweet.createdAt,
+                    "shortRelative"
+                  )
+                : formatDate(tweet.updatedAt ?? tweet.createdAt, "long")}
+            </span>
+          </UserCard>
           <span
             className="dots"
             onClick={() => setMenuVisible((prev) => !prev)}
           >
             <DotsIcon />
           </span>
-        </UserCard>
-        {menuVisible && tweet.id && (
-          <div className="menu" ref={menuRef}>
-            {isOwnTweet ? (
-              <div className="menu-options">
-                <button
-                  onClick={() =>
-                    openTweetBoxModal(tweet, "edit", (content, imageUrl) => {
-                      handleEditTweet(tweet, content, imageUrl);
-                    })
-                  }
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleDeleteTweet(tweet);
-                  }}
-                >
-                  Excluir
-                </button>
-              </div>
-            ) : (
-              <div className="menu-options">
-                <button onClick={handleFollow}>
-                  {Array.isArray(tweetUser.followers) &&
-                  tweetUser.followers?.some(
-                    (user) => user.followerId === userLogged.id
-                  )
-                    ? "Deixar de seguir"
-                    : "Seguir"}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-      <div
-        className="tweet-content"
-        onClick={() => handleTweetClick(tweet.id, tweetUser.username)}
-      >
-        {/* Verifica se há um link e renderiza */}
-        {tweet.content && isLinkUrl(tweet.content) ? (
-          <a href={tweet.content} target="_blank" rel="noopener noreferrer">
-            {tweet.content}
-          </a>
-        ) : (
-          tweet.content && <p>{tweet.content}</p>
-        )}
-        {/* Renderiza a imagem se houver */}
-        {tweet.imageUrl && (
-          <img
-            src={tweet.imageUrl}
-            alt="Imagem"
-            onError={(e) => (e.currentTarget.style.display = "none")}
-          />
-        )}
-      </div>
+          {menuVisible && tweet.id && (
+            <div className="menu" ref={menuRef}>
+              {isOwnTweet ? (
+                <div className="menu-options">
+                  <button
+                    onClick={() =>
+                      openTweetBoxModal(tweet, "edit", (content, imageUrl) => {
+                        handleEditTweet(tweet, content, imageUrl);
+                      })
+                    }
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleDeleteTweet(tweet);
+                    }}
+                  >
+                    Excluir
+                  </button>
+                </div>
+              ) : (
+                <div className="menu-options">
+                  <button onClick={handleFollow}>
+                    {Array.isArray(tweetUser.followers) &&
+                    tweetUser.followers?.some(
+                      (user) => user.followerId === userLogged.id
+                    )
+                      ? "Deixar de seguir"
+                      : "Seguir"}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        <div
+          className="tweet-content"
+          onClick={() => handleTweetClick(tweet.id, tweetUser.username)}
+        >
+          {/* Verifica se há um link e renderiza */}
+          {tweet.content && isLinkUrl(tweet.content) ? (
+            <a href={tweet.content} target="_blank" rel="noopener noreferrer">
+              {tweet.content}
+            </a>
+          ) : (
+            tweet.content && <p>{tweet.content}</p>
+          )}
+          {/* Renderiza a imagem se houver */}
+          {tweet.imageUrl && (
+            <img
+              src={tweet.imageUrl}
+              alt="Imagem"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+            />
+          )}
+        </div>
 
-      <div className="tweet-footer">
-        <div className="icons">
-          <span
-            key={`reply-${tweet.id}-${tweet.replies?.length}`} // Adiciona o ID do tweet para garantir unicidade
-            className={`icon ${
-              Array.isArray(tweet.replies) &&
-              tweet.replies?.some((reply) => reply.userId === userLogged.id)
-                ? "replied"
-                : ""
-            }`}
-            title="Responder"
-            onClick={() =>
-              openTweetBoxModal(tweet, "reply", (content, imageUrl) => {
-                handleReply(content ?? "", imageUrl);
-              })
-            }
-          >
-            <CommentIcon />
-            <span className="counter">{tweet.replies?.length || null}</span>
-          </span>
-          <span
-            key={`retweet-${tweet.id}-${tweet.retweets?.length}`} // Adiciona o ID do tweet para garantir unicidade
-            className={`icon green ${
-              Array.isArray(tweet.retweets) &&
-              tweet.retweets?.some(
-                (retweet) => retweet.userId === userLogged.id
-              )
-                ? "retweeted"
-                : ""
-            }`}
-            title="Repostar"
-            onClick={() => setRetweetPopupVisible(true)}
-          >
-            <RetweetIcon />
-            <span className="counter">{tweet.retweets?.length || null}</span>
-          </span>
-          {retweetPopupVisible && renderRetweetDialog()}
-          <span
-            key={`like-${tweet.id}-${updatedTweet.likes?.length}`} // Adiciona o ID do tweet para garantir unicidade
-            className={`icon red like-button ${
-              updatedTweet.likes?.some((like) => like.userId === userLogged.id)
-                ? "liked"
-                : ""
-            }`}
-            onClick={handleLike}
-          >
-            <LikeIcon />
-            <span className="counter">
-              {updatedTweet.likes?.length || null}
+        <div className="tweet-footer">
+          <div className="icons">
+            <span
+              key={`reply-${tweet.id}-${tweet.replies?.length}`} // Adiciona o ID do tweet para garantir unicidade
+              className={`icon ${
+                Array.isArray(tweet.replies) &&
+                tweet.replies?.some((reply) => reply.userId === userLogged.id)
+                  ? "replied"
+                  : ""
+              }`}
+              title="Responder"
+              onClick={() =>
+                openTweetBoxModal(tweet, "reply", (content, imageUrl) => {
+                  handleReply(content ?? "", imageUrl);
+                })
+              }
+            >
+              <CommentIcon />
+              <span className="counter">{tweet.replies?.length || null}</span>
             </span>
-          </span>
-          <span
-            className="icon"
-            title="Ver"
-            onClick={() =>
-              navigate(`/${tweetUser.username}/status/${tweet.id}`)
-            }
-          >
-            <StatisticIcon />
-          </span>
-          <div className="actions">
-            <span className="icon" title="Salvar Tweet">
-              <SaveIcon />
+            <span
+              key={`retweet-${tweet.id}-${tweet.retweets?.length}`} // Adiciona o ID do tweet para garantir unicidade
+              className={`icon green ${
+                Array.isArray(tweet.retweets) &&
+                tweet.retweets?.some(
+                  (retweet) => retweet.userId === userLogged.id
+                )
+                  ? "retweeted"
+                  : ""
+              }`}
+              title="Repostar"
+              onClick={() => setRetweetPopupVisible(true)}
+            >
+              <RetweetIcon />
+              <span className="counter">{tweet.retweets?.length || null}</span>
             </span>
-            <span className="icon" title="Compartilhar">
-              <ShareIcon />
+            {retweetPopupVisible && renderRetweetDialog()}
+            <span
+              key={`like-${tweet.id}-${updatedTweet.likes?.length}`} // Adiciona o ID do tweet para garantir unicidade
+              className={`icon red like-button ${
+                updatedTweet.likes?.some(
+                  (like) => like.userId === userLogged.id
+                )
+                  ? "liked"
+                  : ""
+              }`}
+              onClick={handleLike}
+              title="Curtir"
+            >
+              <LikeIcon />
+              <span className="counter">
+                {updatedTweet.likes?.length || null}
+              </span>
             </span>
+            <span
+              className="icon"
+              title="Ver"
+              onClick={() =>
+                navigate(`/${tweetUser.username}/status/${tweet.id}`)
+              }
+            >
+              <StatisticIcon />
+            </span>
+            <div className="actions">
+              <span className="icon" title="Salvar Tweet">
+                <SaveIcon />
+              </span>
+              <span className="icon" title="Compartilhar">
+                <ShareIcon />
+              </span>
+            </div>
           </div>
         </div>
       </div>

@@ -1,13 +1,35 @@
 import styled from "styled-components";
 
 export const PostStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid ${({ theme }) => theme.highlight};
-  flex: 1;
+  display: grid;
+  grid-template-columns: 40px 1fr; /* Avatar fixo de 40px + conteúdo flexível */
+  gap: 12px; /* Espaço entre avatar e conteúdo */
   padding: 15px;
-  padding-left: 8px;
+  padding-left: 12px;
   position: relative;
+  border-bottom: 1px solid ${({ theme }) => theme.highlight};
+
+  /* Remove borda inferior do post pai em replies */
+  &.parent-tweet {
+    border-bottom: none;
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .avatar-column {
+    grid-row: 1 / -1; /* Avatar ocupa todas as linhas do post */
+    width: 40px;
+    height: 40px;
+  }
+
+  .content-column {
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Permite que o conteúdo encolha */
+  }
 
   .header {
     position: relative;
@@ -15,16 +37,21 @@ export const PostStyle = styled.div`
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    gap: 10px;
+    gap: 4px;
     padding: 0;
     margin: 0;
     border: none;
 
-    .dots {
-      margin-left: auto;
-      cursor: pointer;
+    @media (max-width: 600px) {
+      min-width: 0;
+      gap: 2px;
     }
 
+    .dots {
+      margin-left: auto;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
     .menu {
       position: absolute;
       background-color: ${({ theme }) => theme.backgroundColor};
@@ -38,7 +65,6 @@ export const PostStyle = styled.div`
         gap: 5px;
         background-color: ${({ theme }) => theme.backgroundColor};
         border-radius: 5px;
-        border: 1px solid ${({ theme }) => theme.highlight};
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
       }
       button {
@@ -60,12 +86,13 @@ export const PostStyle = styled.div`
   .tweet-content {
     display: flex;
     flex-direction: column;
-    margin-top: -15px;
-    padding-left: 46px;
-    padding-right: 5px;
     gap: 10px;
-    z-index: 10;
-    font-size: 15px;
+    font-size: 17px;
+    padding-right: 5px;
+
+    @media (max-width: 768px) {
+      font-size: 15px;
+    }
     img {
       object-fit: contain;
       border: 1px solid ${({ theme }) => theme.highlight};
@@ -75,7 +102,7 @@ export const PostStyle = styled.div`
     }
   }
   .tweet-footer {
-    padding: 10px 10px 0 48px;
+    padding: 10px 10px 0 0;
 
     .icons {
       display: flex;
@@ -83,7 +110,7 @@ export const PostStyle = styled.div`
       align-items: center;
       gap: 15px;
 
-      span {
+      span.icon {
         color: #626161;
         height: 20px;
         width: auto;
@@ -100,27 +127,26 @@ export const PostStyle = styled.div`
           color: rgb(0, 255, 0); /* Cor verde no hover */
         }
 
-        &.red:hover {
-          color: rgb(255, 0, 0); /* Cor vermelha no hover */
+        &.like-button:hover {
+          color: rgb(249, 24, 128); /* Cor rosa/vermelha no hover do like */
         }
-      }
 
-      span.liked {
-        color: rgb(255, 0, 0); /* Cor vermelha quando curtido */
-      }
+        &.liked {
+          color: rgb(249, 24, 128); /* Cor rosa/vermelha quando curtido */
+        }
 
-      span.retweeted {
-        color: rgb(0, 255, 0); /* Cor verde quando retweetado */
-      }
+        &.retweeted {
+          color: rgb(0, 255, 0); /* Cor verde quando retweetado */
+        }
 
-      span.replied {
-        color: rgb(83, 200, 255); /* Cor azul quando respondido */
+        &.replied {
+          color: rgb(83, 200, 255); /* Cor azul quando respondido */
+        }
       }
 
       .counter {
         font-size: 0.8rem;
         color: inherit; /* Herda a cor do pai no hover */
-        margin-top: 5px;
       }
 
       .actions {
@@ -138,15 +164,5 @@ export const PostStyle = styled.div`
         }
       }
     }
-  }
-
-  .like-button.liked {
-    color: red;
-  }
-
-  .icon.like-button {
-    display: flex;
-    align-items: center;
-    gap: 4px; /* Ajuste para garantir espaçamento consistente entre o ícone e o contador */
   }
 `;
