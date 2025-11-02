@@ -5,6 +5,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { Avatar } from "../components/Avatar";
 import { BackIcon } from "../assets/Icons";
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
 import { Dialog } from "../components/Dialog";
@@ -12,7 +13,7 @@ import { Post } from "../components/Post";
 import { TweetBox } from "../components/TweetBox";
 import { TweetPageStyle } from "../components/TweetPage";
 import { User } from "../@types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useModal } from "../hooks";
 
 export const TweetPage = () => {
@@ -23,6 +24,7 @@ export const TweetPage = () => {
   const { users } = useAppSelector((state) => state.usersList);
   const { user } = useAppSelector((state) => state.userLogged);
   const { modalOpen, modalContent, openModal, closeModal } = useModal();
+  const [showReplyBox, setShowReplyBox] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -47,8 +49,13 @@ export const TweetPage = () => {
           userId: user.id,
         })
       );
+      setShowReplyBox(false);
       return;
     }
+  };
+
+  const handleReplyBoxClick = () => {
+    setShowReplyBox(true);
   };
 
   return (
@@ -69,14 +76,25 @@ export const TweetPage = () => {
             tweetUser={tweetUser || ({} as User)}
             userLogged={user}
             closeModal={closeModal}
+            className="parent-tweet"
           />
-          <TweetBox
-            mode="reply"
-            tweet={tweet}
-            tweetUser={tweetUser}
-            initialContent=""
-            onTweetSubmit={(content) => content && handleReply(content)}
-          />
+          {!showReplyBox ? (
+            <div className="reply-input-box" onClick={handleReplyBoxClick}>
+              <div className="avatar-column">
+                <Avatar user={user as User} />
+              </div>
+              <div className="input-placeholder">Postar sua resposta</div>
+            </div>
+          ) : (
+            <TweetBox
+              mode="reply"
+              tweet={tweet}
+              tweetUser={tweetUser}
+              initialContent=""
+              onTweetSubmit={(content) => content && handleReply(content)}
+              hideParent={true}
+            />
+          )}
           {tweet.replies &&
             tweet.replies.length > 0 &&
             tweet.replies.map((reply) => {

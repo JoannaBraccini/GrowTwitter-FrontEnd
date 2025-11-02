@@ -33,6 +33,7 @@ export const ProfileStyle = styled.div`
       }
     }
     .data {
+      flex: 1;
       h2 {
         font-size: 18px;
         font-weight: bold;
@@ -40,6 +41,30 @@ export const ProfileStyle = styled.div`
       span {
         font-size: 14px;
         color: ${({ theme }) => theme.textSecondary};
+      }
+    }
+    .search-icon {
+      display: none;
+
+      @media (max-width: 920px) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-self: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-left: auto;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        &:hover {
+          background-color: ${({ theme }) => theme.highlight};
+        }
       }
     }
   }
@@ -189,13 +214,6 @@ export const ProfileStyle = styled.div`
     margin-top: 10px;
 
     .tweets-content {
-      border-top: 1px solid ${({ theme }) => theme.highlight};
-      padding: 10px 20px;
-
-      @media (max-width: 768px) {
-        padding: 0;
-      }
-
       .tweet {
         .retweet {
           font-size: 12px;
@@ -203,6 +221,37 @@ export const ProfileStyle = styled.div`
           display: flex;
           align-items: center;
           gap: 5px;
+        }
+
+        /* Estilo para respostas com tweet original */
+        &.reply-thread {
+          position: relative;
+
+          .parent-tweet {
+            position: relative;
+
+            /* Linha vertical conectando os tweets */
+            &::after {
+              content: "";
+              position: absolute;
+              left: 37px; /* Ajustado para centralizar no avatar */
+              top: 50px; /* Começa mais cedo, logo abaixo do avatar */
+              bottom: -25px; /* Estende bem mais para baixo para conectar ao próximo avatar */
+              width: 2px;
+              background-color: ${({ theme }) => theme.highlight};
+            }
+
+            @media (max-width: 768px) {
+              &::after {
+                top: 48px;
+                bottom: -25px;
+              }
+            }
+          }
+
+          .reply-indicator {
+            display: none;
+          }
         }
       }
       .empty-message {

@@ -60,10 +60,12 @@ export function Feed() {
     <DefaultLayout>
       <FeedStyle>
         <div className="feed-header">
+          <h2>Página Inicial</h2>
           <Tabs
             tabs={["Para você", "Seguindo"]}
             activeTab={activeTab}
             onTabChange={(tab) => setActiveTab(tab as TabOptions)}
+            paddingTop="12px"
           />
         </div>
         <TweetBox
@@ -73,17 +75,18 @@ export function Feed() {
           mode="create"
           onTweetSubmit={useCreateTweet(closeModal).handleCreateTweet}
         />
-        <span className="divider" />
-        {(activeTab === "Para você"
-          ? tweets.filter((tweet) => tweet.tweetType !== "REPLY") // Exibe todos os tweets que não são respostas
-          : feed.filter(
-              (tweet) =>
-                tweet.tweetType !== "REPLY" && tweet.userId !== userLogged.id
-            )
-        ) // Exibe tweets do feed que não são respostas
-          .map((tweet) => {
+        {(() => {
+          const tweetsToShow =
+            activeTab === "Para você"
+              ? tweets
+              : feed.filter((tweet) => tweet.userId !== userLogged.id);
+
+          return tweetsToShow.map((tweet) => {
             const tweetUser = users.find((user) => user.id === tweet.userId);
-            if (!tweetUser) return null; // Se não encontrar o usuário, não renderiza o tweet
+
+            if (!tweetUser) {
+              return null;
+            }
 
             return (
               <Post
@@ -96,7 +99,8 @@ export function Feed() {
                 closeModal={closeModal}
               />
             );
-          })}
+          });
+        })()}
       </FeedStyle>
       <Dialog
         isOpen={modalOpen}

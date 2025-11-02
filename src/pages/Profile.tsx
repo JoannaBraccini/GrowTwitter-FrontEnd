@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { BackIcon } from "../assets/Icons";
+import { BackIcon, ExploreIcon } from "../assets/Icons";
 import { Button } from "../components/Button";
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
 import { Dialog } from "../components/Dialog";
@@ -157,6 +157,9 @@ export function Profile() {
             <h2>{user?.name || "Usuário"}</h2>
             <span>{user?.tweets?.length || 0} posts</span>
           </div>
+          <div className="search-icon" onClick={() => navigate("/explore")}>
+            <ExploreIcon />
+          </div>
         </div>
         <div className="banner">
           <div className="cover">
@@ -217,18 +220,57 @@ export function Profile() {
           />
           <div className="tweets-content">
             {filteredTweets.length > 0 ? (
-              filteredTweets.map((tweet) => (
-                <div className="tweet" key={tweet.id}>
-                  <Post
-                    tweetUser={users.find((u) => u.id === tweet.userId) || user}
-                    isOwnTweet={tweet.userId === userLogged?.id}
-                    tweet={tweet}
-                    userLogged={userLogged}
-                    openModal={openModal}
-                    closeModal={closeModal}
-                  />
-                </div>
-              ))
+              filteredTweets.map((tweet) => {
+                // Se for uma resposta, busca o tweet original
+                const parentTweet =
+                  activeTab === "Respostas" && tweet.parentId
+                    ? tweets?.find((t) => t.id === tweet.parentId)
+                    : null;
+
+                return (
+                  <div
+                    className={`tweet ${parentTweet ? "reply-thread" : ""}`}
+                    key={tweet.id}
+                  >
+                    {/* Renderiza o tweet original primeiro, se existir */}
+                    {parentTweet && (
+                      <div className="parent-tweet">
+                        <Post
+                          tweetUser={
+                            users.find((u) => u.id === parentTweet.userId) ||
+                            user
+                          }
+                          isOwnTweet={parentTweet.userId === userLogged?.id}
+                          tweet={parentTweet}
+                          userLogged={userLogged}
+                          openModal={openModal}
+                          closeModal={closeModal}
+                          className="parent-tweet"
+                        />
+                      </div>
+                    )}
+                    {/* Indicador visual de resposta */}
+                    {parentTweet && (
+                      <div className="reply-indicator">
+                        Respondendo a @
+                        {users.find((u) => u.id === parentTweet.userId)
+                          ?.username || "usuário"}
+                      </div>
+                    )}
+                    {/* Renderiza a resposta */}
+                    <Post
+                      tweetUser={
+                        users.find((u) => u.id === tweet.userId) || user
+                      }
+                      isOwnTweet={tweet.userId === userLogged?.id}
+                      tweet={tweet}
+                      userLogged={userLogged}
+                      openModal={openModal}
+                      closeModal={closeModal}
+                    />
+                  </div>
+                );
+              })
             ) : (
               <p className="empty-message">{emptyMessages[activeTab]}</p>
             )}
