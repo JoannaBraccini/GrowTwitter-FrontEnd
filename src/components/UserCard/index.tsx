@@ -3,33 +3,37 @@ import { Tweet, UserBase } from "../../@types";
 import { Avatar } from "../Avatar";
 import React from "react";
 import { UserCardStyle } from "./UserCardStyle";
-import { formatDate } from "../../utils/formatDate";
 import { useVerificationIcon } from "../../hooks";
 
 interface UserCardProps {
   user: UserBase;
-  tweet: Tweet;
+  tweet?: Tweet;
   children?: React.ReactNode;
   className?: string;
+  hideAvatar?: boolean;
 }
 
-export function UserCard({ user, tweet, children, className }: UserCardProps) {
+export function UserCard({
+  user,
+  children,
+  className,
+  hideAvatar = false,
+}: UserCardProps) {
   const { icon, label } = useVerificationIcon(user);
 
   return (
     <UserCardStyle className={className}>
-      <div className="avatar">
-        <Avatar user={user} />
-      </div>
+      {!hideAvatar && (
+        <div className="avatar">
+          <Avatar user={user} />
+        </div>
+      )}
       <h3>{user.name}</h3>
       <span className="verified">
         <img src={icon} alt={label} />
       </span>
       <small>
-        <span className="username">@{user.username}</span> &middot;{" "}
-        {window.innerWidth <= 768
-          ? formatDate(tweet.updatedAt ?? tweet.createdAt, "shortRelative")
-          : formatDate(tweet.updatedAt ?? tweet.createdAt, "long")}
+        <span className="username">@{user.username}</span>
       </small>
       {children}
     </UserCardStyle>
