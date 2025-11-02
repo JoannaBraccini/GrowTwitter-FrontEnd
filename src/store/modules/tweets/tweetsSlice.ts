@@ -86,7 +86,10 @@ const tweetsSlice = createSlice({
 
             if (likedTweetIndex !== -1) {
               const tweet = state.tweets[likedTweetIndex];
-              const likeExists = tweet.likes.some(
+
+              // Garante que likes existe (array vazio se undefined)
+              const currentLikes = tweet.likes || [];
+              const likeExists = currentLikes.some(
                 (like) => like.userId === action.payload.data?.userId
               );
 
@@ -94,10 +97,10 @@ const tweetsSlice = createSlice({
               state.tweets[likedTweetIndex] = {
                 ...tweet,
                 likes: likeExists
-                  ? tweet.likes.filter(
+                  ? currentLikes.filter(
                       (like) => like.userId !== action.payload.data?.userId
                     ) // Remove o like
-                  : [...tweet.likes, action.payload.data], // Adiciona o like
+                  : [...currentLikes, action.payload.data], // Adiciona o like
               };
             }
           }

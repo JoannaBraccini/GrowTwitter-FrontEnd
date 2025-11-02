@@ -39,10 +39,9 @@ export async function loginService(user: Omit<LoginRequest, "remember">) {
       data: response.data.data,
     };
   } catch (error: any) {
-    console.log("Error:", error.response.data);
     return {
-      ok: error.response.data.ok,
-      message: "Erro ao fazer login",
+      ok: false,
+      message: error.response?.data?.message || "Erro ao fazer login",
     };
   }
 }

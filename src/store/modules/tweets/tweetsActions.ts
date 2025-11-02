@@ -74,7 +74,6 @@ export const likeTweet = createAsyncThunk(
     return response;
   }
 );
-
 export const retweetTweet = createAsyncThunk(
   "tweets/retweet",
   async (data: RetweetRequest, { dispatch, getState }) => {

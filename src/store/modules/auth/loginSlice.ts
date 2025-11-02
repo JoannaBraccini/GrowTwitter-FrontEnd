@@ -16,8 +16,8 @@ export const loginAsyncThunk = createAsyncThunk(
     };
 
     const response = await loginService(body);
+
     if (!response.ok) {
-      console.log("Erro no login", response.message);
       dispatch(
         showAlert({
           message: "Erro no login",
@@ -32,7 +32,6 @@ export const loginAsyncThunk = createAsyncThunk(
     };
   }
 );
-
 interface LoginPayload extends ResponseApi<LoginResponse> {
   remember: boolean;
 }
