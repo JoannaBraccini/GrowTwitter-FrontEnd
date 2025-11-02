@@ -22,6 +22,7 @@ export interface TweetBoxProps {
   ) => void;
   initialContent?: string;
   initialImageUrl?: string;
+  hideParent?: boolean;
 }
 
 export function TweetBox({
@@ -31,6 +32,7 @@ export function TweetBox({
   onTweetSubmit,
   initialContent = "",
   initialImageUrl = "",
+  hideParent = false,
 }: TweetBoxProps) {
   const [content, setContent] = useState<string>(initialContent);
   const [imageUrl, setImageUrl] = useState<string>(initialImageUrl);
@@ -85,7 +87,7 @@ export function TweetBox({
   return (
     <TweetBoxStyle>
       <form onSubmit={handleSubmit}>
-        {mode === "reply" && (
+        {mode === "reply" && !hideParent && (
           <div className="reply-content">
             <UserCard user={tweetUser} tweet={tweet} />
             <div className="content">

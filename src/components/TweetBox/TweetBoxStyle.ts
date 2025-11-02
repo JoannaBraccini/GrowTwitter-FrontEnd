@@ -3,6 +3,11 @@ import styled from "styled-components";
 export const TweetBoxStyle = styled.div`
   padding: 13px 10px 5px 5px;
   background-color: ${({ theme }) => theme.backgroundColor};
+  border-bottom: 1px solid ${({ theme }) => theme.highlight};
+
+  @media (max-width: 768px) {
+    padding: 8px 16px 5px 12px;
+  }
 
   form {
     display: flex;

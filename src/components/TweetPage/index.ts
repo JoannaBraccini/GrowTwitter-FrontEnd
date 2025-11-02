@@ -35,7 +35,38 @@ export const TweetPageStyle = styled.div`
   .content {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+  }
+
+  .reply-input-box {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 12px;
+    padding: 15px;
+    padding-left: 12px;
+    border-bottom: 1px solid ${({ theme }) => theme.highlight};
+    cursor: text;
+
+    @media (max-width: 768px) {
+      padding: 12px 16px;
+      gap: 8px;
+    }
+
+    .avatar-column {
+      width: 40px;
+      height: 40px;
+    }
+
+    .input-placeholder {
+      display: flex;
+      align-items: center;
+      color: ${({ theme }) => theme.textSecondary};
+      font-size: 17px;
+      padding: 10px 0;
+
+      @media (max-width: 768px) {
+        font-size: 15px;
+      }
+    }
   }
 
   -webkit-scrollbar {
