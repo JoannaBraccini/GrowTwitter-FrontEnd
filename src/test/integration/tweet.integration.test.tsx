@@ -67,11 +67,16 @@ describe("Tweet Creation Integration Tests", () => {
     const mockSubmit = vi.fn();
 
     renderWithProviders(
-      <TweetBox tweetUser={mockUser} onTweetSubmit={mockSubmit} />
+      <TweetBox
+        tweetUser={mockUser}
+        tweet={mockTweet}
+        onTweetSubmit={mockSubmit}
+        mode={"create"}
+      />
     );
 
-    const textarea = screen.getByPlaceholderText("No que você está pensando?");
-    const submitButton = screen.getByRole("button", { name: "Postar" });
+    const textarea = screen.getByPlaceholderText("O que está acontencendo?");
+    const submitButton = screen.getByRole("button", { name: /postar/i });
 
     // Simula criação de tweet
     fireEvent.change(textarea, { target: { value: "Meu novo tweet!" } });
