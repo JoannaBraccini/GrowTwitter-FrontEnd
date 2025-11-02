@@ -7,6 +7,11 @@ export const GlobalStyle = createGlobalStyle`
     --OpenSans: "Open Sans", sans-serif;
   }
 
+  html {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   * {
       margin: 0;
       padding: 0;
@@ -67,6 +72,11 @@ export const GlobalStyle = createGlobalStyle`
   flex-direction: row;
   width: 100%;
   height: 100%;
+  
+  @media (max-width: 768px) {
+    width: 100vw;
+    margin: 0 -10px; /* Compensa o padding do body */
+  }
 }
 
 

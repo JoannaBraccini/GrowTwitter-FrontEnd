@@ -72,11 +72,16 @@ export function Sign() {
   function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    const usernameOrEmail = event.currentTarget.username.value.trim();
+
+    // Detecta se é email (contém @) ou username
+    const isEmail = usernameOrEmail.includes("@");
+
     const user = {
-      email: event.currentTarget.email.value,
-      username: event.currentTarget.username.value,
+      email: isEmail ? usernameOrEmail : undefined,
+      username: !isEmail ? usernameOrEmail : undefined,
       password: event.currentTarget.password.value,
-      remember: event.currentTarget.remember.value,
+      remember: checked, // Usa o estado checked que é boolean
     };
 
     if (!validateLogin(user)) {
@@ -205,24 +210,15 @@ export function Sign() {
           </span>
           <div className="input-container">
             <input
-              type="email"
-              name="email"
-              placeholder=""
-              maxLength={50}
-              className={errors.email ? "error" : ""}
-            />
-            <label htmlFor="email">E-mail</label>
-          </div>
-          <div className="input-container">
-            <input
               type="text"
               name="username"
               placeholder=""
               minLength={3}
-              maxLength={30}
+              maxLength={50}
               className={errors.username ? "error" : ""}
+              onChange={handleFieldChange}
             />
-            <label htmlFor="username">Nome de usuário</label>
+            <label htmlFor="username">E-mail ou nome de usuário</label>
           </div>
           <div className="input-container">
             <input
