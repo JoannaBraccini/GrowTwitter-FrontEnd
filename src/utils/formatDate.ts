@@ -41,10 +41,8 @@ export const formatDate = (
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    if (days > 31) {
-      return formatToShortMonth(dateObj); // Se for mais que 31 dias, retorna a data no formato "9 de fev"
-    } else if (days > 0) {
-      return `há ${days} dia${days > 1 ? "s" : ""}`;
+    if (days > 1) {
+      return formatToShortMonth(dateObj); // Se for mais que 1 dia, retorna a data no formato "9 de fev"
     } else if (hours > 0) {
       return `há ${hours} hora${hours > 1 ? "s" : ""}`;
     } else if (minutes > 0) {
@@ -64,8 +62,8 @@ export const formatDate = (
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    if (days > 0) {
-      return `${days}d`; // Exibe em dias se for maior que 24 horas
+    if (days > 1) {
+      return formatToShortMonth(dateObj); // Se for mais que 1 dia, retorna a data no formato "1 de nov"
     } else if (hours > 0) {
       return `${hours}h`;
     } else if (minutes > 0) {
