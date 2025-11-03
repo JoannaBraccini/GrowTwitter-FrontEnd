@@ -19,6 +19,7 @@ import { showAlert } from "../store/modules/alert/alertSlice";
 import { useLogout } from "../hooks/useLogout";
 import { useModal } from "../hooks";
 import { useVerificationIcon } from "../hooks/useVerifyIcon";
+import { getTweets } from "../store/modules/tweets/tweetsActions";
 
 type TabOptions = "Posts" | "Respostas" | "Mídia" | "Curtidas";
 
@@ -37,6 +38,13 @@ export function Profile() {
   const [activeTab, setActiveTab] = useState<TabOptions>("Posts");
 
   const { icon, label } = useVerificationIcon(user);
+
+  // Buscar tweets quando o componente carregar
+  useEffect(() => {
+    if (token) {
+      dispatch(getTweets({}));
+    }
+  }, [dispatch, token]);
 
   useEffect(() => {
     if (!userLogged || !token) {
@@ -163,7 +171,7 @@ export function Profile() {
         </div>
         <div className="banner">
           <div className="cover">
-            <img src={defaultCover} />
+            <img src={user?.coverUrl || defaultCover} alt="Cover" />
           </div>
           <div className="avatar">
             <img
