@@ -184,8 +184,8 @@ export const fetchTweetsAndFeed = createAsyncThunk(
   "tweets/fetchTweetsAndFeed",
   async (_, { dispatch }) => {
     await Promise.all([
-      dispatch(getFeed({ page: 1, take: 20 })),
-      dispatch(getTweets({ page: 1, take: 20 })),
+      dispatch(getFeed({ take: 100 })),
+      dispatch(getTweets({ take: 100 })),
     ]);
   }
 );

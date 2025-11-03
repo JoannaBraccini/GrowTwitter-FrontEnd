@@ -78,8 +78,25 @@ export function Feed() {
         {(() => {
           const tweetsToShow =
             activeTab === "Para você"
-              ? tweets
-              : feed.filter((tweet) => tweet.userId !== userLogged.id);
+              ? tweets.filter((tweet) => tweet.tweetType !== "REPLY")
+              : feed.filter(
+                  (tweet) =>
+                    tweet.userId !== userLogged.id &&
+                    tweet.tweetType !== "REPLY"
+                );
+
+          if (tweetsToShow.length === 0) {
+            return (
+              <div
+                style={{ padding: "20px", textAlign: "center", color: "#666" }}
+              >
+                Nenhum tweet encontrado.{" "}
+                {activeTab === "Para você"
+                  ? "Seja o primeiro a postar!"
+                  : "Siga alguém para ver tweets aqui."}
+              </div>
+            );
+          }
 
           return tweetsToShow.map((tweet) => {
             const tweetUser = users.find((user) => user.id === tweet.userId);
