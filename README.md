@@ -20,7 +20,7 @@
     <a href="https://github.com/JoannaBraccini/GrowTwitter-FrontEnd"><strong>Explore os arquivos »</strong></a>
     <br />
     <br />
-    <a href="https:link do vercel">Acessar Demonstração</a>
+    <a href="https://growtwitter-mocha.vercel.app/">Acessar Demonstração</a>
     ·
     <a href="https://github.com/JoannaBraccini/GrowTwitter-FrontEnd/issues/new?labels=bug&template=bug-report---.md">Reportar Bug</a>
     ·
@@ -127,9 +127,9 @@ Fazer uma cópia e rodar localmente.
 - [x] Configuração e estruturação das pastas
 - [x] Criação da página Error
 - [x] Criação da página Sign
-- [ ] Criação da página Profile
-- [ ] Criação da página Feed
-- [ ] Criação da página Explore
+- [x] Criação da página Profile
+- [x] Criação da página Feed
+- [x] Criação da página Explore
 - [x] Temas Claro e Escuro
 - [ ] Suporte multi-idiomas
   - [x] Português
@@ -242,3 +242,4 @@ Link do Projeto: [https://github.com/JoannaBraccini/GrowTwitter-FrontEnd](https:
 [GitHub-url]: https://github.com/
 [Git]: https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=fff
 [Git-url]: https://git-scm.com/
+
