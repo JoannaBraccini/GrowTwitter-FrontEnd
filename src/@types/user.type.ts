@@ -12,6 +12,7 @@ export interface User {
   email: string;
   username: string;
   avatarUrl?: string;
+  coverUrl?: string;
   bio?: string;
   verified: Verified;
   createdAt: string;
@@ -25,7 +26,7 @@ export interface User {
 
 export type UserBase = Pick<
   User,
-  "id" | "name" | "username" | "avatarUrl" | "verified"
+  "id" | "name" | "username" | "avatarUrl" | "coverUrl" | "verified"
 >;
 
 export interface Follow {
@@ -40,7 +41,7 @@ export type UserSearchRequest = Partial<
 >;
 
 export type UserUpdate = { id: string } & Partial<
-  Pick<User, "name" | "username" | "avatarUrl" | "bio">
+  Pick<User, "name" | "username" | "avatarUrl" | "coverUrl" | "bio">
 > & {
     passwordOld?: string | undefined;
     passwordNew?: string | undefined;

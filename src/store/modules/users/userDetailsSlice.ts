@@ -14,6 +14,7 @@ interface InitialState {
     email: string;
     username: string;
     avatarUrl?: string;
+    coverUrl?: string;
     bio?: string;
     verified: Verified;
     createdAt: string;
@@ -36,6 +37,7 @@ const initialState: InitialState = {
     email: "",
     username: "",
     avatarUrl: "",
+    coverUrl: "",
     bio: "",
     verified: "NONE",
     createdAt: new Date().toISOString(),
