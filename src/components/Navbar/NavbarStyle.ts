@@ -73,7 +73,7 @@ export const NavbarStyle = styled.div`
       display: none; /* Esconde o ícone por padrão */
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       font-size: 0; /* Esconde o texto no mobile */
       justify-content: center; /* Centraliza o conteúdo */
       align-items: center;
@@ -174,8 +174,92 @@ export const NavbarStyle = styled.div`
     }
   }
 
+  /* Estilos para tablets (entre 769px e 1024px) */
+  /* @media (min-width: 769px) and (max-width: 1024px) {
+    min-width: 80px;
+    max-width: 80px;
+    padding: 20px 0;
+
+    a {
+      div {
+        justify-content: center;
+        padding: 12px 0;
+        margin: 12px 0;
+
+        &:hover {
+          background-color: ${({ theme }) => theme.highlight};
+        }
+      }
+    }
+
+    .header {
+      gap: 0rem;
+      margin-bottom: 3rem;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 5px 1rem 5px;
+    }
+
+    .logo {
+      width: 2.5rem;
+      margin-left: 0;
+    }
+
+    .navbar-item {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      margin: 8px 0;
+    }
+
+    .icons {
+      margin: 0;
+      padding: 0;
+      height: 28px;
+      width: 28px;
+    }
+
+    div {
+      flex-direction: column;
+      align-items: center;
+
+      h2 {
+        display: none;
+      }
+    }
+
+    .post-tweet {
+      margin-top: 1rem;
+      margin-left: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        display: block;
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        margin-bottom: 2px;
+      }
+    }
+
+    .account-container {
+      width: 70px;
+      .account-button {
+        .account-data,
+        .dots-image {
+          display: none;
+        }
+      }
+    }
+  } */
+
   /* Adicionando estilos para dispositivos móveis */
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     min-width: 60px;
     max-width: 60px;
     padding: 20px 0; /* Padding vertical para não cortar o logo */

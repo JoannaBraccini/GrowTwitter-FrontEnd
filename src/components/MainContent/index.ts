@@ -14,17 +14,12 @@ export const MainContent = styled.div`
   border-right: 1px solid ${({ theme }) => theme.highlight};
 
   @media (max-width: 1024px) {
-    min-width: auto;
-    max-width: 100%;
-  }
-
-  @media (max-width: 768px) {
     margin-left: 60px;
     margin-right: 0;
     min-width: auto;
     max-width: calc(100vw - 60px);
     width: calc(100vw - 60px);
-    border-right: none; /* Remove borda direita no mobile */
+    border-right: none;
     flex: 1;
   }
 

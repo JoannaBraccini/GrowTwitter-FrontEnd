@@ -80,8 +80,8 @@ export const ProfileStyle = styled.div`
       img {
         width: 100%;
         height: 100%;
-        object-fit: contain;
-        object-position: right;
+        object-fit: cover;
+        object-position: center;
       }
     }
 
@@ -103,7 +103,7 @@ export const ProfileStyle = styled.div`
         object-position: center;
       }
     }
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       .cover {
         height: 130px;
       }
@@ -155,7 +155,7 @@ export const ProfileStyle = styled.div`
         cursor: pointer;
         white-space: nowrap;
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
           font-size: 12px;
           padding: 0 5px;
           margin-top: -5px;
@@ -234,16 +234,17 @@ export const ProfileStyle = styled.div`
             &::after {
               content: "";
               position: absolute;
-              left: 37px; /* Ajustado para centralizar no avatar */
+              left: 32px; /* Centralizado no avatar */
               top: 50px; /* Começa mais cedo, logo abaixo do avatar */
               bottom: -25px; /* Estende bem mais para baixo para conectar ao próximo avatar */
               width: 2px;
               background-color: ${({ theme }) => theme.highlight};
             }
 
-            @media (max-width: 768px) {
+            @media (max-width: 1024px) {
               &::after {
                 top: 48px;
+                left: 36px;
                 bottom: -25px;
               }
             }

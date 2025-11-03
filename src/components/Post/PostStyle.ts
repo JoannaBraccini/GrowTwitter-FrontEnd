@@ -9,7 +9,6 @@ export const PostStyle = styled.div`
   position: relative;
   border-bottom: 1px solid ${({ theme }) => theme.highlight};
 
-  /* Remove borda inferior do post pai em replies */
   &.parent-tweet {
     border-bottom: none;
   }
@@ -29,6 +28,7 @@ export const PostStyle = styled.div`
     display: flex;
     flex-direction: column;
     min-width: 0; /* Permite que o conteúdo encolha */
+    border: none;
   }
 
   .header {
