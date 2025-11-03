@@ -72,9 +72,14 @@ export function Sign() {
   function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const usernameOrEmail = event.currentTarget.username.value.trim();
+    let usernameOrEmail = event.currentTarget.username.value.trim();
 
-    // Detecta se é email (contém @) ou username
+    // Remove @ do início se o usuário digitou (ex: @silverleopard809 -> silverleopard809)
+    if (usernameOrEmail.startsWith("@")) {
+      usernameOrEmail = usernameOrEmail.substring(1);
+    }
+
+    // Detecta se é email (contém @ no meio, não apenas no início)
     const isEmail = usernameOrEmail.includes("@");
 
     const user = {
