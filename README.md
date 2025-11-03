@@ -56,8 +56,6 @@
 
 ## Sobre o Projeto
 
-[![GrowTwitter Screen Shot][product-screenshot]](https://example.com)
-
 ### Projeto para avaliação de conhecimentos.
 
 Plataforma similar ao X (antigo Twitter), com CRUD para Usuários, Tweets, Replies, Likes, Retweets e Followers.
@@ -242,4 +240,5 @@ Link do Projeto: [https://github.com/JoannaBraccini/GrowTwitter-FrontEnd](https:
 [GitHub-url]: https://github.com/
 [Git]: https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=fff
 [Git-url]: https://git-scm.com/
+
 
