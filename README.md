@@ -166,7 +166,7 @@ Distribuido sob a licença MIT. Veja `LICENSE.txt` para mais informações.
 
 ## Contato
 
-Joanna Braccini - [LinkedIn](https://www.linkedin.com/in/joannabraccini) - braccinijoanna@gmail.com
+Joanna Braccini - [LinkedIn](https://www.linkedin.com/in/joannabraccini)
 
 Link do Projeto: [https://github.com/JoannaBraccini/GrowTwitter-FrontEnd](https://github.com/JoannaBraccini/GrowTwitter-FrontEnd)
 
@@ -240,5 +240,6 @@ Link do Projeto: [https://github.com/JoannaBraccini/GrowTwitter-FrontEnd](https:
 [GitHub-url]: https://github.com/
 [Git]: https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=fff
 [Git-url]: https://git-scm.com/
+
 
 
